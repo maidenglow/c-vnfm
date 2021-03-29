@@ -1,0 +1,238 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<vnfd>
+  <id>vnfd_mme</id>
+  <vendor>eluon</vendor>
+  <descriptor_version>MME VNFD for vEPC</descriptor_version>
+  <vdu>
+    <vdu_info>
+      <id>vdu_mme</id>
+      <vm_image>http://112.170.41.50/image/mme_1.0.0.img</vm_image>
+      <computation_requirement>1</computation_requirement>
+      <virtual_memory_resource_element>1</virtual_memory_resource_element>
+      <virtual_network_bandwidth_resource>1</virtual_network_bandwidth_resource>
+      <lifecycle_event>
+        <item>initialization</item>
+     	<item>termination</item>
+    	<item>graceful-shutdown</item>
+    	<item>scale-in</item>
+    	<item>scale-out</item>
+     </lifecycle_event>
+      <constraint>vdu_sgw_cp, vdu_pgw_cp</constraint>
+      <high_availability>active, standby</high_availability>
+      <scale_in_out>5</scale_in_out>
+      <vnfc>
+	     <vnfc_info>
+          <id>cp01</id>
+          <connection_point>
+		     <connection_point_info>
+			     <id>cp11</id>
+				 <virtual_link_reference>vld01</virtual_link_reference>
+				  <type>virtual NIC</type>
+             </connection_point_info>
+		  </connection_point>
+        </vnfc_info>
+		<vnfc_info>
+          <id>cp03</id>
+          <connection_point>
+		     <connection_point_info>
+			     <id>cp13</id>
+				 <virtual_link_reference>vld05</virtual_link_reference>
+				  <type>virtual NIC</type>
+             </connection_point_info>
+		   </connection_point>
+        </vnfc_info>
+		<vnfc_info>
+          <id>cp11</id>
+          <connection_point>
+		     <connection_point_info>
+			     <id>cp01</id>
+				 <virtual_link_reference>vld01</virtual_link_reference>
+				  <type>physical port</type>
+             </connection_point_info>
+		  </connection_point>
+        </vnfc_info>
+		<vnfc_info>
+          <id>cp12</id>
+          <connection_point>
+		     <connection_point_info>
+			     <id>cp21</id>
+				 <virtual_link_reference>vld02</virtual_link_reference>
+				  <type>virtual NIC</type>
+             </connection_point_info>
+		  </connection_point>
+        </vnfc_info>
+		<vnfc_info>
+          <id>cp13</id>
+          <connection_point>
+		     <connection_point_info>
+			     <id>cp03</id>
+				 <virtual_link_reference>vld05</virtual_link_reference>
+				  <type>physical port</type>
+             </connection_point_info>
+		   </connection_point>
+        </vnfc_info>
+      </vnfc>
+	  <monitoring_parameter>
+         <item>cpu</item>
+    	 <item>memory</item>
+    	 <item>disk</item>
+	     <item>cps</item>
+	     <item>session</item>
+	     <item>device</item>
+    	 <item>success_rate</item> 
+     </monitoring_parameter>
+    </vdu_info>
+  </vdu>
+  <virtual_link>
+    <virtual_link_info>
+      <id>vld01</id>
+      <connectivity_type>E-Line</connectivity_type>
+      <connection_point_reference>
+	      <ref>cp01</ref>
+		  <ref>cp11</ref>
+		  <ref>cp41</ref>
+	  </connection_point_reference>
+      <root_requirement>10</root_requirement>
+      <leaf_requirement>1</leaf_requirement>
+      <qos> 
+	     <item>latency, 10ms</item>
+	  </qos>
+      <test_access>none</test_access>
+    </virtual_link_info>
+    <virtual_link_info>
+      <id>vld05</id>
+      <connectivity_type>E-Line</connectivity_type>
+      <connection_point_reference>
+	      <ref>cp03</ref>
+		  <ref>cp13</ref>
+	  </connection_point_reference>
+      <root_requirement>1</root_requirement>
+      <leaf_requirement>1</leaf_requirement>
+      <qos> 
+	     <item>latency, 100ms</item>
+	  </qos>
+      <test_access>none</test_access>
+    </virtual_link_info>
+  </virtual_link>
+  <connection_point>
+    <connection_point_info>
+      <id>cp11</id>
+      <virtual_link_reference>vld01</virtual_link_reference>
+      <type>virtual_port</type>
+    </connection_point_info>
+    <connection_point_info>
+      <id>cp12</id>
+      <virtual_link_reference>vld02</virtual_link_reference>
+      <type>virtual_port</type>
+    </connection_point_info>
+    <connection_point_info>
+      <id>cp13</id>
+      <virtual_link_reference>vld05</virtual_link_reference>
+      <type>virtual_port</type>
+    </connection_point_info>
+  </connection_point>
+   <lifecycle_event>
+        <item>initialization</item>
+     	<item>termination</item>
+    	<item>graceful-shutdown</item>
+    	<item>scale-in</item>
+    	<item>scale-out</item>
+     </lifecycle_event>
+  <dependency>
+     <item>vnfd_sgw_cp</item>
+	 <item>vnfd_pgw_cp</item>
+  </dependency>
+  <monitoring_parameter>
+         <item>cpu</item>
+    	 <item>memory</item>
+    	 <item>disk</item>
+	     <item>cps</item>
+	     <item>session</item>
+	     <item>device</item>
+    	 <item>success_rate</item> 
+  </monitoring_parameter>
+  <deployment_flavour>
+    <deployment_flavour_info>
+      <id>epc_small</id>
+      <flavour_key>cps, 100, session, 10000, device, 5000</flavour_key>
+	  <constraint>
+        <item>num, vcpu, 1</item>
+        <item>size, vmemory, 1</item>
+        <item>size, vdisk, 10G</item>
+        <item>capability, network_bandwidth, 1G</item>
+      </constraint>
+      <constituent_vdu>
+	      <constituent_vdu_info>
+             <vdu_reference>vdu_mme</vdu_reference>
+             <number_of_instances>1</number_of_instances>
+             <constituent_vnfc>
+               <ref>cp01</ref>
+               <ref>cp03</ref>
+			   <ref>cp11</ref>
+		   	   <ref>cp12</ref>
+			   <ref>cp13</ref>
+             </constituent_vnfc>
+		 </constituent_vdu_info>
+      </constituent_vdu>
+    </deployment_flavour_info>
+    <deployment_flavour_info>
+      <id>epc_midume</id>
+      <flavour_key>cps, 300, session, 20000, device, 10000</flavour_key>
+	   <constraint>
+        <item>num, vcpu, 2</item>
+        <item>size, vmemory, 4</item>
+        <item>size, vdisk, 10G</item>
+        <item>capability, network_bandwidth, 1G</item>
+      </constraint>
+      <constituent_vdu>
+          <constituent_vdu_info>
+             <vdu_reference>vdu_mme</vdu_reference>
+             <number_of_instances>1</number_of_instances>
+             <constituent_vnfc>
+               <ref>cp01</ref>
+               <ref>cp03</ref>
+			   <ref>cp11</ref>
+		   	   <ref>cp12</ref>
+			   <ref>cp13</ref>
+             </constituent_vnfc>
+		 </constituent_vdu_info>
+      </constituent_vdu>
+    </deployment_flavour_info>
+    <deployment_flavour_info>
+      <id>epc_large</id>
+      <flavour_key>cps, 500, session, 40000, device, 20000</flavour_key>
+	  <constraint>
+        <item>num, vcpu, 4</item>
+        <item>size, vmemory, 8</item>
+        <item>size, vdisk, 20G</item>
+        <item>capability, network_bandwidth, 1G</item>
+      </constraint>
+      <constituent_vdu>
+          <constituent_vdu_info>
+             <vdu_reference>vdu_mme</vdu_reference>
+             <number_of_instances>1</number_of_instances>
+             <constituent_vnfc>
+               <ref>cp01</ref>
+               <ref>cp03</ref>
+			   <ref>cp11</ref>
+		   	   <ref>cp12</ref>
+			   <ref>cp13</ref>
+             </constituent_vnfc>
+		 </constituent_vdu_info>
+      </constituent_vdu>
+    </deployment_flavour_info>
+  </deployment_flavour>
+  <auto_scale_policy>
+    <item>cpu, scale_out, 70%, small</item>
+    <item>memory, scale_out, 70%, small</item>
+    <item>cps, scale_out, 70%, small</item>
+    <item>cps, scale_in, 10%</item>
+    <item>session, scale_out, 70%, small</item>
+    <item>success_rate, graceful_shutdown, 50%</item>
+  </auto_scale_policy>
+  <manifest_file>mme_pacakge.tar.gz</manifest_file>
+  <manifest_file_security>
+     <item>SHA-256</item>
+     <item>SHA-512</item>
+  </manifest_file_security>
+</vnfd>

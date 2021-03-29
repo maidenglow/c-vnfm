@@ -1,0 +1,127 @@
+<div class="modal-header">
+	<h3>이미지 생성</h3>
+</div>
+
+<form name="form" class="form-validation" novalidate ng-submit="submit(image)" role="form">
+
+	<div class="modal-body">
+		<fieldset>
+
+			<div class="form-group">
+
+				<div class="form-control-wrapper">
+					<label for="name" data-i18n="이름"></label>
+					<input type="text"
+						name="name"
+						class="form-control"
+						ng-model="image.name"
+						placeholder="이름"
+						maxlength="100"
+						required
+						/>
+
+					<div ng-show="form.name.$error.required" data-i18n="필수 필드입니다."></div>
+				</div>
+				
+				<div class="form-control-wrapper">
+					<label for="" data-i18n="설명"></label>
+					<textarea
+						class="form-control" 
+						rows="4"
+						ng-model="image.properties.description"></textarea>
+				</div>
+				
+				<div class="form-control-wrapper">
+					<label for="id_file" data-i18n="이미지 파일"></label>
+					<input type="file"
+						id="id_file"
+						name="file"
+						class="form-control"
+						ng-model="image.file"
+						ng-file-select="onFileSelect($files)"
+						required />
+				</div>
+				
+				<div class="form-control-wrapper">
+					<label for="" data-i18n="아키텍쳐"></label>
+					<input type="text"
+						class="form-control" 
+						ng-model="image.architecture" />
+				</div>
+				
+				<div class="form-control-wrapper">
+					<label for="disk_format" data-i18n="포멧"></label>
+					<select
+						name="disk_format"
+						class="form-control"
+						ng-model="image.disk_format"
+						required>
+						<option style="display: none;" value=""></option>
+						<option value="aki">AKI - Amazon Kernel Image</option>
+						<option value="ami">AMI - Amazon Machine Image</option>
+						<option value="ari">ARI - Amazon Ramdisk Image</option>
+						<option value="iso">ISO - Optical Disk Image</option>
+						<option value="qcow2">QCOW2 - QEMU Emulator</option>
+						<option value="raw">Raw</option>
+						<option value="vdi">VDI</option>
+						<option value="vhd">VHD</option>
+						<option value="vmdk">VMDK</option>
+					</select>
+					
+					<div ng-show="form.dist_format.$error.required" data-i18n="필수 필드입니다."></div>
+				</div>
+
+				<div class="form-control-wrapper">
+					<label for="" data-i18n="최소 디스크(GB)"></label>
+					<input type="text"
+						class="form-control" 
+						ng-model="image.min_disk" />
+				</div>
+				
+				<div class="form-control-wrapper">
+					<label for="" data-i18n="최소 램(MB)"></label>
+					<input type="text"
+						class="form-control" 
+						ng-model="image.min_ram" />
+				</div>
+
+				<div class="form-control-wrapper">
+					<input type="checkbox"
+						id="is_public"
+						ng-model="image.is_public" />
+					<label for="is_public" data-i18n="공용"></label>
+				</div>
+
+				<div class="form-control-wrapper">
+					<input type="checkbox"
+						id="procted"
+						ng-model="image.protected" />
+					<label for="procted" data-i18n="보호함"></label>
+				</div>
+
+			</div><!-- // form-group -->
+
+		</fieldset><!-- // fieldset -->
+	</div><!-- // modal-body -->
+
+	<div class="modal-footer">
+
+		<button type="button"
+			class="btn btn-default pull-left"
+			ng-disabled="!canRevert()"
+			ng-click="revert()"
+			data-i18n="초기화"></button>
+
+		<button type="button"
+			class="btn btn-warning"
+			ng-click="cancel()"
+			data-i18n="취소"></button>
+
+		<button type="submit"
+			class="btn btn-primary"
+			ng-disabled="!canSubmit()"
+			data-i18n="생성"></button>
+
+	</div><!-- // modal-footer -->
+
+</form><!-- // form -->

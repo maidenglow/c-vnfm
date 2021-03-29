@@ -1,0 +1,107 @@
+
+<div class="panel panel-default">
+	
+	<div class="panel-heading">
+		<div class="row">
+			<div class="col-md-6 text-left">
+				<span class="glyphicon glyphicon-th"></span>
+				Router 상세
+			</div><!-- // col -->
+			
+			<div ng-show="router"
+				class="col-md-6 text-right">
+
+				<div class="btn-group" dropdown>
+					<button type="button" class="btn btn-info btn-sm dropdown-toggle">
+						동작
+						<span class="caret"></span>
+					</button>
+	
+	                <ul class="dropdown-menu" role="menu">
+	                	<li ng-show="router.external_gateway_info == null"><a href ng-click="manageGatewayForm(router)">게이트웨이 설정</a></li>
+	                	<li ng-show="router.external_gateway_info != null"><a href ng-click="deleteGatewayForm(router)">게이트웨이 삭제</a></li>
+	                	<li ><a href ng-click="createIntefaceForm(router)">인터페이스 추가</a></li>
+	                </ul>
+				</div>
+				
+				<a href
+					ng-click="deleteRouterForm(router)"
+					ng-disabled="router == null"
+					class="btn btn-sm btn-danger">
+					<span class="fa fa-trash"></span>
+					Router 삭제</a>
+
+			</div><!-- // col -->
+		</div><!-- // row -->
+	</div><!-- // panel-heading -->
+
+	<div class="panel-body">
+		<div class="custom-pre-scrollable" ng-style="style()" resizefit>
+
+			<table class="table">
+				<caption>상세정보</caption>
+
+				<colgroup>
+					<col width="30%">
+					<col width="70%">
+				</colgroup>
+				
+				<tbody>
+					<tr>
+						<th>프로젝트</th>
+						<td ng-bind="router.project_name"></td>
+					</tr>
+					<tr>
+						<th>이름</th>
+						<td ng-bind="router.name"></td>
+					</tr>
+					<tr>
+						<th>상태</th>
+						<td ng-bind="router.status"></td>
+					</tr>
+					<tr>
+						<th>외부네트워크</th>
+						<td ng-bind="router.external_gateway_info.network_name ? router.external_gateway_info.network_name : '-'"></td>
+					</tr>
+				</tbody>
+			</table>
+			
+			인터페이스
+			<div class="panel panel-default margin-right-10">
+		        <table class="table">
+		            <thead>
+		                <tr>
+		                    <th width="20%">이름</th>
+		                    <th width="20%">고정 IP</th>
+		                    <th width="10%">상태</th>
+		                    <th width="15%">타입</th>
+		                    <th width="15%">관리자 상태</th>
+		                    <th width="20%">실행</th>
+		                </tr>
+		            </thead>
+		            <tbody>
+		                <tr ng-repeat="item in router.ports">
+		                    <td ng-bind="item.name ? item.name : '(' + item.id.substring(0,8) +')' "></td>
+		                    <td >
+		                    	 <div ng-repeat="fixed_ip in item.fixed_ips">
+		                    	 	<div ng-bind="fixed_ip.ip_address"></div>
+		                    	 </div>
+		                    </td>
+		                    <td ng-bind="item.status"></td>
+		                    <td ng-bind="item.device_owner.indexOf('gateway') > -1 ? '외부 게이트웨이' : '내부 인터페이스' "></td>
+		                    <td ng-bind="item.admin_state_up ? 'UP' : 'DOWN' "></td>
+		                    <td>
+		                    	<a href
+									ng-click="deleteRouterInterfaceForm(router, item)"
+									class="btn btn-sm btn-danger" ng-show="item.device_owner.indexOf('interface') > -1 ">
+										<span class="fa fa-trash"></span>
+									인터페이스 삭제</a>
+		                    </td>
+		                </tr>
+		            </tbody>
+		        </table>
+		    </div>
+		    <br/>
+		</div><!-- // panel-body-wrapper -->
+	</div><!-- // panel-body -->
+</div><!-- // panel -->

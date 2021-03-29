@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+	 <!-- <include resource="logback-${spring.profiles.active}.xml"/>  -->
+	<!-- <include resource="logback-local.xml"/> -->
+	<include resource="logback-prod.xml"/>
+</configuration>

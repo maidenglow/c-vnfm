@@ -1,0 +1,1137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AtviewOptions">
+
+	<!-- policy -->
+	<select id="getPolicy" parameterType="hashmap" resultType="java.util.LinkedHashMap">
+		select
+			*
+		from
+			nfv_policy_tab
+		<if test="item != null">
+			where policy = #{policy}
+		</if>
+	</select>
+
+	<insert id="postPolicy" parameterType="hashmap">
+
+		insert into
+			nfv_policy_tab
+		values
+		(
+			#{policy_no},
+			#{policy}
+		)
+
+	</insert>
+
+	<update id="putPolicy" parameterType="hashmap">
+		update
+			nfv_policy_tab
+		set
+			policy = #{policy}
+		where
+			policy_no = #{policy_no}
+
+	</update>
+
+	<select id="passableDeletePolicy" parameterType="hashmap"	resultType="int">
+		SELECT
+			count(*)
+		FROM nfv_policy_tab a,
+			nfv_policy_ref b
+		WHERE 
+			a.policy_no = b.policy_no
+		AND 
+			a.policy = #{policy}
+	</select>
+
+	<delete id="deletePolicy" parameterType="hashmap">
+		delete
+		from
+			nfv_policy_tab
+		where
+			policy = #{policy}
+	</delete>
+
+
+
+	<!-- qos -->
+	<select id="getQos" parameterType="hashmap" resultType="java.util.LinkedHashMap">
+		select
+			*
+		from
+			nfv_qos_tab
+		<if test="item != null">
+		where 
+			item = #{item}
+		</if>
+
+	</select>
+
+	<insert id="postQos" parameterType="hashmap">
+
+		insert into
+			nfv_qos_tab
+		values
+		(
+			#{qos_no},
+			#{item}
+		)
+
+	</insert>
+
+	<update id="putQos" parameterType="hashmap">
+		update
+			nfv_qos_tab
+		set
+			item = #{item}
+		where
+			qos_no = #{qos_no}
+
+	</update>
+
+	<select id="passableDeleteQos" parameterType="hashmap"	resultType="int">
+		SELECT
+			count(*)
+		FROM 
+			nfv_qos_tab a,
+			nfv_qos_ref b
+		WHERE 
+			a.qos_no = b.qos_no
+		AND 
+			a.item = #{item}
+	</select>
+
+	<delete id="deleteQos" parameterType="hashmap">
+		delete
+		from
+			nfv_qos_tab
+		where
+			item = #{item}
+	</delete>
+	
+	
+	
+	<!-- lifecycle -->
+	<select id="getLifecycle" parameterType="hashmap" resultType="java.util.LinkedHashMap">
+		select
+			*
+		from
+			nfv_lifecycle_tab
+		<if test="item != null">
+		where 
+			item = #{item}
+		</if>
+
+	</select>
+
+	<insert id="postLifecycle" parameterType="hashmap">
+
+		insert into
+			nfv_lifecycle_tab
+		values
+		(
+			#{life_no},
+			#{item}
+		)
+
+	</insert>
+
+	<update id="putLifecycle" parameterType="hashmap">
+		update
+			nfv_lifecycle_tab
+		set
+			item = #{item}
+		where
+			life_no = #{life_no}
+
+	</update>
+
+	<select id="passableDeleteLifecycle" parameterType="hashmap" resultType="int">
+		SELECT
+			count(*)
+		FROM 
+			nfv_lifecycle_tab a,
+			nfv_lifecycle_ref b
+		WHERE 
+			a.life_no = b.life_no
+		AND 
+			a.item = #{item}
+	</select>
+
+	<delete id="deleteLifecycle" parameterType="hashmap">
+		delete
+		from
+			nfv_lifecycle_tab
+		where
+			item = #{item}
+	</delete>
+	
+	
+	<!-- monitoring -->
+	<select id="getMonitoring" parameterType="hashmap" resultType="java.util.LinkedHashMap">
+		select
+			*
+		from
+			nfv_monitoring_tab
+		<if test="item != null">
+		where 
+			item = #{item}
+		</if>
+
+	</select>
+
+	<insert id="postMonitoring" parameterType="hashmap">
+
+		insert into
+			nfv_monitoring_tab
+		values
+		(
+			#{mnt_no},
+			#{item}
+		)
+
+	</insert>
+
+	<update id="putMonitoring" parameterType="hashmap">
+		update
+			nfv_monitoring_tab
+		set
+			item = #{item}
+		where
+			mnt_no = #{mnt_no}
+
+	</update>
+
+	<select id="passableDeleteMonitoring" parameterType="hashmap"
+		resultType="int">
+		SELECT
+			count(*)
+		FROM 
+			nfv_monitoring_tab a,
+			nfv_monitoring_ref b
+		WHERE 
+			a.mnt_no = b.mnt_no
+		AND 
+			a.item = #{item}
+	</select>
+
+	<delete id="deleteMonitoring" parameterType="hashmap">
+		delete
+		from
+			nfv_monitoring_tab
+		where
+			item = #{item}
+	</delete>
+	
+	<!-- NFP -->
+	<select id="getNfpCount" parameterType="hashmap" resultType="int" >
+			select
+			count(*)
+		from nfv_nfp_tab
+		<if test="nfpId != null">
+		WHERE nfp_id = #{nfpId}
+		</if>
+		
+	</select>
+	
+	
+	<select id="getNfpOne" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+		
+			SELECT a.*,
+	              b.policy,
+                  b.policy_no,
+	              b.nfp_con,
+                  b.cp_no
+	         FROM nfv_nfp_tab as a,
+	              (SELECT nfv_policy_ref.policy_ref_no,
+	                     nfv_policy_tab.policy,
+                         nfv_policy_tab.policy_no,
+	                     'NULL' as cp_ref_no,
+	                     'NULL' as nfp_con,
+                         'NULL' as cp_no
+	                FROM nfv_policy_ref
+	                   INNER JOIN nfv_policy_tab
+	                       ON nfv_policy_ref.policy_no = nfv_policy_tab.policy_no
+	                    UNION ALL
+	              SELECT 'NULL' as policy_ref_no,
+	                     'NULL' as policy,
+                         'NULL' as policy_no,
+	                     nfv_cp_ref.cp_ref_no,
+	                     nfv_cp_tab.id as nfp_con,
+						 nfv_cp_tab.cp_no
+	                FROM nfv_cp_ref
+	                   INNER JOIN nfv_cp_tab
+	                       ON nfv_cp_ref.cp_no = nfv_cp_tab.cp_no
+	              ) as b
+	        WHERE (a.policy_ref_no = b.policy_ref_no
+	              OR a.connection_ref_no = b.cp_ref_no)
+			 AND nfp_id = #{nfp_Id}
+	 
+	</select>		
+
+	
+	<insert id="postPolicyRef" parameterType="hashmap">
+	
+		insert into 
+		  nfv_policy_ref
+		values
+		(
+		  #{policy_ref_no},
+		  #{policy_no}
+		)
+
+	</insert>
+	
+	<insert id="postNfp" parameterType="hashmap">
+		insert into 
+		  nfv_nfp_tab
+		values
+		(
+		  #{nfp_no},
+		  #{nfp_id},
+		  #{policy_ref_no},
+		  #{cp_ref_no}
+		)
+
+	</insert>
+	
+	<select id="getNfp" parameterType="hashmap" resultType="java.util.LinkedHashMap" >			
+			select 
+				nfp_no, nfp_id, policy_ref_no, connection_ref_no 
+			from 
+				nfv_nfp_tab
+			where
+				nfp_id  = #{nfp_id} 
+	</select>
+
+
+	<delete id="deletePolicyRef" parameterType="hashmap">
+		delete from nfv_policy_ref
+		where policy_ref_no= #{policy_ref_no}
+	</delete>
+	
+	<delete id="deleteNfp" parameterType="hashmap">
+		delete from nfv_nfp_tab
+		where nfp_no= #{nfp_no}
+	</delete>
+	
+	<select id="getVnfc" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+			 SELECT *
+				  FROM
+				       (SELECT 
+				              vnfc_tab.vnfc_no,
+				              vnfc_tab.vnfc_id,
+				              vnfc_tab.connection_ref_no
+				         FROM 
+				              nfv_vnfc_tab as vnfc_tab
+				       
+				       ) as vnfc,
+				       (SELECT nfv_cp_ref.cp_ref_no,
+				              nfv_cp_tab.id as cp_id,
+			                     nfv_cp_tab.cp_no as cp_no,
+				              nfv_cp_tab.virtual_link_reference,
+				              nfv_cp_tab.type
+				         FROM nfv_cp_ref
+				            INNER JOIN nfv_cp_tab
+				                ON nfv_cp_ref.cp_no = nfv_cp_tab.cp_no
+				       ) as con
+				 WHERE vnfc.connection_ref_no = con.cp_ref_no
+				       AND vnfc.vnfc_id = #{vnfc_id}	 
+	</select>	
+	
+	<insert id="postVnfc" parameterType="hashmap">
+		insert into 
+		  nfv_vnfc_tab
+		values
+		(
+		  #{vnfc_no},
+		  #{vnfc_id},
+		  #{cp_ref_no}
+		)
+	</insert>
+	
+	
+	<select id="getVnfcOne" parameterType="hashmap" resultType="java.util.LinkedHashMap" >			
+               select 
+               	vnfc_no, vnfc_id, connection_ref_no from nfv_vnfc_tab
+               where 
+               	vnfc_id = #{vnfc_id} 
+	</select>
+	
+	
+	<delete id="deleteVnfc" parameterType="hashmap">
+		delete from 
+			nfv_vnfc_tab
+		where 
+			vnfc_no= #{vnfc_no}
+	</delete>
+	
+	
+	<select id="passableDeleteNfp" parameterType="hashmap"		resultType="int">
+               select count(*) 
+               from 
+               	nfv_nfp_tab A, nfv_nfp_ref B
+               where 
+               	A.nfp_no = B.nfp_no
+               and 
+               A.nfp_id =  #{nfp_id}
+	</select>
+	
+	
+	<select id="passableDeleteVnfc" parameterType="hashmap"		resultType="int">
+         		select count(*) 
+               from 
+               	nfv_vnfc_tab A, nfv_vnfc_ref B
+               where 
+               	A.vnfc_no = B.vnfc_no
+               and 
+               A.vnfc_id =  #{vnfc_id}
+	</select>
+	
+	
+	<select id="getVnffgd" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+SELECT nfv_version_tab.id, 
+		       nfv_version_tab.vendor, 
+		       nfv_version_tab.version,
+		       vnffgd.number_of_endpoints, 
+		       vnffgd.number_of_virtual_links, 
+		       vnffgd.dvl, 
+		       vnffgd.dvl_no, 
+		       vnffgd.nfp_id, 
+		       vnffgd.nfp_no, 
+		       vnffgd.policy, 
+		       vnffgd.policy_no, 
+		       vnffgd.nfp_con, 
+		       vnffgd.con as cp_id, 
+		       vnffgd.cp_no, 
+		       vnffgd.descriptor_version, 
+		       vnffgd.constituent, 
+		       vnffgd.constituent_no, 
+		       vnffgd.seq asvnffgd_security, 
+		       vnffgd.security_no 
+		  FROM 
+		       (SELECT a.* , 
+		              con as dvl, 
+		              vld_no as dvl_no, 
+		              'NULL' as nfp_id, 
+		              'NULL' as nfp_no, 
+		              'NULL' as policy, 
+		              'NULL' as policy_no, 
+		              'NULL' as nfp_con, 
+		              'NULL' as con, 
+		              'NULL' as cp_no, 
+		              'NULL' as constituent, 
+		              'NULL' as constituent_no, 
+		              'NULL' as seq, 
+		              'NULL' as security_no 
+		         FROM nfv_vnffgd_tab as a, 
+		              (SELECT nfv_function_ref.function_ref_no, 
+		                     nfv_version_tab.id as con, 
+		                     nfv_vld_tab.version_no as vld_no 
+		                FROM nfv_function_ref 
+		                   INNER JOIN nfv_version_tab 
+		                       ON nfv_function_ref.function_no = nfv_version_tab.version_no 
+		                   INNER JOIN nfv_vld_tab 
+		                       ON nfv_version_tab.version_no = nfv_vld_tab.version_no 
+		              ) as b 
+		        WHERE a.dvl_ref_no = b.function_ref_no 
+		             UNION ALL 
+		       SELECT a.* , 
+		              'NULL' as dvl, 
+		              'NULL' as dvl_no, 
+		              b.nfp_id, 
+		              b.nfp_no, 
+		              b.policy, 
+		              b.policy_no, 
+		              b.nfp_con, 
+		              'NULL' as con, 
+		              'NULL' as cp_no, 
+		              'NULL' as constituent, 
+		              'NULL' as constituent_no, 
+		              'NULL' as seq, 
+		              'NULL' as seq_no 
+		         FROM nfv_vnffgd_tab as a, 
+		              (SELECT d.nfp_ref_no, 
+		                     e.nfp_id, 
+		                     e.nfp_no, 
+		                     e.policy, 
+		                     e.policy_no, 
+		                     e.nfp_con 
+		                FROM nfv_nfp_ref as d, 
+		                     (SELECT a.*, 
+		                            b.policy, 
+		                            b.policy_no, 
+		                            b.nfp_con 
+		                       FROM nfv_nfp_tab as a, 
+		                            (SELECT nfv_policy_ref.policy_ref_no, 
+		                                   nfv_policy_tab.policy, 
+		                                   nfv_policy_tab.policy_no, 
+		                                   'NULL' as cp_ref_no, 
+		                                   'NULL' as nfp_con 
+		                              FROM nfv_policy_ref 
+		                                 INNER JOIN nfv_policy_tab 
+		                                     ON nfv_policy_ref.policy_no = nfv_policy_tab.policy_no 
+		                                  UNION ALL 
+		                            SELECT 'NULL' as policy_ref_no, 
+		                                   'NULL' as policy, 
+		                                   'NULL' as policy_no, 
+		                                   nfv_cp_ref.cp_ref_no, 
+		                                   nfv_cp_tab.id as nfp_con 
+		                              FROM nfv_cp_ref 
+		                                 INNER JOIN nfv_cp_tab 
+		                                     ON nfv_cp_ref.cp_no = nfv_cp_tab.cp_no 
+		                            ) as b 
+		                      WHERE a.policy_ref_no = b.policy_ref_no 
+		                            OR a.connection_ref_no = b.cp_ref_no 
+		                     ) as e 
+		               WHERE d.nfp_no = e.nfp_no 
+		              ) as b 
+		        WHERE a.nfp_ref_no = b.nfp_ref_no 
+		             UNION ALL 
+		       SELECT a.* , 
+		              'NULL' as dvl, 
+		              'NULL' as dvl_no, 
+		              'NULL' as nfp_id, 
+		              'NULL' as nfp_no, 
+		              'NULL' as policy, 
+		              'NULL' as policy_no, 
+		              'NULL' as nfp_con, 
+		              con, 
+		              cp_no, 
+		              'NULL' as constituent, 
+		              'NULL' as constituent_no, 
+		              'NULL' as seq, 
+		              'NULL' as security_no 
+		         FROM nfv_vnffgd_tab as a, 
+		              (SELECT nfv_cp_ref.cp_ref_no, 
+		                     nfv_cp_tab.id as con, 
+		                     nfv_cp_tab.cp_no 
+		                FROM nfv_cp_ref 
+		                   INNER JOIN nfv_cp_tab 
+		                       ON nfv_cp_ref.cp_no = nfv_cp_tab.cp_no 
+		              ) as b 
+		        WHERE a.connection_point_ref_no = b.cp_ref_no 
+		             UNION ALL 
+		       SELECT a.* , 
+		              'NULL' as dvl, 
+		              'NULL' as dvl_no, 
+		              'NULL' as nfp_id, 
+		              'NULL' as nfp_no, 
+		              'NULL' as policy, 
+		              'NULL' as policy_no, 
+		              'NULL' as nfp_con, 
+		              'NULL' as con, 
+		              'NULL' as cp_no, 
+		              con as constituent, 
+		              b.version_no, 
+		              'NULL' as seq, 
+		              'NULL' as security_no 
+		         FROM nfv_vnffgd_tab as a, 
+		              (SELECT nfv_function_ref.function_ref_no, 
+		                     nfv_version_tab.id as con, 
+		                     nfv_vnfd_tab.version_no 
+		                FROM nfv_function_ref 
+		                   INNER JOIN nfv_version_tab 
+		                       ON nfv_function_ref.function_no = nfv_version_tab.version_no 
+		                   INNER JOIN nfv_vnfd_tab 
+		                       ON nfv_version_tab.version_no = nfv_vnfd_tab.version_no 
+		              ) as b 
+		        WHERE a.constituent_vnfs_ref_no = b.function_ref_no 
+		             UNION ALL 
+		       SELECT a.*, 
+		              'NULL' as dvl, 
+		              'NULL' as dvl_no, 
+		              'NULL' as nfp_id, 
+		              'NULL' as nfp_no, 
+		              'NULL' as policy, 
+		              'NULL' as policy_no, 
+		              'NULL' as nfp_con, 
+		              'NULL' as con, 
+		              'NULL' as cp_no, 
+		              'NULL' as constituent , 
+		              'NULL' as constituent_no, 
+		              seq, 
+		              security_no 
+		         FROM nfv_vnffgd_tab as a, 
+		              (SELECT nfv_security_ref.security_ref_no, 
+		                     nfv_security_tab.item as seq, 
+		                     nfv_security_tab.security_no 
+		                FROM nfv_security_ref 
+		                   INNER JOIN nfv_security_tab 
+		                       ON nfv_security_ref.security_no = nfv_security_tab.security_no 
+		              ) as b 
+		        WHERE a.vnffgd_security_ref_no = b.security_ref_no 
+		       ) as vnffgd, 
+		       nfv_version_tab 
+		 WHERE vnffgd.version_no = nfv_version_tab.version_no 
+		       AND nfv_version_tab.id = #{id}
+		ORDER BY dvl, nfp_id, nfp_con, con
+
+	</select>	
+
+	<insert id="postVnffgd" parameterType="hashmap">
+		insert into 
+		  nfv_vnffgd_tab
+		values
+		(
+		  #{vnffgd_no},
+		  #{version_no},
+		  #{number_of_endpoints},
+		  #{number_of_virtual_links},
+		  #{vld_ref_no},
+		  #{nfp_ref_no},
+		  #{cp_ref_no},
+		  #{descriptor_version},
+		  #{vnfd_ref_no},
+		  #{security_ref_no}		  
+		)
+
+	</insert>
+	
+	
+	<insert id="postFunctionRef" parameterType="hashmap">
+		insert into 
+		  nfv_function_ref
+		values
+		(
+		#{function_ref_no},
+		#{function_no}
+		)
+	
+	</insert>
+	
+	
+	<insert id="postNfpRef" parameterType="hashmap">
+	
+		insert into 
+		  nfv_nfp_ref
+		values
+		(
+		#{nfp_ref_no},
+		#{nfp_no}
+		)
+	</insert>
+	
+	
+	<select id="getVnffgdOne" parameterType="hashmap" resultType="java.util.LinkedHashMap" >			
+		select vnffgd_no,
+		       version_no,
+		       number_of_endpoints,
+		       number_of_virtual_links,
+		       dvl_ref_no,
+		       nfp_ref_no,
+		       connection_point_ref_no,
+		       descriptor_version,
+		       constituent_vnfs_ref_no,
+		       vnffgd_security_ref_no
+		  from 
+		  	nfv_vnffgd_tab 
+		  where version_no= #{version_no} 
+	</select>
+	
+	
+	<update id="putVnffgd" parameterType="hashmap">
+		update
+			nfv_vnffgd_tab
+		set
+			number_of_endpoints = #{number_of_endpoints}, 
+			number_of_virtual_links =#{number_of_virtual_links}, 
+			descriptor_version = #{descriptor_version}
+		where
+		  version_no = #{version_no}
+	</update>
+	
+	
+	<delete id="deleteFunctionRef" parameterType="hashmap">
+		delete from 
+			nfv_function_ref
+		where 
+			function_ref_no= #{function_ref_no}
+	</delete>
+	
+	
+	<delete id="deleteNfpRef" parameterType="hashmap">
+		delete from 
+			nfv_nfp_ref
+		where 
+			nfp_ref_no= #{nfp_ref_no}
+	</delete>
+	
+	<delete id="deleteVnffgd" parameterType="hashmap">
+		delete from nfv_vnffgd_tab
+		where version_no= #{version_no}
+	</delete>
+	
+	
+	<!-- vnfdep -->
+	<select id="getVnfdep" parameterType="hashmap" resultType="java.util.LinkedHashMap">
+		select
+			*
+		from
+			nfv_vnfdep_tab
+		<if test="item != null">
+		where 
+			item = #{item}
+		</if>
+
+	</select>
+
+	<insert id="postVnfdep" parameterType="hashmap">
+
+		insert into
+			nfv_vnfdep_tab
+		values
+		(
+			#{vnfdep_no},
+			#{item}
+		)
+
+	</insert>
+
+	<update id="putVnfdep" parameterType="hashmap">
+		update
+			nfv_vnfdep_tab
+		set
+			item = #{item}
+		where
+			vnfdep_no = #{vnfdep_no}
+
+	</update>
+
+	<select id="passableDeleteVnfdep" parameterType="hashmap"	resultType="int">
+		SELECT
+			count(*)
+		FROM 
+			nfv_vnfdep_tab a,
+			nfv_vnfdep_ref b
+		WHERE 
+			a.vnfdep_no = b.vnfdep_no
+		AND 
+			a.item = #{item}
+	</select>
+
+	<delete id="deleteVnfdep" parameterType="hashmap">
+		delete
+		from
+			nfv_vnfdep_tab
+		where
+			item = #{item}
+	</delete>
+	
+	
+	<select id="getVnfrtd" parameterType="hashmap" resultType="java.util.LinkedHashMap" >	
+       		SELECT 
+		       a.vnfrtd_id, 
+		       a.mnt_ref_no, 
+		       c.vnfrtd_mnt_item,
+		       c.mnt_no as vnfrtd_mnt_no
+		  FROM nfv_vnfrtd_tab as a,
+		       (SELECT mnt_ref.mnt_ref_no, 
+		              mnt_tab.item as vnfrtd_mnt_item ,
+		              mnt_tab.mnt_no
+		         FROM nfv_monitoring_ref as mnt_ref 
+		            INNER JOIN nfv_monitoring_tab as mnt_tab 
+		                ON mnt_ref.mnt_no = mnt_tab.mnt_no 
+		       ) as c 
+		 WHERE  a.mnt_ref_no = c.mnt_ref_no 
+		       AND a.vnfrtd_id = #{id}
+	</select>		
+	
+	<insert id="postVnfrtd" parameterType="hashmap">
+		 insert into 
+		 	nfv_vnfrtd_tab( vnfrtd_no, vnfrtd_id, mnt_ref_no ) 
+		 values( 
+		 #{vnfrtd_no},
+		 #{id} ,
+		 #{mnt_ref_no} 
+		  )
+	</insert>
+	
+	
+	<select id="passableDeleteVnfrtd" parameterType="hashmap"	resultType="int">
+  SELECT
+			count(*)
+		FROM nfv_vnfrtd_tab a,
+			nfv_vnfrtd_ref b
+		WHERE 
+			a.vnfrtd_no = b.vnfrtd_no
+		AND 
+			a.vnfrtd_id = #{id}
+	</select>
+	
+	<select id="getVnfrtdOne" parameterType="hashmap" resultType="java.util.LinkedHashMap" >			
+		select
+			 vnfrtd_no,
+	      	 vnfrtd_id,
+	     	  mnt_ref_no
+		  from 
+		  	nfv_vnfrtd_tab 
+		  where vnfrtd_id= #{id} 
+	</select>
+	
+	<delete id="deleteVnfrtd" parameterType="hashmap">
+		delete
+		from
+			nfv_vnfrtd_tab
+		where
+			vnfrtd_no = #{vnfrtd_no}
+	</delete>
+
+
+	<!-- constraint -->
+	<select id="getConstraint" parameterType="hashmap" resultType="java.util.LinkedHashMap">
+		select
+			*
+		from
+			nfv_constraint_tab
+		<if test="item != null">
+		where 
+			item = #{item}
+		</if>
+
+	</select>
+
+	<insert id="postConstraint" parameterType="hashmap">
+
+		insert into
+			nfv_constraint_tab
+		values
+		(
+			#{constraint_no},
+			#{item}
+		)
+
+	</insert>
+
+	<update id="putConstraint" parameterType="hashmap">
+		update
+			nfv_constraint_tab
+		set
+			item = #{item}
+		where
+			cstr_no = #{constraint_no}
+
+	</update>
+
+	<select id="passableDeleteConstraint" parameterType="hashmap"	resultType="int">
+		SELECT
+			count(*)
+		FROM 
+			nfv_constraint_tab a,
+			nfv_constraint_ref b
+		WHERE 
+			a.cstr_no = b.cstr_no
+		AND 
+			a.item = #{item}
+	</select>
+
+	<delete id="deleteConstraint" parameterType="hashmap">
+		delete
+		from
+			nfv_constraint_tab
+		where
+			item = #{item}
+	</delete>
+	
+	
+	<select id="getDf" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+			select
+			CONCAT(flavour_flag, CONCAT('_', flavour_id)) flavour_id,
+			flavour_flag,
+			flavour_key,
+			cstr_item,
+            cstr_key,
+			vdu_id,
+            constituent_key,
+			instance_cnt,
+			cp_id
+		from 
+		(
+		select 
+			a.flavour_id,
+			a.flavour_flag,
+			a.flavour_key,
+			b.item as cstr_item,
+            b.cstr_no as cstr_key,
+			'NULL' as vdu_id,
+            'NULL' as constituent_key,
+			'NULL' as instance_cnt,
+			'NULL' as cp_id
+		from 
+		nfv_flavour_tab a, nfv_constraint_tab b, nfv_constraint_ref c
+		where 1=1
+		and a.cstr_ref_no = c.cstr_ref_no
+		and b.cstr_no = c.cstr_no
+		
+		UNION ALL
+		select 
+			a.flavour_id,
+			a.flavour_flag,
+            a.flavour_key,
+			'NULL' as cstr_item,
+            'NULL' as cstr_key,
+			c.vdu_id,
+            c.cstt_no,
+			c.instance_cnt,
+			g.id as cp_id
+		from 
+			nfv_flavour_tab a, nfv_constituent_ref b, 
+			nfv_constituent_tab c, nfv_vnfc_ref d, nfv_vnfc_tab e,
+			nfv_cp_ref f, nfv_cp_tab g 
+		where 1=1 
+		and a.cstt_ref_no = b.cstt_ref_no
+		and b.cstt_no = c.cstt_no
+		and c.vnfc_ref_no = d.vnfc_ref_no
+		and d.vnfc_no = e.vnfc_no
+		and e.connection_ref_no = f.cp_ref_no
+		and f.cp_no = g.cp_no
+		) a
+		where
+		1=1 
+		and a.flavour_id = #{flavour_id}
+		and a.flavour_flag = #{flavour_flag}
+	</select>
+	
+	<insert id="postDf" parameterType="hashmap">
+	
+		insert into nfv_flavour_tab values(
+		                #{flavour_no},
+		                #{flavour_id},
+		                #{flavour_flag},
+		                #{flavour_key},
+		                #{constraint_ref_no},
+		                #{constituent_ref_no}
+		                )
+	
+	</insert>
+	
+	<select id="passablePostDf" parameterType="hashmap"	resultType="int">
+		SELECT count(*) 
+		  FROM nfv_flavour_tab 
+		 WHERE flavour_id = #{flavour_id}
+		       AND flavour_flag =  #{flavour_flag}
+	</select>
+	
+	
+	<insert id="postConstraintRef" parameterType="hashmap">
+	
+		insert into 
+		  nfv_constraint_ref
+		values
+		(
+		#{constraint_ref_no},
+		#{constraint_no}
+		)
+	</insert>
+	
+	
+	<insert id="postConstituentRef" parameterType="hashmap">	
+		insert into 
+		  nfv_constituent_ref
+		values
+		(
+		#{constituent_ref_no},
+		#{constituent_no}
+		)
+	</insert>
+	
+	<select id="getDfOne" parameterType="hashmap" resultType="java.util.LinkedHashMap" >			
+		select * from nfv_flavour_tab where flavour_id = #{flavour_id} and flavour_flag=#{flavour_flag};
+	</select>
+	
+	<delete id="deleteConstraintRef" parameterType="hashmap">
+		delete
+		from
+			nfv_constraint_ref
+		where
+			cstr_ref_no = #{constraint_ref_no}
+	</delete>
+	
+	<delete id="deleteConstituentRef" parameterType="hashmap">
+		delete
+		from
+			nfv_constituent_ref
+		where
+			cstt_ref_no = #{constituent_ref_no}
+	</delete>
+	
+	
+	<select id="passableDeleteDf" parameterType="hashmap"	resultType="int">
+		select 
+			count(*) 
+		from 
+			nfv_flavour_tab A, nfv_flavour_ref B
+		WHERE 
+			A.flavour_no = B.flavour_no 
+			AND flavour_id = #{flavour_id} 
+			AND flavour_flag = #{flavour_flag}
+	</select>
+	
+	
+	<delete id="deleteDf" parameterType="hashmap">
+		delete
+		from
+			nfv_flavour_tab
+		where
+			flavour_id = #{flavour_id} 
+			AND flavour_flag = #{flavour_flag}
+	</delete>
+
+	<update id="putDf" parameterType="hashmap">
+		update
+			nfv_flavour_tab
+		set
+		 flavour_key = #{flavour_key}
+		where
+			flavour_id = #{flavour_id} 
+			AND flavour_flag = #{flavour_flag}
+	</update>
+	
+	
+	<!-- SDF -->
+		<select id="getSdf" parameterType="hashmap" resultType="java.util.LinkedHashMap" >	
+		SELECT nfv_sdf_tab.sdf_no as convnf_ref_no, 
+		       nfv_sdf_tab.sdf_id, 
+		       nfv_sdf_tab.sdf_flavour_key, 
+		       convnf.* 
+		  FROM nfv_convnf_ref, 
+		       nfv_sdf_tab, 
+		       (SELECT nfv_convnf_tab.convnf_no, 
+		              nfv_version_tab.id as vnf_ref_id, 
+		              nfv_convnf_tab.flavour_nm as vnf_flavour_id, 
+		              nfv_convnf_tab.rddc_model, 
+		              nfv_convnf_tab.affinity, 
+		              nfv_convnf_tab.vnf_cap, 
+		              nfv_convnf_tab.vnf_instance_cnt 
+		         FROM nfv_convnf_tab, 
+		              nfv_version_tab 
+		        WHERE nfv_convnf_tab.version_no = nfv_version_tab.version_no 
+		       ) as convnf 
+		 WHERE nfv_convnf_ref.convnf_no = convnf.convnf_no 
+		   AND nfv_sdf_tab.convnf_ref_no = nfv_convnf_ref.convnf_ref_no 
+		   AND nfv_sdf_tab.sdf_id = #{id}
+	</select>		
+	
+	<insert id="postSdf" parameterType="hashmap">
+			insert into nfv_sdf_tab
+			values
+			(
+			#{sdf_no},
+			#{id},
+			#{sdf_flavour_key},
+			#{convnf_ref_no}
+			)
+	</insert>
+	
+	
+	<select id="passableDeleteSdf" parameterType="hashmap"	resultType="int">
+		SELECT
+			count(*)
+		FROM nfv_sdf_tab a,
+			nfv_sdf_ref b
+		WHERE 
+			a.sdf_no = b.sdf_no
+		AND 
+			a.sdf_id = #{id}
+	</select>
+	
+	<select id="getSdfOne" parameterType="hashmap" resultType="java.util.LinkedHashMap" >			
+           select
+           	sdf_no, sdf_id, sdf_flavour_key, convnf_ref_no
+           from nfv_sdf_tab
+           where
+           	sdf_id = #{id}
+	</select>
+	
+	<delete id="deleteSdf" parameterType="hashmap">
+		delete
+		from
+			nfv_sdf_tab
+		where
+			sdf_no = #{sdf_no}
+	</delete>
+	
+	
+	<insert id="postConvnfRef" parameterType="hashmap">	
+	insert into nfv_convnf_ref 
+           values (
+           #{convnf_ref_no}, 
+           #{convnf_no}
+           )
+	</insert>
+	
+	<delete id="deleteConvnfRef" parameterType="hashmap">
+		delete from 
+			nfv_convnf_ref 
+		where 
+			convnf_ref_no=#{convnf_ref_no}
+	</delete>
+	
+	<update id="putSdf" parameterType="hashmap">
+		update
+			nfv_sdf_tab
+		set
+		 	sdf_flavour_key = #{sdf_flavour_key}
+		where
+			sdf_no = #{sdf_no}
+	</update>
+	
+	<!-- nfvi(vnf_status) -->
+	<select id="getState" parameterType="hashmap" resultType="java.util.LinkedHashMap">
+		select
+			state_no, version_no, item
+		from
+			nfv_state_tab
+		<if test="item != null">
+		where 
+			item = #{item}
+		</if>
+	</select>
+	
+	<select id="passableDeleteState" parameterType="hashmap" resultType="int">
+		select
+		    count(*)
+		from 
+			nfv_state_tab a, nfv_function_ref b
+		where 
+		    a.state_no = b.function_no
+		    and a.state_no = #{state_no} 
+		    and a.version_no = #{version_no}
+	</select>
+	
+	<select id="getVersionCnt" parameterType="hashmap" resultType="int" >
+		select 
+			count(*)
+		from
+		    nfv_version_tab 
+		where 
+			version_no = #{version_no}
+	</select>
+	
+	<insert id="postState" parameterType="hashmap">	
+		insert into 
+			nfv_state_tab(state_no, version_no, item) 
+		values( #{state_no}, #{version_no}, #{item} )
+	</insert>
+
+	<update id="putState" parameterType="hashmap">
+		update 
+			nfv_state_tab
+		set 
+			item = #{item}
+		where
+			state_no = #{state_no} 
+	</update>
+	
+	<delete id="deleteState" parameterType="hashmap">
+		delete from 
+			nfv_state_tab 
+		where 
+			state_no = #{state_no}
+	</delete>
+
+</mapper>

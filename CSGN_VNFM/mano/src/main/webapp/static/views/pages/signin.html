@@ -1,0 +1,48 @@
+<div data-ng-controller="SigninCtrl" 
+	ng-init="init()"
+	class="page">
+    <div class="signin-header">
+        <section class="logo text-center">
+        	<a href="#/"><img src="images/mano/main_toolbar_left_2.bmp" alt="메인로고 파일 이미지" ></a>
+            
+        </section>
+    </div>
+
+    <div class="signin-body">
+        <div class="container">
+            <div class="form-container">
+                <form name="form" class="form-validation" ng-enter="fnSignin(user,form.$invalid)">
+                    <fieldset>
+                        <div class="form-group">
+                            <span class="glyphicon glyphicon-envelope"></span>
+                            <input type="text"
+                                   class="form-control input-lg input-round text-center"
+                                   placeholder="Username"
+                                   required autofocus ng-model="user.userid"
+                                   >
+                        </div>
+                        <div class="form-group">
+                            <span class="glyphicon glyphicon-lock"></span>
+                            <input type="password"
+                                   class="form-control input-lg input-round text-center"
+                                   placeholder="Password"
+                                   required ng-model="user.pass"
+                                   >
+                        </div>
+                        <div class="form-group">
+                        <button class="btn btn-lg btn-primary btn-round btn-block text-center" type="button" ng-disabled="form.$invalid" ng-click="fnSignin(user)">Sign in</button>
+                        <!--     <a href="#/dashboard/dashboard" class="btn btn-primary btn-lg btn-round btn-block text-center">Log in</a> -->
+                        </div>
+                    </fieldset>
+                </form>
+
+                <!-- <section>
+                    <p class="text-center"><a href="#/pages/forgot-password">Forgot your password?</a></p>
+                    <p class="text-center text-muted text-small">Don't have an account yet? <a href="#/pages/signup">Sign up</a></p>
+                </section> -->
+                
+            </div>
+        </div>
+    </div>
+
+</div>

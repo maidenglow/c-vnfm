@@ -1,0 +1,964 @@
+<?xml version="1.0" encoding="utf-8"?>
+<verisdnfv_response>
+	<verification_type>RA</verification_type>
+	<descriptor_type>NSD</descriptor_type>
+	<descriptor_id>nsd_epc</descriptor_id>
+	<target_id>1</target_id>
+	<management_policy_id>policy01</management_policy_id>
+	<host_id>ALL</host_id>
+	<result>
+		<result_info>
+			<deployment_flavour_id>epc_large</deployment_flavour_id>
+			<green_zone>
+				<schedule_plan>
+					<schedule_plan_info>
+						<index>1</index>
+						<component>
+							<component_info>
+								<id>compute1</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_mme</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+							</component_info>
+							<component_info>
+								<id>compute2</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+							</component_info>
+						</component>
+					</schedule_plan_info>
+					<schedule_plan_info>
+						<index>2</index>
+						<component>
+							<component_info>
+								<id>compute1</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_mme</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+							</component_info>
+							<component_info>
+								<id>compute2</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+							</component_info>
+						</component>
+					</schedule_plan_info>
+				</schedule_plan>
+			</green_zone>
+			<dead_zone>
+				<statistics_summary>
+					<resource_violation_count>
+						<item>count_cpu, 100</item>
+						<item>count_memory, 100</item>
+						<item>count_disk, 0</item>
+						<item>count_network, 50</item>
+					</resource_violation_count>
+				</statistics_summary>
+				<schedule_plan>
+					<schedule_plan_info>
+						<index>1</index>
+						<component>
+							<component_info>
+								<id>compute1</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_mme</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+								<violated_vnf>
+									<violated_vnf_info>
+										<id>vnfd_pgw_dp</id>
+										<status>active</status>
+									</violated_vnf_info>
+								</violated_vnf>
+								<violated_vdu>
+									<violated_vdu_info>
+										<id></id>
+										<status></status>
+									</violated_vdu_info>
+								</violated_vdu>
+								<violated_resource>
+									<item>cpu</item>
+									<item>memory</item>
+								</violated_resource>
+							</component_info>
+							<component_info>
+								<id>compute2</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+								<violated_vnf>
+									<violated_vnf_info>
+										<id></id>
+										<status></status>
+									</violated_vnf_info>
+								</violated_vnf>
+								<violated_vdu>
+									<violated_vdu_info>
+										<id></id>
+										<status></status>
+									</violated_vdu_info>
+								</violated_vdu>
+								<violated_resource>
+									<item></item>
+								</violated_resource>
+							</component_info>
+						</component>
+					</schedule_plan_info>
+					<schedule_plan_info>
+						<index>2</index>
+						<component>
+							<component_info>
+								<id>compute1</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_mme</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+								<violated_vnf>
+									<violated_vnf_info>
+										<id>vnfd_pgw_dp</id>
+										<status>active</status>
+									</violated_vnf_info>
+								</violated_vnf>
+								<violated_vdu>
+									<violated_vdu_info>
+										<id></id>
+										<status></status>
+									</violated_vdu_info>
+								</violated_vdu>
+								<violated_resource>
+									<item>cpu</item>
+									<item>memory</item>
+								</violated_resource>
+							</component_info>
+							<component_info>
+								<id>compute2</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+								<violated_vnf>
+									<violated_vnf_info>
+										<id></id>
+										<status></status>
+									</violated_vnf_info>
+								</violated_vnf>
+								<violated_vdu>
+									<violated_vdu_info>
+										<id></id>
+										<status></status>
+									</violated_vdu_info>
+								</violated_vdu>
+								<violated_resource>
+									<item></item>
+								</violated_resource>
+							</component_info>
+						</component>
+					</schedule_plan_info>
+				</schedule_plan>
+			</dead_zone>
+		</result_info>
+		<result_info>
+			<deployment_flavour_id>epc_medium</deployment_flavour_id>
+			<green_zone>
+				<schedule_plan>
+					<schedule_plan_info>
+						<index>1</index>
+						<component>
+							<component_info>
+								<id>compute1</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_mme</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+							</component_info>
+							<component_info>
+								<id>compute2</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+							</component_info>
+						</component>
+					</schedule_plan_info>
+					<schedule_plan_info>
+						<index>2</index>
+						<component>
+							<component_info>
+								<id>compute1</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_mme</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+							</component_info>
+							<component_info>
+								<id>compute2</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+							</component_info>
+						</component>
+					</schedule_plan_info>
+				</schedule_plan>
+			</green_zone>
+			<dead_zone>
+				<statistics_summary>
+					<resource_violation_count>
+						<item>count_cpu, 100</item>
+						<item>count_memory, 100</item>
+						<item>count_disk, 0</item>
+						<item>count_network, 50</item>
+					</resource_violation_count>
+				</statistics_summary>
+				<schedule_plan>
+					<schedule_plan_info>
+						<index>1</index>
+						<component>
+							<component_info>
+								<id>compute1</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_mme</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+								<violated_vnf>
+									<violated_vnf_info>
+										<id>vnfd_pgw_dp</id>
+										<status>active</status>
+									</violated_vnf_info>
+								</violated_vnf>
+								<violated_vdu>
+									<violated_vdu_info>
+										<id></id>
+										<status></status>
+									</violated_vdu_info>
+								</violated_vdu>
+								<violated_resource>
+									<item>cpu</item>
+									<item>memory</item>
+								</violated_resource>
+							</component_info>
+							<component_info>
+								<id>compute2</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+								<violated_vnf>
+									<violated_vnf_info>
+										<id></id>
+										<status></status>
+									</violated_vnf_info>
+								</violated_vnf>
+								<violated_vdu>
+									<violated_vdu_info>
+										<id></id>
+										<status></status>
+									</violated_vdu_info>
+								</violated_vdu>
+								<violated_resource>
+									<item></item>
+								</violated_resource>
+							</component_info>
+						</component>
+					</schedule_plan_info>
+					<schedule_plan_info>
+						<index>2</index>
+						<component>
+							<component_info>
+								<id>compute1</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_mme</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+								<violated_vnf>
+									<violated_vnf_info>
+										<id>vnfd_pgw_dp</id>
+										<status>active</status>
+									</violated_vnf_info>
+								</violated_vnf>
+								<violated_vdu>
+									<violated_vdu_info>
+										<id></id>
+										<status></status>
+									</violated_vdu_info>
+								</violated_vdu>
+								<violated_resource>
+									<item>cpu</item>
+									<item>memory</item>
+								</violated_resource>
+							</component_info>
+							<component_info>
+								<id>compute2</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+								<violated_vnf>
+									<violated_vnf_info>
+										<id></id>
+										<status></status>
+									</violated_vnf_info>
+								</violated_vnf>
+								<violated_vdu>
+									<violated_vdu_info>
+										<id></id>
+										<status></status>
+									</violated_vdu_info>
+								</violated_vdu>
+								<violated_resource>
+									<item></item>
+								</violated_resource>
+							</component_info>
+						</component>
+					</schedule_plan_info>
+				</schedule_plan>
+			</dead_zone>
+
+		</result_info>
+		<result_info>
+			<deployment_flavour_id>epc_small</deployment_flavour_id>
+			<green_zone>
+				<schedule_plan>
+					<schedule_plan_info>
+						<index>1</index>
+						<component>
+							<component_info>
+								<id>compute1</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_mme</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+							</component_info>
+							<component_info>
+								<id>compute2</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+							</component_info>
+						</component>
+					</schedule_plan_info>
+					<schedule_plan_info>
+						<index>2</index>
+						<component>
+							<component_info>
+								<id>compute1</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_mme</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+							</component_info>
+							<component_info>
+								<id>compute2</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+							</component_info>
+						</component>
+					</schedule_plan_info>
+				</schedule_plan>
+			</green_zone>
+			<dead_zone>
+				<statistics_summary>
+					<resource_violation_count>
+						<item>count_cpu, 100</item>
+						<item>count_memory, 100</item>
+						<item>count_disk, 0</item>
+						<item>count_network, 50</item>
+					</resource_violation_count>
+				</statistics_summary>
+				<schedule_plan>
+					<schedule_plan_info>
+						<index>1</index>
+						<component>
+							<component_info>
+								<id>compute1</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_mme</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+								<violated_vnf>
+									<violated_vnf_info>
+										<id>vnfd_pgw_dp</id>
+										<status>active</status>
+									</violated_vnf_info>
+								</violated_vnf>
+								<violated_vdu>
+									<violated_vdu_info>
+										<id></id>
+										<status></status>
+									</violated_vdu_info>
+								</violated_vdu>
+								<violated_resource>
+									<item>cpu</item>
+									<item>memory</item>
+								</violated_resource>
+							</component_info>
+							<component_info>
+								<id>compute2</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+								<violated_vnf>
+									<violated_vnf_info>
+										<id></id>
+										<status></status>
+									</violated_vnf_info>
+								</violated_vnf>
+								<violated_vdu>
+									<violated_vdu_info>
+										<id></id>
+										<status></status>
+									</violated_vdu_info>
+								</violated_vdu>
+								<violated_resource>
+									<item></item>
+								</violated_resource>
+							</component_info>
+						</component>
+					</schedule_plan_info>
+					<schedule_plan_info>
+						<index>2</index>
+						<component>
+							<component_info>
+								<id>compute1</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_mme</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+								<violated_vnf>
+									<violated_vnf_info>
+										<id>vnfd_pgw_dp</id>
+										<status>active</status>
+									</violated_vnf_info>
+								</violated_vnf>
+								<violated_vdu>
+									<violated_vdu_info>
+										<id></id>
+										<status></status>
+									</violated_vdu_info>
+								</violated_vdu>
+								<violated_resource>
+									<item>cpu</item>
+									<item>memory</item>
+								</violated_resource>
+							</component_info>
+							<component_info>
+								<id>compute2</id>
+								<allocated_vnf>
+									<allocated_vnf_info>
+										<id>vnfd_sgw_dp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+									<allocated_vnf_info>
+										<id>vnfd_pgw_cp</id>
+										<status>active</status>
+									</allocated_vnf_info>
+								</allocated_vnf>
+								<allocated_vdu>
+									<allocated_vdu_info>
+										<id></id>
+										<status></status>
+									</allocated_vdu_info>
+								</allocated_vdu>
+								<allocated_resource>
+									<item>cpu, 10</item>
+									<item>memory, 30</item>
+									<item>disk, 300</item>
+									<item>network, 10</item>
+								</allocated_resource>
+								<violated_vnf>
+									<violated_vnf_info>
+										<id></id>
+										<status></status>
+									</violated_vnf_info>
+								</violated_vnf>
+								<violated_vdu>
+									<violated_vdu_info>
+										<id></id>
+										<status></status>
+									</violated_vdu_info>
+								</violated_vdu>
+								<violated_resource>
+									<item></item>
+								</violated_resource>
+							</component_info>
+						</component>
+					</schedule_plan_info>
+				</schedule_plan>
+			</dead_zone>
+
+		</result_info>
+	</result>
+</verisdnfv_response>

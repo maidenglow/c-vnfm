@@ -1,0 +1,53 @@
+<div class="modal-header">
+	<h3>ZONE 생성</h3>
+</div>
+
+<form name="form" class="form-validation" novalidate ng-submit="submit(system)">
+
+	<div class="modal-body">
+
+		<fieldset>
+
+			<div class="form-group">
+
+				<div class="form-control-wrapper">
+					<label for="name" data-i18n="이름"></label>
+					<input type="text"
+						name="id"
+						class="form-control"
+						ng-model="system.id"
+						placeholder="이름"
+						maxlength="100"
+						required
+						/>
+
+					<div ng-show="form.name.$error.required" data-i18n="필수 필드입니다."></div>
+				</div>
+				
+			</div><!-- // form-group -->
+
+		</fieldset><!-- // fieldset -->
+
+	</div><!-- // modal-body -->
+
+	<div class="modal-footer">
+
+		<button type="button"
+			class="btn btn-default pull-left"
+			ng-disabled="!canRevert()"
+			ng-click="revert()"
+			data-i18n="초기화"></button>
+
+		<button type="button"
+			class="btn btn-warning"
+			ng-click="cancel()"
+			data-i18n="취소"></button>
+
+		<button type="submit"
+			class="btn btn-primary"
+			ng-disabled="!system.id"
+			data-i18n="생성"></button>
+
+	</div><!-- // modal-footer -->
+
+</form><!-- // form -->

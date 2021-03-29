@@ -1,0 +1,19 @@
+
+<h5>설명</h5>
+
+<div>
+볼륨 크기를 확장시킬 수 있습니다.
+</div>
+<br/>
+
+<h5>볼륨 제한</h5>
+
+				
+전체 <span ng-bind="limits.gigabytes.max | number" /> GB 에서 
+ <span ng-bind="limits.gigabytes.used | number" />  GB 사용
+
+<progress>
+	<bar ng-repeat="bar in volumeUsedGBytesStacked" value="bar.value" type="{{bar.type}}"></bar>
+</progress>
+
+<br/>

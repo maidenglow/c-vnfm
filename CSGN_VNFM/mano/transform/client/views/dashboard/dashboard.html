@@ -1,0 +1,90 @@
+<div ng-controller="DashboardCtrl"
+	ng-init="init()"
+	class="page">
+
+	<div class="row">
+		<div class="col-md-12">
+
+			<div class="panel panel-default">
+
+				<div class="panel-body">
+					<div class="custom-pre-scrollable" ng-style="style()" resizefit adjust-value="414">
+
+						<div class="row hypervisor-stats-chart-wrapper"
+							ng-show="hypervisorStats">
+							<div class="col-md-4">
+								<h5>VCPU 사용량</h5>
+								<p>
+									{{hypervisorStats.vcpus_used | number}}
+									/
+									{{hypervisorStats.vcpus | number}}
+								</p>
+								<canvas data-custom-gauge-chart
+										data-max="cpuChartMax"
+										data-val="cpuChartVal"
+										data-options="gaugeChart.options"
+										style="width: 100%; height: auto;"
+										></canvas>
+							</div><!-- // col -->
+
+							<div class="col-md-4">
+								<h5>메모리 사용량</h5>
+								<p>
+									{{hypervisorStats.memory_mb_used | number}} MB
+									/
+									{{hypervisorStats.memory_mb | number}} MB
+								</p>
+								<canvas data-custom-gauge-chart
+										data-max="memoryChartMax"
+										data-val="memoryChartVal"
+										data-options="gaugeChart.options"
+										style="width: 100%; height: auto;"
+										></canvas>
+							</div><!-- // col -->
+
+							<div class="col-md-4">
+								<h5>디스크 사용량</h5>
+								<p>
+									{{hypervisorStats.local_gb_used | number}} GB
+									/
+									{{hypervisorStats.local_gb | number}} GB
+								</p>
+								<canvas data-custom-gauge-chart
+										data-max="diskChartMax"
+										data-val="diskChartVal"
+										data-options="gaugeChart.options"
+										style="width: 100%; height: auto;"
+										></canvas>
+							</div><!-- // col -->
+
+						</div><!-- // row -->
+
+						<table id="osKsadmServices" class="table table-bordered table-striped datatable">
+							<thead>
+								<tr>
+									<th class="sortable hide normal_column">Id</th>
+									<th class="sortable normal_column">이름</th>
+									<th class="sortable normal_column">서비스</th>
+									<th class="sortable normal_column">호스트</th>
+									<th class="sortable normal_column">활성화됨</th>
+								</tr>
+							</thead>
+
+							<tbody>
+							
+								<tr ng-repeat="item in osKsadmServices">
+									<td><span ng-bind="item.name"></span></td>
+									<td><span ng-bind="item.type"></span></td>
+									<td><span ng-bind="item.host"></span></td>
+									<td><span ng-bind="item.enabled"></span></td>
+								</tr>
+
+							</tbody>
+						</table>
+
+					</div><!-- // panel-body-wrapper -->
+				</div><!-- // panel-body -->
+			</div><!-- // panel -->
+		</div>
+	</div>
+</div>

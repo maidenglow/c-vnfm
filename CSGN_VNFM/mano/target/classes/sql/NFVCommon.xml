@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="NFVCommon">
+
+	<select id="getSeq" parameterType="string" resultType="string">
+		SELECT get_seq(#{seq_name});
+	</select>
+	
+	<select id="getTmenuRefNo" parameterType="string" resultType="string">
+		select tmenu_ref_no from nfv_tmenu_tab where tmenu_id = #{tmenu_id}
+	</select>
+	
+</mapper>

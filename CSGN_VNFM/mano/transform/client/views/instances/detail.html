@@ -1,0 +1,261 @@
+<div class="panel panel-default" style="padding: 1em;">
+	<div class="row system-chart-wrapper">
+		<div class="col-md-6">
+			<h5>CPU</h5>
+			<div data-instance-flot-chart-realtime
+				system-id="instance.id"
+				percentage="instanceUsedCpuPer"
+				data-type="realtime"
+				style="width: 100%; height: 120px;">
+			</div>
+		</div><!-- // col -->
+
+		<div class="col-md-6">
+			<h5>Memory</h5>
+			<div data-instance-flot-chart-realtime
+				system_id="instance.id"
+				percentage="instanceUsedMemoryPer"
+				data-type="realtime"
+				style="width: 100%; height: 120px;">
+			</div>
+		</div><!-- // col -->
+
+	</div><!-- // row -->
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<div class="row">
+			<div class="col-md-6 text-left">
+				<span class="glyphicon glyphicon-th"></span>
+				인스턴스 개요
+			</div><!-- // col -->
+
+			<div ng-show="instance"
+				class="col-md-6 text-right">
+
+				<div class="btn-group" dropdown>
+					<button type="button" class="btn btn-info btn-sm dropdown-toggle">
+						동작
+						<span class="caret"></span>
+					</button>
+	
+	                <ul class="dropdown-menu" role="menu">
+	                	<li ng-show="instance.status == 'PAUSED'"><a href ng-click="instanceAction('UNPAUSE', instance)">인스턴스 재시작</a></li>
+	                	<li ng-show="instance.status == 'ACTIVE'"><a href ng-click="instanceAction('PAUSE', instance)">인스턴스 정지</a></li>
+	                	<li><a href ng-click="createFloatingIPForm(instance)">유동 IP 연결</a></li>
+	                	<li><a href ng-click="deleteFloatingIPForm(instance)">유동 IP 연결 해제</a></li>
+	                	
+	                </ul>
+				</div>
+				
+				<a href
+					ng-click="deleteInstance(instance)"
+					ng-disabled="instance == null"
+					class="btn btn-sm btn-danger">
+					<span class="fa fa-trash"></span>
+					인스턴스 종료</a>
+
+			</div><!-- // col -->
+		</div><!-- // row -->
+	</div><!-- // header -->
+
+	<div class="panel-body">
+		<div class="custom-pre-scrollable" ng-style="style()" resizefit adjust-value="665">
+
+			<div ng-show="instance">
+	
+				<table class="table">
+					<caption>정보</caption>
+					<colgroup>
+						<col width="20%" />
+						<col width="30%" />
+						<col width="20%" />
+						<col width="30%" />
+					</colgroup>
+	
+					<tbody>
+						<tr>
+							<th><span data-i18n="이름"></span></th>
+							<td colspan="3"><span ng-bind="instance.name"></span></td>
+						</tr>
+	
+						<tr>
+							<th><span data-i18n="ID"></span></th>
+							<td colspan="3"><span ng-bind="instance.id"></span></td>
+						</tr>
+	
+						<tr>
+							<th><span data-i18n="상태"></span></th>
+							<td>
+								<span ng-show="isActionProgress(instance.status)" class="custom_progress">
+										<progressbar class="progressbar-sm progress-striped active" value="100"></progressbar>
+								</span>
+								<span ng-bind="instance.status"></span>
+							</td>
+						
+							<th><span data-i18n="가용성존"></span></th>
+							<td><span ng-bind="instance['OS-EXT-AZ:availability_zone']"></span></td>
+						</tr>
+	
+						<tr>
+							<th><span data-i18n="생성"></span></th>
+							<td><span ng-bind="instance.created | date: 'yyyy-MM-dd HH:mm:ss'"></span></td>
+						
+							<th><span data-i18n="가동 시간"></span></th>
+							<td><span ng-bind="instance['OS-SRV-USG:launched_at'] | date: 'yyyy-MM-dd HH:mm:ss'"></span></td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<div ng-show="instance.fault">
+	
+					<table class="table">
+						<caption>Fault</caption>
+						<colgroup>
+							<col width="20%" />
+							<col width="30%" />
+							<col width="20%" />
+							<col width="30%" />
+						</colgroup>
+		
+						<tbody>
+							<tr>
+								<th><span data-i18n="메시지"></span></th>
+								<td class="danger"><span ng-bind="instance.fault.message"></span></td>
+							</tr>
+	
+							<tr>
+								<th><span data-i18n="코드"></span></th>
+								<td class="danger"><span ng-bind="instance.fault.code"></span></td>
+							</tr>
+	
+							<tr>
+								<th><span data-i18n="세부 정보"></span></th>
+								<td class="danger"><span ng-bind="instance.fault.details"></span></td>
+							</tr>
+	
+							<tr>
+								<th><span data-i18n="생성"></span></th>
+								<td class="danger"><span ng-bind="instance.fault.created | date: 'yyyy-MM-dd HH:mm:ss'"></span></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
+				<table class="table">
+					<caption>스펙</caption>
+
+					<colgroup>
+						<col width="20%" />
+						<col width="30%" />
+						<col width="20%" />
+						<col width="30%" />
+					</colgroup>
+	
+					<tbody>
+						<tr>
+							<th><span data-i18n="Flavor"></span></th>
+							<td colspan="3"><span ng-bind="instance.flavor.name"></span></td>
+						</tr>
+	
+						<tr>
+							<th><span data-i18n="VCPUs"></span></th>
+							<td><span ng-bind="instance.flavor.vcpus | number"></span></td>
+
+							<th><span data-i18n="RAM"></span></th>
+							<td><span ng-bind="instance.flavor.ram | number"></span></td>
+						</tr>
+	
+						<tr>
+							<th><span data-i18n="디스크"></span></th>
+							<td colspan="3"><span ng-bind="instance.flavor.disk | number"></span></td>
+						</tr>
+	
+						<tr ng-show="instance.flavor.ephemeral">
+							<th><span data-i18n="Ephemeral 디스크"></span></th>
+							<td colspan="3"><span ng-bind="instance.flavor.ephemeral"></span></td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<table class="table">
+					<caption>IP 주소</caption>
+
+					<colgroup>
+						<col width="30%" />
+						<col width="70%" />
+					</colgroup>
+	
+					<tbody ng-repeat="(network, ip_list) in instance.addresses.addresses">
+						<tr>
+							<th ng-bind="network"></th>
+							<td>
+								<span ng-repeat="ip in ip_list">
+									{{ip.addr}}{{$last ? '' : ', '}}
+								</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<!-- TODO 시큐리티 그룹 구현!!!! -->
+				
+				<table class="table">
+					<caption>메타</caption>
+					<colgroup>
+						<col width="30%" />
+						<col width="70%" />
+					</colgroup>
+	
+					<tbody>
+						<tr>
+							<th><span data-i18n="키이름"></span></th>
+							<td ng-bind="instance.key_name || 'None'"></td>
+						</tr>
+	
+						<tr>
+							<th><span data-i18n="이미지 이름"></span></th>
+							<td>
+								<a href
+									ng-if="instance.image"
+									ng-bind="instance.image.name"></a>
+								<spa ng-if="!instance.image">None</span>
+							</td>
+						</tr>
+					</tbody>
+	
+					<tbody ng-repeat="(key, value) in instance.metadata">
+						<tr>
+							<th ng-bind="key"></th>
+							<td ng-bind="value"></td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<table class="table">
+					<volume>볼륨 연결</volume>
+
+					<colgroup>
+						<col width="30%" />
+						<col width="70%" />
+					</colgroup>
+	
+					<tbody ng-repeat="volume in instance['os-extended-volumes:volumes_attached']">
+						<tr>
+							<th data-i18n="Volume"></th>
+							<td>
+								<a href>
+									<span ng-if="!volume.name" ng-bind="volume.id"></span>
+									<span ng-if="volume.name" ng-bind="volume.name"></span>
+								</a>
+								<span ng-bind="volume.device"></span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		
+		</div><!-- // panel-body-wrapper -->
+	</div><!-- // panel-body -->
+</div><!-- // panel -->

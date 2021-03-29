@@ -1,0 +1,83 @@
+
+<div class="row">
+	<div class="col-md-6">
+
+		<fieldset>
+			<div class="form-group">
+
+				<!-- availability_zone -->
+				<div class="form-control-wrapper">
+					<label for="id_availability_zone" data-i18n="가용성존"></label>
+					<select
+						id="id_availability_zone"
+						name="availability_zone"
+						class="form-control"
+						ng-model="instance.availability_zone"
+						ng-options="item.zoneName for item in availability_zones track by item.zoneName"
+						ng-init="instance.availability_zone=availability_zones[0].zoneName"
+						>
+						<option style="display: none;" value=""></option>
+					</select>
+				</div>
+
+				<!-- name -->
+				<div class="form-control-wrapper">
+					<label for="id_name" data-i18n="이름"></label>
+					<input type="text"
+						id="id_name"
+						name="name"
+						class="form-control"
+						ng-model="instance.name"
+						placeholder="이름"
+						maxlength="256"
+						required
+						/>
+
+					<div ng-show="form.name.$error.required" data-i18n="필수 필드입니다."></div>
+				</div>
+
+				<!-- Flavor -->
+				<div class="form-control-wrapper">
+					<label for="id_flavor" data-i18n="Flavor"></label>
+					<select
+						id="id_flavor"
+						name="flavor"
+						class="form-control"
+						ng-model="instance.flavor"
+						ng-options="item as item.name for item in flavors"
+						ng-change="changeFlavor()"
+						ng-init="instance.flavor=flavors[0]">
+						<option style="display: none;" value=""></option>
+					</select>
+				</div>
+				
+				<!-- Image -->
+				<div class="form-control-wrapper">
+					<label for="id_flavor" data-i18n="Image"></label>
+					<select
+						id="id_image"
+						name="image"
+						class="form-control"
+						ng-model="instance.image"
+						ng-options="item as item.name for item in images"
+						ng-init="instance.image=images[0]">
+						<option style="display: none;" value=""></option>
+					</select>
+				</div>
+
+			</div><!-- // form-group -->
+		</fieldset><!-- // fieldset -->
+
+	</div><!-- // col -->
+
+	<div class="col-md-6">
+	
+		<div class="row">
+			<div class="col-md-12">
+				<div ng-include=" 'views/instances/create_detail_flavors_and_quotas.html' ">
+				</div>
+			</div>
+		</div>
+
+	</div><!-- // col -->
+</div><!-- // row -->

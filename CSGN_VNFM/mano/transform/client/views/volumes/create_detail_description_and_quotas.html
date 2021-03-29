@@ -1,0 +1,27 @@
+
+<h5>설명</h5>
+
+<div>
+볼륨은 인스턴스에 연결할 수 있는 블록 장치입니다.
+</div>
+<br/>
+
+<h5>볼륨 제한</h5>
+
+				
+전체 <span ng-bind="limits.gigabytes.max | number" /> GB 에서 
+ <span ng-bind="limits.gigabytes.used | number" />  GB 사용
+
+<progress>
+	<bar ng-repeat="bar in volumeUsedGBytesStacked" value="bar.value" type="{{bar.type}}"></bar>
+</progress>
+
+<br/>
+
+전체 <span ng-bind="limits.counts.max | number" />개 볼륨 에서 
+  <span ng-bind="limits.counts.used | number" />개 사용
+
+<progress>
+	<bar ng-repeat="bar in volumeUsedCountsStacked" value="bar.value" type="{{bar.type}}"></bar>
+</progress>
+

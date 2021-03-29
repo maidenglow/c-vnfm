@@ -1,0 +1,109 @@
+<div class="modal-body row form-group" ng-init="init()">
+	<div class="row panel-body">
+		<div class="col-md-4 col-lg-4">
+		<!-- 인덱스 선택 영역 s -->
+			<div class="" ng-style="style()" resizefit>
+				<div class="row form-control-wrapper">
+					<div class="col-lg-12">
+						<label for="id_flavor" data-i18n="Flavor"></label>
+						<select id="id_flavor" name="flavor" class="form-control" ng-model="viewinfo.deploymentFlavourId" ng-change="changeFlavor()">
+							<option value="2" selected="selected" label="small"></option>
+							<option value="1" label="medium"></option>
+							<option value="0" label="large"></option>
+						</select>
+						
+					</div>
+				</div>
+				<div class="row form-control-wrapper">
+					<div class="col-lg-12">
+						<input id="id_resultType_green" type="radio" name="resultType" value="0" 
+							ng-model="viewinfo.resultType" 
+							ng-disabled="result.result_info[viewinfo.deploymentFlavourId].green_zone == ''">
+						<label for="id_resultType_green" data-i18n="Green zone">
+						</label>
+						<span ng-if="result.result_info[viewinfo.deploymentFlavourId].green_zone == ''" data-i18n="(disabled)"></span>
+						<input id="id_green_zone" name="green_zone" type="number" 
+							ng-model="viewinfo.greenZoneIndex" 
+							min="0" max="{{result.result_info[viewinfo.deploymentFlavourId].green_zone.schedule_plan.schedule_plan_info[0].length - 1}}" 
+							ng-disabled="viewinfo.resultType == 1" class="form-control">
+						</input>
+						
+					</div>
+				</div>
+				<div class="row form-control-wrapper">
+					<div class="col-lg-12">
+						<input id="id_resultType_dead" type="radio" name="resultType" value="1"
+							ng-model="viewinfo.resultType" 
+							ng-disabled="result.result_info[viewinfo.deploymentFlavourId].dead_zone == ''">
+						<label for="id_resultType_dead" data-i18n="Dead zone">
+						</label>
+						<span ng-if="result.result_info[viewinfo.deploymentFlavourId].dead_zone == ''" data-i18n="(disabled)"></span>
+						<input id="id_dead_zone" name="dead_zone" type="number" 
+							ng-model="viewinfo.deadZoneIndex" 
+							min="0" max="{{result.result_info[viewinfo.deploymentFlavourId].dead_zone.schedule_plan.schedule_plan_info[0].length - 1}}"
+							ng-disabled="viewinfo.resultType == 0" class="form-control">
+						</input>
+						
+					</div>
+				</div>
+			</div>
+		<!-- 인덱스 선택 영역 e -->
+		</div>
+		<div class="col-md-8 col-lg-8">
+			<div class="nav-container custom-pre-scrollable" ng-style="style()" resizefit>
+				<!-- Compute List 영역 s -->
+				<div ng-repeat="computeGroup in computeGroupList" style="max-width: 530px;">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="form-control-wrapper">
+								<label data-i18n="{{computeGroup.host}}"></label>
+								<div class="well">
+									<div class="custom-container">
+										<!--  compute list  -->
+										<div ng-repeat="compute in computeGroup.compute" class="btn btn-info btn-sm" style="margin: 5px;">
+											<span>{{compute.item}}</span>
+										</div>
+										<!--  green zone list  -->
+										<div ng-if="viewinfo.resultType == 0" ng-repeat="component in result.result_info[viewinfo.deploymentFlavourId].green_zone.schedule_plan.schedule_plan_info[0][viewinfo.greenZoneIndex].component.component_info | filterAllocatedVnf:computeGroup.host" 
+											class="btn btn-success btn-sm" style="margin: 5px;">
+											<span>{{component.id}}</span>
+										</div>
+										<!--  dead zone list  -->
+										<div ng-if="viewinfo.resultType == 1" ng-repeat="componentDead in componentDeadMap[computeGroup.host].components" 
+											class="btn btn-sm {{componentDead.resultClass}}" data-toggle="tooltip" title="{{componentDead.violation_reason}}" style="margin: 5px;">
+											<span>{{componentDead.id}}</span>
+										</div>
+										<!--  empty zone list  -->
+										<div ng-repeat="component in componentMaxMap[computeGroup.host].emptyComponents" class="btn btn-default btn-sm" style="margin: 5px;">
+											<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Compute List 영역 e -->
+			</div>
+		</div>
+	</div>
+	<div class="row panel-body">
+		<div class="col-lg-12">
+			<!-- <div ng-show="viewinfo.resultType == 0" data-i18n="Verification Success" class="form-control"></div> -->
+			<div class="well">{{viewinfo.resultType == 0 ? 'Verification Success' : result.result_info[viewinfo.deploymentFlavourId].dead_zone.statistics_summary.resource_violation_count.item.join(', ')}}</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal-footer">
+	<div class="text-right">
+
+
+		<button type="button"
+			class="btn btn-default"
+			ng-click="cancel()" data-i18n="Close"
+			></button>
+
+	</div>
+</div><!-- // modal-footer -->
+

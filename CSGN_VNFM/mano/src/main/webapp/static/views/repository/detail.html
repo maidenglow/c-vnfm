@@ -1,0 +1,52 @@
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<div class="row">
+			<div class="col-md-6 text-left">
+				<span class="glyphicon glyphicon-th"></span>
+				Repository 파일 리스트
+			</div><!-- // col -->
+			<!-- byjch -->
+			 <div ng-show="flavor"
+				class="col-md-6 text-right">
+				<input type="file"
+								id="id_file"
+								name="file"
+								style="display:none"
+								class="form-control"
+								ng-model="image.file"
+								ng-file-select="onFileSelect($files)"
+								required />
+				<a href
+					ng-click="selectFile()"
+					ng-disabled="flavor.info==null"
+					class="btn btn-danger btn-sm">
+					<span class="fa fa-trash"></span> 파일 추가</a>
+				<a href
+					ng-click="deleteImageForm(item)"
+					ng-disabled="item.path==null"
+					class="btn btn-danger btn-sm">
+					<span class="fa fa-trash"></span> 파일 삭제</a>
+
+			</div> <!-- // col -->
+		</div><!-- // row -->
+	</div><!-- // panel-heading -->
+
+	<div class="panel-body">
+		<div class="custom-pre-scrollable" ng-style="style()" resizefit>
+
+		<div class="nav-container custom-pre-scrollable" ng-style="style()" resizefit>
+			<ul class="nav">
+				<li ng-repeat="item in items track by $index">
+					<a href
+						ng-click="selectItem(item)"
+						ng-class="{'highlight' : isSelected(item)}">
+						<i class="fa fa-cube"></i> 
+						<span ng-bind="item.name"
+							ng-class="'label label-success'"></span></a></li>
+			</ul>
+		</div>
+					
+		</div><!-- // panel-body-wrapper -->
+	</div><!-- // panel-body -->
+</div><!-- // panel -->

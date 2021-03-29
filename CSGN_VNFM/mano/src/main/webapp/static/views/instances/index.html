@@ -1,0 +1,161 @@
+
+<div data-ng-controller="InstancesCtrl"
+	ng-init="init()"
+	class="page">
+<style>
+		.angular-ui-tree-handle {
+		    cursor: default;
+		    border: none;
+		    padding: 0;
+		    display: block;
+		}
+		.nav-container .treenav>li>.tree-node-content>a>i {
+		    display: inline-block;
+		    margin-right: 10px;
+		    width: 20px;
+		    line-height: 1;
+		    text-align: center;
+		    font-size: 16px;
+		    -moz-transition: all .2s ease-in-out;
+		    -webkit-transition: all .2s ease-in-out;
+		    -o-transition: all .2s ease-in-out;
+		    transition: all .2s ease-in-out;
+		}
+		.nav-container .treenav>li {
+		    position: relative;
+		    min-width: 250px;
+		    margin: 0;
+		    text-align: left;
+		    font-weight: 700;
+		    -moz-transition: all .2s ease-in-out;
+		    -webkit-transition: all .2s ease-in-out;
+		    -o-transition: all .2s ease-in-out;
+		    transition: all .2s ease-in-out;
+		}
+		.nav-container .treenav>li>div>a.highlight {
+		    color: #709A27;
+		}
+		.nav-container .treenav>li:first-child>a.node-type-icon {
+		    border-top: 0;
+		}
+		.nav-container .treenav>li:hover>a.node-type-icon {
+		    background-color: #e4e4e4;
+		    color: #50bafe;
+		}
+		.nav-container .treenav a.node-type-icon:hover {
+		    text-decoration: none;
+		}
+		.nav-container .treenav>li>div>a.node-type-icon {
+		    position: relative;
+		    display: inline-block;
+/* 		    padding: 15px 15px; */
+		    -moz-transition: all .2s ease-in-out;
+		    -webkit-transition: all .2s ease-in-out;
+		    -o-transition: all .2s ease-in-out;
+		    transition: all .2s ease-in-out;
+		}
+		.treenav>li>div>a.node-type-icon:hover, .treenav>li>div>a.node-type-icon:focus {
+		    text-decoration: none;
+		    background-color: #eee;
+		}
+		.nav-container .treenav a.node-type-icon {
+		    font-size: 13px;
+		    color: #767676;
+		    -moz-transition: all .2s ease-in-out;
+		    -webkit-transition: all .2s ease-in-out;
+		    -o-transition: all .2s ease-in-out;
+		    transition: all .2s ease-in-out;
+		}
+		.treenav>li>div>a.node-type-icon {
+		    position: relative;
+		    display: block;
+ 		    /* padding: 10px 10px; */
+ 		    padding: 7px 0px;
+		}
+		.treenav>li>div>a.node-type-icon.is-leaf-node-type-icon {
+ 		    padding: 7px 10px;
+ 		    margin-left: 20px;
+		}
+		.treenav .label.is-leaf-node {
+		    background-color: #E3F7C0;
+    		color: #333;
+		}
+		.treenav .left-indent {
+			margin-left: 27px;
+		}
+		.treenav .fa-cog~.label-success {
+		    background-color: #465629;
+		}
+		.treenav .fa-cog~.label-smoption {
+		    background-color: #94b758;
+		}
+		.treenav>li>div>a.node-type-icon.is-smoption-node-type-icon {
+ 		    /* padding: 7px 10px; */
+ 		    margin-left: 27px;
+		}
+</style>
+	<div class="row">
+
+		<!-- List -->
+		<div class="col-md-4 col-lg-3">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<div class="row">
+						<div class="col-md-6 text-left">
+							<span class="glyphicon glyphicon-th"></span>
+							VNF 목록
+						</div><!-- // col -->
+
+						<div class="col-md-6 text-right">
+
+							<a href
+								ng-click="createInstanceForm()"
+								class="btn btn-sm btn-danger">
+								<span class="fa fa-plus"></span>
+								VNF 시작</a>
+
+						</div><!-- // col -->
+					</div><!-- // row -->
+				</div><!-- // panel-heading -->
+
+				<div class="panel-body">
+					<div class="nav-container">
+						<div id="mytree" 
+						ng-if="instances" 
+						data-nfv-tree-nav ng-model="instances" 
+						class="custom-pre-scrollable" 
+						style="max-height: 561px;"></div>
+					</div>
+					<!-- <div class="nav-container custom-pre-scrollable" ng-style="style()" resizefit>
+						<ul class="nav">
+							<li ng-repeat="item in instances">
+								<a href
+									ng-click="selectInstance(item)"
+									ng-class="{'highlight' : isSelected(item)}">
+									<i class="fa fa-sitemap"></i>
+									<span ng-bind="item.name"
+										ng-class="instanceStatusClass(item)">
+									</span>
+									<span ng-show="isActionProgress(item.status)" class="custom_progress">
+										<progressbar class="progressbar-sm progress-striped active" value="100"></progressbar>
+									</span>
+									
+								</a>								
+							</li>
+						</ul>
+					</div> -->
+					
+				</div><!-- panel -->
+			</div><!-- // panel-body -->
+		</div><!-- // List -->
+		
+		<!-- Detail -->
+		<div class="col-md-8 col-lg-9">
+			
+			<div ng-show="true" ng-include=" 'views/instances/detail.html' ">
+			</div>
+
+		</div><!-- // Detail -->
+	</div>
+
+</div><!-- // InstancesCtrl -->

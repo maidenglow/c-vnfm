@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <settings>
+        <setting name="cacheEnabled" value="false" />
+		<setting name="useGeneratedKeys" value="true" />
+		<setting name="defaultExecutorType" value="REUSE" />
+    </settings>
+    
+    <typeAliases>
+        <typeAlias alias="AccountVO" type="com.eluon.vepc.mano.vo.AccountVO"></typeAlias>
+        <typeAlias alias="AccountGradeVO" type="com.eluon.vepc.mano.vo.AccountGradeVO"></typeAlias>
+        <typeAlias alias="LoginVO" type="com.eluon.vepc.mano.vo.LoginVO"></typeAlias>
+        <typeAlias alias="SystemVO" type="com.eluon.vepc.mano.vo.SystemVO"></typeAlias>
+        <typeAlias alias="SystemCpuVO" type="com.eluon.vepc.mano.vo.SystemCpuVO"></typeAlias>
+        <typeAlias alias="SystemMemoryVO" type="com.eluon.vepc.mano.vo.SystemMemoryVO"></typeAlias>
+        <typeAlias alias="SystemDiskVO" type="com.eluon.vepc.mano.vo.SystemDiskVO"></typeAlias>
+        <typeAlias alias="SystemNetworkVO" type="com.eluon.vepc.mano.vo.SystemNetworkVO"></typeAlias>
+        <typeAlias alias="InstanceVO" type="com.eluon.vepc.mano.vo.InstanceVO"></typeAlias>
+        <typeAlias alias="InstanceCpuVO" type="com.eluon.vepc.mano.vo.InstanceCpuVO"></typeAlias>
+        <typeAlias alias="InstanceMemoryVO" type="com.eluon.vepc.mano.vo.InstanceMemoryVO"></typeAlias>
+        <typeAlias alias="InstanceDiskVO" type="com.eluon.vepc.mano.vo.InstanceDiskVO"></typeAlias>
+        <typeAlias alias="InstanceNetworkVO" type="com.eluon.vepc.mano.vo.InstanceNetworkVO"></typeAlias>
+        <typeAlias alias="AlarmVO" type="com.eluon.vepc.mano.vo.AlarmVO"></typeAlias>
+        <typeAlias alias="CodeVO" type="com.eluon.vepc.mano.vo.CodeVO"></typeAlias>
+        
+		<!-- NFV verification Project - Under Add -->
+        <typeAlias alias="VeryfyVO" type="com.eluon.vepc.mano.vo.VeryfyVO"></typeAlias>
+        
+        <!-- source location change 2015/10/14 - kim -->
+        
+        <typeAlias alias="NFVCommonVO" type="com.eluon.vepc.mano.vo.NFVCommonVO"></typeAlias>
+        
+        <!-- Scale VO 2016/01/12 -->
+        <typeAlias alias="GroupVO" type="com.eluon.vepc.mano.vo.GroupVO"></typeAlias>
+        <typeAlias alias="ScaleInVO" type="com.eluon.vepc.mano.vo.ScaleInVO"></typeAlias>
+        <typeAlias alias="ScaleOutVO" type="com.eluon.vepc.mano.vo.ScaleOutVO"></typeAlias>
+        <typeAlias alias="InstanceCreateInfoVO" type="com.eluon.vepc.mano.vo.InstanceCreateInfoVO"></typeAlias>
+        <typeAlias alias="ScaleGroupVO" type="com.eluon.vepc.mano.vo.ScaleGroupVO"></typeAlias>
+        <typeAlias alias="RealTimeScaleVO" type="com.eluon.vepc.mano.vo.RealTimeScaleVO"></typeAlias>
+        <typeAlias alias="ScaleNetworkRefItemVO" type="com.eluon.vepc.mano.vo.ScaleNetworkRefItemVO"></typeAlias>
+        
+        <typeAlias alias="VNFDescriptorVO" type="com.eluon.vepc.mano.vo.VNFDescriptorVO"></typeAlias>
+        <typeAlias alias="VnfcVO" type="com.eluon.vepc.mano.vo.VnfcVO"></typeAlias>
+        <typeAlias alias="VnfcVO" type="com.eluon.vepc.mano.vo.VnfcVO"></typeAlias>
+        <typeAlias alias="AlarmNeutronAgentVO" type="com.eluon.vepc.mano.vo.AlarmNeutronAgentVO"></typeAlias>
+        <typeAlias alias="AlarmNovaServicesVO" type="com.eluon.vepc.mano.vo.AlarmNovaServicesVO"></typeAlias>
+        <typeAlias alias="ActionLogVO" type="com.eluon.vepc.mano.vo.ActionLogVO"></typeAlias>
+        <typeAlias alias="EventLogVO" type="com.eluon.vepc.mano.vo.EventLogVO"></typeAlias>
+        <typeAlias alias="EndpointVO" type="com.eluon.vepc.mano.vo.EndpointVO"></typeAlias>
+        
+    </typeAliases>
+	
+    <mappers>
+        <mapper resource="/sql/Account.xml" />
+        <mapper resource="/sql/Telemetry.xml" />
+        <mapper resource="/sql/System.xml" />
+        
+        <!-- NFV verification Project - Under Add -->
+        <mapper resource="/sql/Veryfy.xml" />
+        <mapper resource="/sql/NFVCommon.xml" />
+        
+        <!-- source location change 2015/10/14 - kim -->
+        <mapper resource="/sql/Parser.xml" />
+        <mapper resource="/sql/Atview.xml" />
+        <mapper resource="/sql/AtviewOptions.xml" />
+        <mapper resource="/sql/Verification.xml" />
+        <mapper resource="/sql/AtviewSub.xml" />
+        <!-- NFV SCALE 2016/01/12 -->
+        <mapper resource="/sql/Scale.xml" />
+        
+        <!--  add vnfd source -->
+        <mapper resource="/sql/Vnfd.xml" />
+        
+    </mappers>
+    
+</configuration>

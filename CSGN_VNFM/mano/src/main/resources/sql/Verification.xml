@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Verification">
+
+	<select id="getManagementPolicyList" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+		
+		SELECT nfv_mnt_menu_tab.mnt_menu_no,
+	       nfv_mnt_menu_tab.mnt_menu_id,
+	       mnt_policy.*
+	  FROM nfv_mnt_menu_tab,
+	       (SELECT nfv_mnt_policy_ref.mnt_policy_ref_no,
+	              nfv_mnt_policy_ref.mnt_policy_no,
+	              nfv_mnt_policy_tab.mnt_policy_id,
+	              nfv_mnt_policy_tab.mnt_policy_nm,
+	              nfv_mnt_policy_tab.mnt_policy_value
+	         FROM nfv_mnt_policy_ref
+	            INNER JOIN nfv_mnt_policy_tab
+	                ON nfv_mnt_policy_ref.mnt_policy_no = nfv_mnt_policy_tab.mnt_policy_no
+	       ) AS mnt_policy
+	 WHERE nfv_mnt_menu_tab.mnt_policy_ref_no = mnt_policy.mnt_policy_ref_no
+	       AND nfv_mnt_menu_tab.mnt_menu_id = 'POLICY'
+		
+	</select>
+	
+	<select id="getManagementPolicy" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+		
+		select * from nfv_mnt_policy_tab
+		where mnt_policy_id = #{mnt_policy_id}
+		
+	</select>
+	
+	<select id="getManagementPolicyIdList" parameterType="hashmap" resultType="string" >
+		
+		select mnt_policy_id from nfv_mnt_policy_tab
+		
+	</select>
+	
+	<insert id="postManagementPolicy" parameterType="hashmap" >
+		
+		insert into nfv_mnt_policy_tab
+		values
+		(
+			#{mnt_policy_no},
+			#{mnt_policy_id},
+			#{mnt_efficient},
+			#{mnt_cnt_vm},
+			#{mnt_cpu},
+			#{mnt_memory},
+			#{mnt_disk},
+			#{mnt_network}
+		)
+		
+	</insert>
+	
+	<insert id="postManagementPolicyRef" parameterType="hashmap" >
+		
+		insert into nfv_mnt_policy_ref
+		values
+		(
+			#{mnt_policy_ref_no},
+			#{mnt_policy_no}
+		)
+		
+	</insert>
+	
+	<update id="putManagementPolicy" parameterType="hashmap" >
+		
+		update 
+			nfv_mnt_policy_tab
+		set
+			mnt_policy_value = #{mnt_policy_value}
+		where
+			mnt_policy_no = #{mnt_policy_no}
+	</update>
+	
+	<delete id="deleteManagementPolicy" parameterType="hashmap" >
+		
+		delete from nfv_mnt_policy_tab
+		where mnt_policy_no = #{mnt_policy_no}
+		
+	</delete>
+	
+	<delete id="deleteManagementPolicyRef" parameterType="hashmap" >
+		
+		delete from nfv_mnt_policy_ref
+		where mnt_policy_no = #{mnt_policy_no}
+		
+	</delete>
+	
+</mapper>

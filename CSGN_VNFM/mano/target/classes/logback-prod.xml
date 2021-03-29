@@ -1,0 +1,36 @@
+<included>
+
+    <logger name="com.eluon.vepc.mano" level="INFO"/>
+    <!-- 3rdparty Loggers -->
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="org.mybatis" level="INFO"/>
+
+    <logger name="org.quartz" level="INFO"/>
+    <logger name="org.springframework.batch" level="INFO"/>
+    <logger name="com.eluon.vepc.mano.batch" level="INFO"/>
+    
+    <logger name="jdbc.resultsettable" level="OFF"/>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/usr/local/tomcat8/logs/mano.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>
+                /usr/local/tomcat8/logs/backup/%d{yyyyMM,aux}/mano.log-%d{yyyyMMdd}.%i.gz
+            </FileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>50MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date [%thread] [%-5level] %message%xException%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="FILE"/>
+    </root>
+    
+</included>

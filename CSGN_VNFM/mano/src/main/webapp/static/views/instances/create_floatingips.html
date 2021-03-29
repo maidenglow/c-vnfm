@@ -1,0 +1,99 @@
+<div class="modal-header">
+	<h3>유동 IP 연결 관리</h3>
+</div>
+
+<form name="form" class="form-validation" novalidate ng-submit="submit(floatingip)">
+
+	<div class="modal-body">
+
+		
+		
+		<tabset class="ui-tab">
+		    <tab heading="IP 주소">
+		    	<!-- Detail -->
+
+				<div class="row">
+					<div class="col-md-6">
+				
+						<fieldset>
+							<div class="form-group">
+				
+								<!-- ip_addr -->
+								<div class="form-control-wrapper">
+									<label for="id_ip_addr" data-i18n="IP 주소"></label>
+									<div class="input-group ">
+										<select
+											id="id_ip_addr"
+											name="ip_addr"
+											class="form-control"
+											ng-model="floatingip.ipAddress"
+											ng-options="item.floating_ip_address for item in floatingIps"
+											required
+											>
+											<option value="">IP 주소 선택</option>
+										</select>
+										<span class="input-group-btn" >
+											<button type="button" class="btn btn-default margin-left-5" ng-click="createFloatingIpPoolForm()">
+				                                <i class="fa fa-plus"></i>
+				                            </button>
+										</span>
+										<span class="input-group-btn" ></span>
+									</div>
+									<div ng-show="form.ip_addr.$error.required" data-i18n="필수 필드입니다."></div>									
+								</div>
+				
+								<!-- associate_port -->
+								<div class="form-control-wrapper">
+									<label for="id_associate_port" data-i18n="연결된 포트"></label>
+									<select
+										id="id_associate_port"
+										name="associate_port"
+										class="form-control"
+										ng-model="floatingip.port"
+										ng-options="item.name for item in instances"
+										required
+										>
+										<option value="">포트 선택</option>
+									</select>
+									
+									<div ng-show="form.associate_port.$error.required" data-i18n="필수 필드입니다."></div>
+								</div>
+				
+							</div><!-- // form-group -->
+						</fieldset><!-- // fieldset -->
+				
+					</div><!-- // col -->
+				
+					<div class="col-md-6">
+					
+						<div class="row">
+							<div class="col-md-12">
+								선택한 인스턴스와 연결할 IP 주소를 선택하십시오.
+							</div>
+						</div>
+				
+					</div><!-- // col -->
+				</div><!-- // row -->
+
+
+		    </tab>
+		    
+		</tabset>
+
+	</div><!-- // modal-body -->
+
+	<div class="modal-footer">
+
+		<button type="button"
+			class="btn btn-warning"
+			ng-click="cancel()"
+			data-i18n="취소"></button>
+
+		<button type="submit"
+			class="btn btn-primary"
+			ng-disabled="!canSubmit()"
+			data-i18n="생성"></button>
+
+	</div><!-- // modal-footer -->
+
+</form><!-- // form -->

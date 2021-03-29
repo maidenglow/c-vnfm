@@ -1,0 +1,95 @@
+
+<form name="form" class="form-validation" novalidate>
+	<fieldset>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-md-6 text-left">
+						<span class="glyphicon glyphicon-th"></span> Descriptor Viewer
+					</div>
+					<!-- // col -->
+
+					<div class="col-md-6 text-right">
+
+						<button type="submit"
+							ng-click="saveModify()"
+							class="btn btn-sm btn-info">
+							<span class="fa fa-floppy-o"></span>
+							Save
+						</button>
+						<button type="button" ng-click="addNewOption()"
+							class="btn btn-sm btn-info">
+							<span class="fa fa-plus"></span>
+							Add
+						</button>
+						
+
+						<button type="button" ng-click="deleteSelectedItem()"
+							class="btn btn-sm btn-danger" ng-class="{'disabled': lifecycle_data == undefined}" ng-disabled="lifecycle_data == undefined">
+							<span class="fa fa-trash"></span>
+							Delete
+						</button>
+					</div>
+					<!-- // col -->
+				</div>
+				<!-- // row -->
+			</div>
+			<!-- // header -->
+
+			<div class="panel-body">
+				<div class="custom-pre-scrollable" ng-style="style()" resizefit>
+				
+<div class="form-group">
+	<table class="table">
+		<caption></caption>
+
+		<colgroup>
+			<col width="20%" />
+			<col width="20%" />
+			<col width="60%" />
+		</colgroup>
+
+		<tbody>
+			<tr ng-repeat="lifecycleItem in lifecycle_data.lifecycle">
+				<th><div class="form-control-wrapper">
+						<input type="checkbox"
+							name="life_no"
+							data-group-name="life_no_list"
+							value="{{lifecycleItem.life_no}}"
+							ng-model="lifecycleItem.checked"
+							placeholder="life_no"
+							/>
+					</div></th>
+				<td>
+					item
+				</td>
+				<td>
+					<div class="form-control-wrapper">
+						<input type="text"
+							name="item"
+							class="form-control"
+							data-group-name="item_list"
+							ng-model="lifecycleItem.item"
+							placeholder="item"
+							maxlength="50"
+							required
+							/>
+	
+						<div ng-show="form.vendor.$error.required">Required</div>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+
+				</div>
+				<!-- // panel-body-wrapper -->
+			</div>
+			<!-- // panel-body -->
+		</div>
+		<!-- // panel -->
+	</fieldset>
+</form><!-- // form -->

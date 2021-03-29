@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="System">
+
+	<select id="getSystem" parameterType="string" resultType="SystemVO">
+		SELECT SYSTEM_ID systemId, HOST_NAME hostName, HOST_TYPE hostType, PRIVATE_IP privateIp, PUBLIC_IP publicIp, OS_NAME osName, TOTAL_CORE_CPU totalCoreCpu, USED_CORE_CPU usedCoreCpu, FREE_CORE_CPU freeCoreCpu, USED_CPU_PER usedCpuPer, TOTAL_MEMORY totalMemory, USED_MEMORY usedMemory, FREE_MEMORY freeMemory, USED_MEMORY_PER usedMemoryPer, TOTAL_DISK totalDisk, USED_DISK usedDisk, FREE_DISK freeDisk, USED_DISK_PER usedDiskPer, TOTAL_NETWORK totalNetwork, TOTAL_SEND_NETWORK totalSendNetwork, TOTAL_RECV_NETWORK totalRecvNetwork, STATUS status, REGISTER_DATE registerDate		
+		FROM VM_SYSTEM
+        WHERE SYSTEM_ID = #{systemId}
+        AND STATUS= 'Y'
+	</select>
+
+	<insert id="insertSystemInfo" parameterType="SystemVO">
+		INSERT INTO VM_SYSTEM (
+		SYSTEM_ID, 
+		HOST_NAME, 
+		HOST_TYPE, 
+		PRIVATE_IP, 
+		PUBLIC_IP, 
+		OS_NAME, 
+		TOTAL_CORE_CPU, 
+		USED_CORE_CPU, 
+		FREE_CORE_CPU, 
+		USED_CPU_PER,
+		TOTAL_MEMORY,
+		USED_MEMORY, 
+		FREE_MEMORY, 
+		USED_MEMORY_PER, 
+		TOTAL_DISK, 
+		USED_DISK, 
+		FREE_DISK, 
+		USED_DISK_PER, 
+		TOTAL_NETWORK, 
+		TOTAL_SEND_NETWORK, 
+		TOTAL_RECV_NETWORK)
+		VALUES (
+		#{systemId, jdbcType=VARCHAR}, 
+		#{hostName, jdbcType=VARCHAR}, 
+		#{hostType, jdbcType=VARCHAR}, 
+		#{privateIp, jdbcType=VARCHAR}, 
+		#{publicIp, jdbcType=VARCHAR}, 
+		#{osName, jdbcType=VARCHAR}, 
+		#{totalCoreCpu, jdbcType=VARCHAR}, 
+		#{usedCoreCpu, jdbcType=VARCHAR}, 
+		#{freeCoreCpu, jdbcType=VARCHAR},
+		#{usedCpuPer, jdbcType=VARCHAR}, 
+		#{totalMemory, jdbcType=VARCHAR}, 
+		#{usedMemory, jdbcType=VARCHAR}, 
+		#{freeMemory, jdbcType=VARCHAR}, 
+		#{usedMemoryPer, jdbcType=VARCHAR}, 
+		#{totalDisk, jdbcType=VARCHAR}, 
+		#{usedDisk, jdbcType=VARCHAR}, 
+		#{freeDisk, jdbcType=VARCHAR}, 
+		#{usedDiskPer, jdbcType=VARCHAR}, 
+		#{totalNetwork, jdbcType=VARCHAR}, 
+		#{totalSendNetwork, jdbcType=VARCHAR}, 
+		#{totalRecvNetwork, jdbcType=VARCHAR})
+	 </insert>
+
+	<update id="updateSystemInfo" parameterType="SystemVO">
+		UPDATE VM_SYSTEM
+		SET 
+		HOST_NAME=#{hostName, jdbcType=VARCHAR},         
+		HOST_TYPE=#{hostType, jdbcType=VARCHAR},         
+		PRIVATE_IP=#{privateIp, jdbcType=VARCHAR},        
+		PUBLIC_IP=#{publicIp, jdbcType=VARCHAR},         
+		OS_NAME=#{osName, jdbcType=VARCHAR},           
+		TOTAL_CORE_CPU=#{totalCoreCpu, jdbcType=VARCHAR},     
+		USED_CORE_CPU=#{usedCoreCpu, jdbcType=VARCHAR},      
+		FREE_CORE_CPU=#{freeCoreCpu, jdbcType=VARCHAR},      
+		USED_CPU_PER=#{usedCpuPer, jdbcType=VARCHAR},       
+		TOTAL_MEMORY=#{totalMemory, jdbcType=VARCHAR},      
+		USED_MEMORY=#{usedMemory, jdbcType=VARCHAR},       
+		FREE_MEMORY=#{freeMemory, jdbcType=VARCHAR},       
+		USED_MEMORY_PER=#{usedMemoryPer, jdbcType=VARCHAR},    
+		TOTAL_DISK=#{totalDisk, jdbcType=VARCHAR},        
+		USED_DISK=#{usedDisk, jdbcType=VARCHAR},         
+		FREE_DISK=#{freeDisk, jdbcType=VARCHAR},         
+		USED_DISK_PER=#{usedDiskPer, jdbcType=VARCHAR},      
+		TOTAL_NETWORK=#{totalNetwork, jdbcType=VARCHAR},     
+		TOTAL_SEND_NETWORK=#{totalSendNetwork, jdbcType=VARCHAR}, 
+		TOTAL_RECV_NETWORK=#{totalRecvNetwork, jdbcType=VARCHAR}  
+		WHERE SYSTEM_ID = #{systemId, jdbcType=VARCHAR}
+	</update>
+	
+	<select id="listSystems_back" parameterType="SystemVO" resultType="SystemVO" >
+		SELECT SYSTEM_ID systemId, HOST_NAME hostName, HOST_TYPE hostType, PRIVATE_IP privateIp, PUBLIC_IP publicIp, OS_NAME osName, TOTAL_CORE_CPU totalCoreCpu, USED_CORE_CPU usedCoreCpu, FREE_CORE_CPU freeCoreCpu, USED_CPU_PER usedCpuPer, TOTAL_MEMORY totalMemory, USED_MEMORY usedMemory, FREE_MEMORY freeMemory, USED_MEMORY_PER usedMemoryPer, TOTAL_DISK totalDisk, USED_DISK usedDisk, FREE_DISK freeDisk, USED_DISK_PER usedDiskPer, TOTAL_NETWORK totalNetwork, TOTAL_SEND_NETWORK totalSendNetwork, TOTAL_RECV_NETWORK totalRecvNetwork, STATUS status, REGISTER_DATE registerDate		
+		FROM VM_SYSTEM
+		WHERE STATUS = 'Y'
+        <trim prefixOverrides="AND|OR ">
+            <if test='osName != null and !osName.equals("")'>
+                AND OS_NAME = #{osName}
+            </if>
+        </trim>
+		ORDER BY REGISTER_DATE DESC
+	</select>
+	
+	<select id="listSystems" parameterType="SystemVO" resultType="SystemVO" >
+		SELECT SYSTEM_ID systemId, HOST_NAME hostName, HOST_TYPE hostType, PRIVATE_IP privateIp, PUBLIC_IP publicIp, OS_NAME osName, TOTAL_CORE_CPU totalCoreCpu, USED_CORE_CPU usedCoreCpu, FREE_CORE_CPU freeCoreCpu, USED_CPU_PER usedCpuPer, TOTAL_MEMORY totalMemory, USED_MEMORY usedMemory, FREE_MEMORY freeMemory, USED_MEMORY_PER usedMemoryPer, TOTAL_DISK totalDisk, USED_DISK usedDisk, FREE_DISK freeDisk, USED_DISK_PER usedDiskPer, TOTAL_NETWORK totalNetwork, TOTAL_SEND_NETWORK totalSendNetwork, TOTAL_RECV_NETWORK totalRecvNetwork, STATUS status, REGISTER_DATE registerDate		
+		FROM VM_SYSTEM
+		WHERE STATUS = 'Y'
+		ORDER BY REGISTER_DATE DESC
+	</select>
+	
+	<select id="listSystemCpusBySystemId" parameterType="String" resultType="SystemCpuVO" >
+		SELECT CPU_ID cpuId, SYSTEM_ID systemId, TOTAL_CORE_CPU totalCoreCpu, USED_CORE_CPU usedCoreCpu, FREE_CORE_CPU freeCoreCpu, USED_CPU_PER usedCpuPer, REGISTER_DATE registerDate 
+		FROM VM_SYSTEM_CPU
+		WHERE SYSTEM_ID = #{systemId}
+	</select>
+	
+	<select id="listSystemMemorysBySystemId" parameterType="String" resultType="SystemMemoryVO" >
+		SELECT MEMORY_ID memoryId, SYSTEM_ID systemId, TOTAL_MEMORY totalMemory, USED_MEMORY usedMemory, FREE_MEMORY freeMemory, USED_MEMORY_PER usedMemoryPer, REGISTER_DATE registerDate 
+		FROM VM_SYSTEM_MEMORY
+		WHERE SYSTEM_ID = #{systemId}
+	</select>
+	
+	<select id="listSystemDisksBySystemId" parameterType="String" resultType="SystemDiskVO" >
+		SELECT DISK_ID diskId, SYSTEM_ID systemId, MOUNT mount, DEVICE device, BLOCKS blocks, USED used, REGISTER_DATE registerDate
+		FROM VM_SYSTEM_DISK
+		WHERE SYSTEM_ID = #{systemId}
+	</select>
+	
+	<select id="listSystemNetworksBySystemId" parameterType="String" resultType="SystemNetworkVO" >
+		SELECT NETWORK_ID networkId, SYSTEM_ID systemId, TOTAL_SEND_BYTES totalSendBytes, TOTAL_RECV_BYTES totalRecvBytes, NIC_NAME nicName, IP_ADDRESS ipAddress, MAC mac, SEND_BYTES sendBytes, SEND_ERROR_BYTES sendErrorBytes, RECV_BYTES recvBytes, RECV_ERROR_BYTES recvErrorBytes, REGISTER_DATE registerDate
+		FROM VM_SYSTEM_NETWORK
+		WHERE SYSTEM_ID = #{systemId}
+	</select>
+
+	<insert id="registAlarm" parameterType="AlarmVO" >
+		INSERT INTO VM_ALARM (
+			ALARM_ID
+			<if test="alarmNo != null and alarmNo != ''">
+			,ALARM_NO
+			</if>
+			<if test="alarmName != null and alarmName != ''">
+			,ALARM_NAME
+			</if>
+			<if test="alarmName != null and alarmName != ''">
+			</if>
+			<if test="alarmContents != null and alarmContents != ''">
+			,ALARM_CONTENTS
+			</if>
+			<if test="alarmRoute != null and alarmRoute != ''">
+			,ALARM_ROUTE
+			</if>
+			<if test="alarmDetailRoute != null and alarmDetailRoute != ''">
+			,ALARM_DETAIL_ROUTE
+			</if>
+			<if test="alarmStatus != null and alarmStatus != ''">
+			,ALARM_STATUS
+			</if>
+			<if test="alarmGrade != null and alarmGrade != ''">
+			,ALARM_GRADE
+			</if>
+			<if test="alarmOwner != null and alarmOwner != ''">
+			,ALARM_OWNER
+			</if>
+			<if test="alarmMusicPath != null and alarmMusicPath != ''">
+			,ALARM_MUSIC_PATH
+			</if>
+			<if test="alarmImagePath != null and alarmImagePath != ''">
+			,ALARM_IMAGE_PATH
+			</if>
+			,REGISTER_DATE
+			)
+		VALUES (
+			#{alarmId}
+			<if test="alarmNo != null and alarmNo != ''">
+			,#{alarmNo}
+			</if>
+			<if test="alarmName != null and alarmName != ''">
+			,#{alarmName}
+			</if> 
+			<if test="alarmContents != null and alarmContents != ''">
+			,#{alarmContents}
+			</if>
+			<if test="alarmRoute != null and alarmRoute != ''">
+			,#{alarmRoute}
+			</if>
+			<if test="alarmDetailRoute != null and alarmDetailRoute != ''">
+			,#{alarmDetailRoute}
+			</if>
+			<if test="alarmStatus != null and alarmStatus != ''">
+			,#{alarmStatus}
+			</if>
+			<if test="alarmGrade != null and alarmGrade != ''">
+			,#{alarmGrade}
+			</if>
+			<if test="alarmOwner != null and alarmOwner != ''">
+			,#{alarmOwner}
+			</if>
+			<if test="alarmMusicPath != null and alarmMusicPath != ''">
+			,#{alarmMusicPath}
+			</if>
+			<if test="alarmImagePath != null and alarmImagePath != ''">
+			,#{alarmImagePath}
+			</if>
+			,now()
+			)
+	</insert>
+
+
+	<select id="getAlarm" parameterType="string" resultType="AlarmVO">
+		SELECT ALARM_ID alarmId, ALARM_NO alarmNo, ALARM_NAME alarmName, ALARM_CONTENTS alarmContents, ALARM_ROUTE alarmRoute, ALARM_DETAIL_ROUTE alarmDetailRoute, ALARM_STATUS alarmStatus, ALARM_GRADE alarmGrade, ALARM_OWNER alarmOwner, ALARM_MUSIC_PATH alarmMusicPath, ALARM_IMAGE_PATH alarmImagePath, MINUTE(TIMEDIFF(now(),REGISTER_DATE)) registerDate,
+		       (SELECT C.DESCRIPTION FROM VM_CODE C WHERE C.CODE = ALARM_GRADE) AS alarmGradeCdNm    /* 알람 등급 코드명 */
+		FROM VM_ALARM
+        WHERE ALARM_ID = #{alarmId} order by REGISTER_DATE DESC
+	</select>
+	
+	<select id="listAlarms" parameterType="AlarmVO" resultType="AlarmVO" >
+		SELECT X.*,
+			   (SELECT C.DESCRIPTION FROM VM_CODE C WHERE C.CODE = X.alarmGrade) AS alarmGradeCdNm    /* 알람 등급 코드명 */
+		FROM (
+			SELECT cast(REGISTER_DATE as unsigned) regDate, ALARM_ID alarmId, ALARM_NO alarmNo, ALARM_NAME alarmName, 
+			ALARM_CONTENTS alarmContents, ALARM_ROUTE alarmRoute, ALARM_DETAIL_ROUTE alarmDetailRoute, 
+			ALARM_STATUS alarmStatus, ALARM_GRADE alarmGrade, ALARM_OWNER alarmOwner, 
+			ALARM_MUSIC_PATH alarmMusicPath, ALARM_IMAGE_PATH alarmImagePath, 
+			HOUR(TIMEDIFF(now(),REGISTER_DATE)) registerTime, MINUTE(TIMEDIFF(now(),REGISTER_DATE)) registerDate
+			FROM VM_ALARM
+			<where> 
+			<if test="alarmStatus != null and alarmStatus != ''">
+				ALARM_STATUS = #{alarmStatus}
+			</if>
+			<if test="alarmId != null and alarmId != ''">
+				AND ALARM_ID > #{alarmId}
+			</if>
+			</where>
+		) X ORDER BY regDate DESC
+		LIMIT 100
+	</select>
+	
+	<update id="deleteAlarm" parameterType="AlarmVO">
+		DELETE FROM VM_ALARM
+		WHERE ALARM_ID = #{alarmId}
+	</update>
+	
+	<update id="updateAlarm" parameterType="AlarmVO">
+		UPDATE VM_ALARM
+		SET ALARM_STATUS=#{alarmStatus}
+		WHERE ALARM_ID = #{alarmId}
+	</update>
+	
+	
+	<select id="listAlarms_back" parameterType="AlarmVO" resultType="AlarmVO" >
+		SELECT ALARM_ID alarmId, ALARM_NO alarmNo, ALARM_NAME alarmName, ALARM_CONTENTS alarmContents, ALARM_ROUTE alarmRoute, ALARM_DETAIL_ROUTE alarmDetailRoute, ALARM_STATUS alarmStatus, ALARM_GRADE alarmGrade, ALARM_OWNER alarmOwner, ALARM_MUSIC_PATH alarmMusicPath, ALARM_IMAGE_PATH alarmImagePath, REGISTER_DATE registerDate
+		FROM VM_ALARM
+		ORDER BY REGISTER_DATE DESC
+	</select>
+
+	<select id="getCode" parameterType="string" resultType="CodeVO">
+		SELECT CODE code, PARENT_CODE parentCode, DESCRIPTION description, STATUS status, REGISTER_DATE registerDate
+		FROM VM_CODE
+        WHERE CODE = #{code}
+	</select>
+	
+	<select id="listCodes" parameterType="CodeVO" resultType="CodeVO" >
+		SELECT CODE code, PARENT_CODE parentCode, DESCRIPTION description, STATUS status, REGISTER_DATE registerDate
+		FROM VM_CODE
+		WHERE STATUS = 'Y'
+		ORDER BY REGISTER_DATE DESC
+	</select>
+		
+</mapper>

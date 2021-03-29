@@ -1,0 +1,97 @@
+
+			    	
+			    	<fieldset>
+
+			<div class="form-group">
+
+				<div class="form-control-wrapper">
+					<label for="name" data-i18n="이름"></label>
+					<input type="text"
+						name="name"
+						class="form-control"
+						ng-model="flavor.name"
+						placeholder="이름"
+						maxlength="100"
+						required
+						/>
+
+					<div ng-show="form.name.$error.required" data-i18n="필수 필드입니다."></div>
+				</div>
+				
+				<div class="form-control-wrapper">
+					<label for="_id" data-i18n="ID"></label>
+					<input type="text"
+						name="_id"
+						class="form-control"
+						ng-model="flavor.id"
+						placeholder="auto"
+						maxlength="100"
+						/>
+				</div>
+				
+				<div class="form-control-wrapper">
+					<label for="" data-i18n="VCPUs"></label>
+					<input type="number"
+						name="vcpus"
+						class="form-control" 
+						ng-model="flavor.vcpus"
+						maxlength="10"  
+						required />
+						
+					<div ng-show="form.vcpus.$error.required && !form.vcpus.$error.number" data-i18n="필수 필드입니다."></div>
+					<div ng-show="form.vcpus.$error.number" data-i18n="숫자만 입력해주세요"></div>
+				</div>
+				
+				<div class="form-control-wrapper">
+					<label for="" data-i18n="RAM (MB)"></label>
+					<input type="number"
+						name="ram"
+						class="form-control" 
+						ng-model="flavor.ram"
+						maxlength="10" integer 
+						required />
+					<div ng-show="form.ram.$error.required && !form.ram.$error.number" data-i18n="필수 필드입니다."></div>
+					<div ng-show="form.ram.$error.number" data-i18n="숫자만 입력해주세요"></div>
+				</div>
+				
+				<div class="form-control-wrapper">
+					<label for="" data-i18n="Root 디스크 (GB)"></label>
+					<input type="number"
+						name="disk"
+						class="form-control" 
+						ng-model="flavor.disk"
+						maxlength="10" integer 
+						required />
+					<div ng-show="form.disk.$error.required && !form.disk.$error.number" data-i18n="필수 필드입니다."></div>
+					<div ng-show="form.disk.$error.number" data-i18n="숫자만 입력해주세요"></div>
+				</div>
+				
+				<div class="form-control-wrapper">
+					<label for="" data-i18n="Ephemeral 디스크 (GB)"></label>
+					<input type="number"
+						name="ephemeral"
+						class="form-control" 
+						ng-model="flavor.ephemeral"
+						maxlength="10" integer 
+						required />
+					<div ng-show="form.ephemeral.$error.required && !form.ephemeral.$error.number" data-i18n="필수 필드입니다."></div>
+					<div ng-show="form.ephemeral.$error.number" data-i18n="숫자만 입력해주세요"></div>
+				</div>
+				
+				<div class="form-control-wrapper">
+					<label for="" data-i18n="Swap 디스크 (MB)"></label>
+					<input type="number"
+						name="swap"
+						class="form-control" 
+						ng-model="flavor.swap"
+						maxlength="10" integer 
+						required />
+					<div ng-show="form.swap.$error.required && !form.swap.$error.number" data-i18n="필수 필드입니다."></div>
+					<div ng-show="form.swap.$error.number" data-i18n="숫자만 입력해주세요"></div>
+				</div>
+				
+
+			</div><!-- // form-group -->
+
+		</fieldset><!-- // fieldset -->
+			  

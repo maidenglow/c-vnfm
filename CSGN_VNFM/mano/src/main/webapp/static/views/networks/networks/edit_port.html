@@ -1,0 +1,78 @@
+<div class="modal-header">
+	<h3>포트 편집</h3>
+</div>
+
+<form name="form" class="form-validation" novalidate ng-submit="submit(port)">
+
+	<div class="modal-body">
+
+		<!-- Detail -->
+		<div class="row">
+			<div class="col-md-12">
+		
+				<fieldset>
+					<div class="form-group">
+
+						<!-- id -->
+						<div class="form-control-wrapper">
+							<label for="id_id" data-i18n="ID"></label>
+							<input type="text"
+								id="id_id"
+								name="name"
+								class="form-control"
+								ng-model="port.id"
+								maxlength="256"
+								disabled
+								/>
+						</div>
+		
+						<!-- name -->
+						<div class="form-control-wrapper">
+							<label for="id_name" data-i18n="이름"></label>
+							<input type="text"
+								id="id_name"
+								name="name"
+								class="form-control"
+								ng-model="port.name"
+								placeholder="이름"
+								maxlength="256"
+								/>
+						</div>
+						
+						<div class="form-control-wrapper">
+							<label for="no_gateway" data-i18n="관리자 상태" class="margin-bottom-0"></label>
+							<input type="checkbox"
+								name="admin_state_up"
+								class="form-control margin-top-0"
+								ng-model="port.admin_state_up"
+								/>
+						</div>
+						
+		
+		
+		
+					</div><!-- // form-group -->
+				</fieldset><!-- // fieldset -->
+		
+			</div><!-- // col -->
+	
+		</div><!-- // row -->
+
+	</div><!-- // modal-body -->
+
+	<div class="modal-footer">
+
+
+		<button type="button"
+			class="btn btn-warning"
+			ng-click="cancel()"
+			data-i18n="취소"></button>
+
+		<button type="submit"
+			class="btn btn-primary"
+			ng-disabled="!canSubmit()"
+			data-i18n="저장"></button>
+
+	</div><!-- // modal-footer -->
+
+</form><!-- // form -->

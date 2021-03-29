@@ -1,0 +1,62 @@
+
+<div data-ng-controller="NetworksCtrl" 
+	ng-init="init()"
+	class="page">
+
+	<div class="row">
+
+		<!-- List -->
+		<div class="col-md-4 col-lg-3">
+		
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<div class="row">
+						<div class="col-md-6 text-left">
+							<span class="glyphicon glyphicon-th"></span>
+							Network 목록
+						</div><!-- // col -->
+						
+						<div class="col-md-6 text-right">
+
+							<a href
+								ng-click="createNetworkForm()"
+								class="btn btn-sm btn-danger">
+								<span class="fa fa-plus"></span>
+								Network 생성</a>
+								
+						</div><!-- // col -->
+					</div><!-- // row -->
+				</div><!-- // panel-heading -->
+
+				<div class="panel-body">
+
+					<div class="nav-container custom-pre-scrollable" ng-style="style()" resizefit>
+						<ul class="nav">
+							<li	ng-repeat="item in networks"
+								class="image-item">
+								<a href
+									ng-click="selectItem(item)"
+									ng-class="{'highlight' : isSelected(item)}">
+									<i class="fa fa-cloud"></i>
+									<span ng-bind="item.name ? item.name : '(' + item.id.substring(0,8) +')'"
+										ng-class="itemStatusClass(item)"></span></a></li>
+						</ul>
+					</div>
+
+				</div><!-- // panel -->
+			</div><!-- // panel-body -->
+
+		</div><!-- // List -->
+		
+		<!-- Detail -->
+		<div class="col-md-8 col-lg-9">
+
+			<div ng-include=" 'views/networks/networks/detail.html' "
+				ng-show="networks !=null && networks.length > 0">
+			</div>
+
+		</div><!-- // Detail -->
+
+	</div><!-- // row -->
+
+</div><!-- // VolumsCtrl -->

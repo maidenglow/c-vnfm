@@ -1,0 +1,140 @@
+
+<div class="row">
+	<div class="col-md-6">
+
+		<fieldset>
+			<div class="form-group">
+
+
+				<!-- name -->
+				<div class="form-control-wrapper">
+					<label for="id_name" data-i18n="이름"></label>
+					<input type="text"
+						id="id_name"
+						name="name"
+						class="form-control"
+						ng-model="volume.display_name"
+						placeholder="이름"
+						maxlength="256"
+						required
+						/>
+
+					<div ng-show="form.name.$error.required" data-i18n="필수 필드입니다."></div>
+				</div>
+				
+				<div class="form-control-wrapper">
+					<label for="" data-i18n="설명"></label>
+					<textarea
+						class="form-control" 
+						rows="4"
+						ng-model="volume.display_description"></textarea>
+				</div>
+				
+
+				<!-- VolumeType -->
+				<div class="form-control-wrapper">
+					<label for="id_volumetype" data-i18n="Type"></label>
+					<select
+						id="id_type"
+						name="type"
+						class="form-control"
+						ng-model="volume.type"
+						ng-options="item as item.name for item in volumeTypes"
+						ng-change="changeVolumeType()">
+						<option style="display: none;" value=""></option>
+					</select>
+				</div>
+				
+				<!-- Size -->
+				<div class="form-control-wrapper">
+					<label for="id_size" data-i18n="크기(GB)"></label>
+					<input type="number"
+						id="id_size"
+						name="size"
+						class="form-control"
+						ng-model="volume.size"
+						ng-change="calVolumeGBytesProgress()"
+						maxlength="256"
+						required
+						/>
+
+					<div ng-show="form.size.$error.required && !form.size.$error.number" data-i18n="필수 필드입니다."></div>
+					<div ng-show="form.size.$error.number" data-i18n="숫자만 입력해주세요"></div>
+				</div>
+
+				<!-- VolumeSource -->
+				<div class="form-control-wrapper">
+					<label for="id_flavor" data-i18n="소스"></label>
+					<select
+						id="id_source"
+						name="source"
+						class="form-control"
+						ng-model="volume.source"
+						ng-options="item as item.name for item in sources"
+						ng-change="changeSource()"
+						ng-init="volume.source=sources[0]">
+						<option style="display: none;" value=""></option>
+					</select>
+				</div>
+				
+				<!-- Volume -->
+				<div class="form-control-wrapper" ng-show="volume.source.type == 'volume'">
+					<label for="id_image" data-i18n="Volume"></label>
+					<select
+						id="id_image"
+						name="image"
+						class="form-control"
+						ng-model="volume.volume"
+						ng-options="item as item.display_name for item in volumes"
+						ng-change="changeVolume()"
+						ng-init="volume.volume=volumes[0]">
+						<option style="display: none;" value=""></option>
+					</select>
+				</div>
+
+				<!-- Image -->
+				<div class="form-control-wrapper" ng-show="volume.source.type == 'image'">
+					<label for="id_image" data-i18n="Image"></label>
+					<select
+						id="id_image"
+						name="image"
+						class="form-control"
+						ng-model="volume.image"
+						ng-options="item as item.name for item in images"
+						ng-change="changeImage()"
+						ng-init="volume.image=images[0]">
+						<option style="display: none;" value=""></option>
+					</select>
+				</div>
+				
+				<!-- availability_zone -->
+				<div class="form-control-wrapper" ng-hide="volume.source.type == 'volume'">
+					<label for="id_availability_zone" data-i18n="가용성존"></label>
+					<select
+						id="id_availability_zone"
+						name="availability_zone"
+						class="form-control"
+						ng-model="volume.availability_zone_select"
+						ng-options="item.zoneName for item in availability_zones track by item.zoneName"
+						ng-init="instance.availability_zone=availability_zones[0].zoneName"
+						ng-change="changeAvailabilityZone()">
+						<option value="">임의의 가용성 존</option>
+					</select>
+				</div>
+
+			</div><!-- // form-group -->
+		</fieldset><!-- // fieldset -->
+
+	</div><!-- // col -->
+
+	<div class="col-md-6">
+	
+		<div class="row">
+			<div class="col-md-12">
+				<div ng-include=" 'views/volumes/create_detail_description_and_quotas.html' ">
+				</div>
+			</div>
+		</div>
+
+	</div><!-- // col -->
+</div><!-- // row -->

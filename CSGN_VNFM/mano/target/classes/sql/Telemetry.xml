@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Telemetry">
+
+	<select id="getInstance" parameterType="string" resultType="InstanceVO">
+		SELECT INSTANCE_ID instanceId, HOST_NAME hostName, HOST_TYPE hostType, PRIVATE_IP privateIp, PUBLIC_IP publicIp, OS_NAME osName, TOTAL_CORE_CPU totalCoreCpu, USED_CORE_CPU usedCoreCpu, FREE_CORE_CPU freeCoreCpu, USED_CPU_PER usedCpuPer, TOTAL_MEMORY totalMemory, USED_MEMORY usedMemory, FREE_MEMORY freeMemory, USED_MEMORY_PER usedMemoryPer, TOTAL_DISK totalDisk, USED_DISK usedDisk, FREE_DISK freeDisk, USED_DISK_PER usedDiskPer, TOTAL_NETWORK totalNetwork, TOTAL_SEND_NETWORK totalSendNetwork, TOTAL_RECV_NETWORK totalRecvNetwork, STATUS status, REGISTER_DATE registerDate		
+		FROM VM_INSTANCE
+        WHERE INSTANCE_ID = #{instanceId}
+        AND STATUS= 'Y'
+	</select>
+	
+	<insert id="insertInstanceInfo" parameterType="InstanceVO">
+		INSERT INTO VM_INSTANCE (
+		INSTANCE_ID, 
+		HOST_NAME, 
+		HOST_TYPE, 
+		PRIVATE_IP, 
+		PUBLIC_IP, 
+		OS_NAME, 
+		TOTAL_CORE_CPU, 
+		USED_CORE_CPU, 
+		FREE_CORE_CPU, 
+		USED_CPU_PER,
+		TOTAL_MEMORY,
+		USED_MEMORY, 
+		FREE_MEMORY, 
+		USED_MEMORY_PER, 
+		TOTAL_DISK, 
+		USED_DISK, 
+		FREE_DISK, 
+		USED_DISK_PER, 
+		TOTAL_NETWORK, 
+		TOTAL_SEND_NETWORK, 
+		TOTAL_RECV_NETWORK)
+		VALUES (
+		#{instanceId, jdbcType=VARCHAR}, 
+		#{hostName, jdbcType=VARCHAR}, 
+		#{hostType, jdbcType=VARCHAR}, 
+		#{privateIp, jdbcType=VARCHAR}, 
+		#{publicIp, jdbcType=VARCHAR}, 
+		#{osName, jdbcType=VARCHAR}, 
+		#{totalCoreCpu, jdbcType=VARCHAR}, 
+		#{usedCoreCpu, jdbcType=VARCHAR}, 
+		#{freeCoreCpu, jdbcType=VARCHAR},
+		#{usedCpuPer, jdbcType=VARCHAR}, 
+		#{totalMemory, jdbcType=VARCHAR}, 
+		#{usedMemory, jdbcType=VARCHAR}, 
+		#{freeMemory, jdbcType=VARCHAR}, 
+		#{usedMemoryPer, jdbcType=VARCHAR}, 
+		#{totalDisk, jdbcType=VARCHAR}, 
+		#{usedDisk, jdbcType=VARCHAR}, 
+		#{freeDisk, jdbcType=VARCHAR}, 
+		#{usedDiskPer, jdbcType=VARCHAR}, 
+		#{totalNetwork, jdbcType=VARCHAR}, 
+		#{totalSendNetwork, jdbcType=VARCHAR}, 
+		#{totalRecvNetwork, jdbcType=VARCHAR})
+	 </insert>
+
+	<update id="updateInstanceInfo" parameterType="InstanceVO">
+		UPDATE VM_INSTANCE
+		SET 
+		HOST_NAME=#{hostName, jdbcType=VARCHAR},         
+		HOST_TYPE=#{hostType, jdbcType=VARCHAR},         
+		PRIVATE_IP=#{privateIp, jdbcType=VARCHAR},        
+		PUBLIC_IP=#{publicIp, jdbcType=VARCHAR},         
+		OS_NAME=#{osName, jdbcType=VARCHAR},           
+		TOTAL_CORE_CPU=#{totalCoreCpu, jdbcType=VARCHAR},     
+		USED_CORE_CPU=#{usedCoreCpu, jdbcType=VARCHAR},      
+		FREE_CORE_CPU=#{freeCoreCpu, jdbcType=VARCHAR},      
+		USED_CPU_PER=#{usedCpuPer, jdbcType=VARCHAR},       
+		TOTAL_MEMORY=#{totalMemory, jdbcType=VARCHAR},      
+		USED_MEMORY=#{usedMemory, jdbcType=VARCHAR},       
+		FREE_MEMORY=#{freeMemory, jdbcType=VARCHAR},       
+		USED_MEMORY_PER=#{usedMemoryPer, jdbcType=VARCHAR},    
+		TOTAL_DISK=#{totalDisk, jdbcType=VARCHAR},        
+		USED_DISK=#{usedDisk, jdbcType=VARCHAR},         
+		FREE_DISK=#{freeDisk, jdbcType=VARCHAR},         
+		USED_DISK_PER=#{usedDiskPer, jdbcType=VARCHAR},      
+		TOTAL_NETWORK=#{totalNetwork, jdbcType=VARCHAR},     
+		TOTAL_SEND_NETWORK=#{totalSendNetwork, jdbcType=VARCHAR}, 
+		TOTAL_RECV_NETWORK=#{totalRecvNetwork, jdbcType=VARCHAR}  
+		WHERE INSTANCE_ID = #{instanceId, jdbcType=VARCHAR}
+	</update>
+	
+	<select id="listInstances_back" parameterType="InstanceVO" resultType="InstanceVO" >
+		SELECT INSTANCE_ID instanceId, HOST_NAME hostName, HOST_TYPE hostType, PRIVATE_IP privateIp, PUBLIC_IP publicIp, OS_NAME osName, TOTAL_CORE_CPU totalCoreCpu, USED_CORE_CPU usedCoreCpu, FREE_CORE_CPU freeCoreCpu, USED_CPU_PER usedCpuPer, TOTAL_MEMORY totalMemory, USED_MEMORY usedMemory, FREE_MEMORY freeMemory, USED_MEMORY_PER usedMemoryPer, TOTAL_DISK totalDisk, USED_DISK usedDisk, FREE_DISK freeDisk, USED_DISK_PER usedDiskPer, TOTAL_NETWORK totalNetwork, TOTAL_SEND_NETWORK totalSendNetwork, TOTAL_RECV_NETWORK totalRecvNetwork, STATUS status, REGISTER_DATE registerDate		
+		FROM VM_INSTANCE
+		WHERE STATUS = 'Y'
+        <trim prefixOverrides="AND|OR ">
+            <if test='osName != null and !osName.equals("")'>
+                AND OS_NAME = #{osName}
+            </if>
+        </trim>
+		ORDER BY REGISTER_DATE DESC
+	</select>
+	
+	<select id="listInstances" parameterType="InstanceVO" resultType="InstanceVO" >
+		SELECT INSTANCE_ID instanceId, HOST_NAME hostName, HOST_TYPE hostType, PRIVATE_IP privateIp, PUBLIC_IP publicIp, OS_NAME osName, TOTAL_CORE_CPU totalCoreCpu, USED_CORE_CPU usedCoreCpu, FREE_CORE_CPU freeCoreCpu, USED_CPU_PER usedCpuPer, TOTAL_MEMORY totalMemory, USED_MEMORY usedMemory, FREE_MEMORY freeMemory, USED_MEMORY_PER usedMemoryPer, TOTAL_DISK totalDisk, USED_DISK usedDisk, FREE_DISK freeDisk, USED_DISK_PER usedDiskPer, TOTAL_NETWORK totalNetwork, TOTAL_SEND_NETWORK totalSendNetwork, TOTAL_RECV_NETWORK totalRecvNetwork, STATUS status, REGISTER_DATE registerDate		
+		FROM VM_INSTANCE
+		WHERE STATUS = 'Y'
+		ORDER BY REGISTER_DATE DESC
+	</select>
+	
+	<select id="listInstanceCpusByInstanceId" parameterType="String" resultType="InstanceCpuVO" >
+		SELECT CPU_ID cpuId, INSTANCE_ID instanceId, TOTAL_CORE_CPU totalCoreCpu, USED_CORE_CPU usedCoreCpu, FREE_CORE_CPU freeCoreCpu, USED_CPU_PER usedCpuPer, REGISTER_DATE registerDate 
+		FROM VM_INSTANCE_CPU
+		WHERE INSTANCE_ID = #{instanceId}
+	</select>
+	
+	<select id="listInstanceMemorysByInstanceId" parameterType="String" resultType="InstanceMemoryVO" >
+		SELECT MEMORY_ID memoryId, INSTANCE_ID instanceId, TOTAL_MEMORY totalMemory, USED_MEMORY usedMemory, FREE_MEMORY freeMemory, USED_MEMORY_PER usedMemoryPer, REGISTER_DATE registerDate 
+		FROM VM_INSTANCE_MEMORY
+		WHERE INSTANCE_ID = #{instanceId}
+	</select>
+	
+	<select id="listInstanceDisksByInstanceId" parameterType="String" resultType="InstanceDiskVO" >
+		SELECT DISK_ID diskId, INSTANCE_ID instanceId, MOUNT mount, DEVICE device, BLOCKS blocks, USED used, REGISTER_DATE registerDate
+		FROM VM_INSTANCE_DISK
+		WHERE INSTANCE_ID = #{instanceId}
+	</select>
+	
+	<select id="listInstanceNetworksByInstanceId" parameterType="String" resultType="InstanceNetworkVO" >
+		SELECT NETWORK_ID networkId, INSTANCE_ID instanceId, TOTAL_SEND_BYTES totalSendBytes, TOTAL_RECV_BYTES totalRecvBytes, NIC_NAME nicName, IP_ADDRESS ipAddress, MAC mac, SEND_BYTES sendBytes, SEND_ERROR_BYTES sendErrorBytes, RECV_BYTES recvBytes, RECV_ERROR_BYTES recvErrorBytes, REGISTER_DATE registerDate
+		FROM VM_INSTANCE_NETWORK
+		WHERE INSTANCE_ID = #{instanceId}
+	</select>
+
+</mapper>

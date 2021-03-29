@@ -1,0 +1,93 @@
+
+<div class="panel panel-default">
+
+	<div class="panel-heading">
+		<div class="row">
+			<div class="col-md-6 text-left">
+				<span class="glyphicon glyphicon-th"></span>
+				Volume 상세
+			</div><!-- // col -->
+
+			<div ng-show="volume"
+				class="col-md-6 text-right">
+
+				<div class="btn-group" dropdown>
+					<button type="button" class="btn btn-info btn-sm dropdown-toggle">
+						동작
+						<span class="caret"></span>
+					</button>
+
+	                <ul class="dropdown-menu" role="menu">
+	                	<li ng-show="volume.status == 'available' || volume.status == 'in-use'"><a href ng-click="editVolumeBasicForm(volume)">볼륨 편집</a></li>
+	                	<li ng-show="volume.status == 'available' || volume.status == 'in-use'"><a href ng-click="editVolumeSizeForm(volume)">볼륨 확장</a></li>
+	                	<li ng-show="volume.status == 'available' || volume.status == 'in-use'"><a href ng-click="editVolumeAttachForm(volume)">연결 편집</a></li>
+	                	<li ng-show="volume.status == 'available' || volume.status == 'in-use'"><a href ng-click="createVolumeSnapshotForm(volume)">스냅샷 생성</a></li>
+	                </ul>
+				</div>
+
+				<a href
+					ng-click="deleteVolumeForm(volume)"
+					ng-disabled="volume == null"
+					class="btn btn-sm btn-danger">
+					<span class="fa fa-trash"></span>
+					Volume 삭제</a>
+
+			</div><!-- // col -->
+		</div><!-- // row -->
+	</div><!-- // panel-heading -->
+
+	<div class="panel-body">
+		<div class="custom-pre-scrollable" ng-style="style()" resizefit>
+
+			<table class="table">
+				<caption>상세정보</caption>
+
+				<colgroup>
+					<col width="30%">
+					<col width="70%">
+				</colgroup>
+
+				<tbody>
+					<tr>
+						<th>프로젝트</th>
+						<td ng-bind="volume.project_name"></td>
+					</tr>
+					<tr>
+						<th>호스트</th>
+						<td ng-bind="volume['os-vol-host-attr:host']"></td>
+					</tr>
+					<tr>
+						<th>이름</th>
+						<td ng-bind="volume.display_name"></td>
+					</tr>
+					<tr>
+						<th>크기</th>
+						<td ng-bind="volume.size + 'GB'"></td>
+					</tr>
+					<tr>
+						<th>상태</th>
+						<td>
+							<span ng-show="isActionProgress(volume.status)" class="custom_progress">
+								<progressbar class="progressbar-sm progress-striped active" value="100"></progressbar>
+							</span>
+							<span ng-bind="volume.status"></span>
+						</td>
+					</tr>
+					<tr>
+						<th>타입</th>
+						<td ng-bind="volume.volume_type"></td>
+					</tr>
+					<tr>
+						<th>연결된 곳</th>
+						<td >
+							<div ng-repeat="item in volume.attachments">
+								<div>{{item.device}}에 {{getServerName(item.server_id)}}에 연결</div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+		</div><!-- // panel-body-wrapper -->
+	</div><!-- // panel-body -->
+</div><!-- // panel -->

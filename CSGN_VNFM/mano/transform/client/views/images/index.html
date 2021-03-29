@@ -1,0 +1,68 @@
+
+<div data-ng-controller="ImagesController" class="page">
+
+	<div class="row">
+
+		<!-- List -->
+		<div class="col-md-4 col-lg-3">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<div class="row">
+						<div class="col-md-6 text-left">
+							<span class="glyphicon glyphicon-th"></span>
+							이미지 목록
+						</div><!-- // col -->
+						
+						<div class="col-md-6 text-right">
+							
+							<a href
+								ng-click="createImageForm()"
+								class="btn btn-sm btn-danger">
+								<span class="fa fa-plus"></span>
+								이미지 생성</a>
+
+						</div><!-- // col -->
+					</div><!-- // row -->
+				</div><!-- // panel-heading -->
+
+				<div class="panel-body">
+
+					<div class="nav-container custom-pre-scrollable" ng-style="style()" resizefit>
+						<ul class="nav">
+							<li	ng-repeat="item in images"
+								class="image-item">
+								<a href
+									ng-click="selectImage(item)"
+									ng-class="{'highlight' : isSelected(item)}">
+									<i class="fa fa-hdd-o"></i>
+									<span ng-bind="item.name"
+										ng-class="imageStatusClass(item)"></span>
+																			
+									<span ng-show="isActionProgress(item.status)" class="custom_progress">
+										<progressbar class="progressbar-sm progress-striped active" value="100"></progressbar>
+									</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+
+				</div><!-- // panel -->
+			</div><!-- // panel-body -->
+		
+		</div><!-- // List -->
+
+		<!-- Detail -->
+		<div class="col-md-8 col-lg-9">
+			
+			<div class="row">
+				<div class="col-md-12">
+					<div
+						ng-show="image"
+						ng-include=" 'views/images/detail.html' ">
+					</div>
+				</div><!-- // Col -->
+			</div><!-- // Row -->
+			
+		</div><!-- // Detail -->
+	</div>
+</div><!-- ImagesController -->

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Veryfy">
+
+ 	<select id="getVldTree" parameterType="hashmap" resultType="VeryfyVO" >
+		 select id from nfv_version_tab where id like CONCAT(#{title}, '%')
+	</select>
+	<select id="getVld" parameterType="hashmap" resultType="VeryfyVO" >
+		select 
+		 	vld.* 
+			 from 
+			 	nfv_version_tab ver
+		 		inner join nfv_vld_tab vld on ver.version_no=vld.version_no
+		 where ver.id=#{title}
+	</select>
+	
+	<select id="getVeryfyList" parameterType="hashmap" resultType="VeryfyVO" >
+		SELECT nfv_version_tab.id, 
+       nfv_version_tab.vendor, 
+       nfv_version_tab.version as descriptor_version, 
+       vld.number_of_endpoints, 
+       vld.root_requirement, 
+       vld.leaf_requirement, 
+       qos, 
+       vld.test_access, 
+       vld.con as connection, 
+       vld.connectivity_type, 
+       vld.seq as vld_security 
+  FROM 
+       (SELECT * 
+         FROM nfv_vld_tab as a, 
+              (SELECT nfv_qos_ref.qos_ref_no as qos_tmp_no, 
+                     nfv_qos_tab.item as qos, 
+                     'NULL' as con, 
+                     'NULL' as seq 
+                FROM nfv_qos_ref 
+                   INNER JOIN nfv_qos_tab 
+                       ON nfv_qos_ref.qos_no = nfv_qos_tab.qos_no 
+              ) as b 
+        WHERE a.qos_ref_no = b.qos_tmp_no 
+             UNION ALL 
+       SELECT * 
+         FROM nfv_vld_tab as a, 
+              (SELECT nfv_cp_ref.cp_ref_no, 
+                     'NULL' as qos, 
+                     nfv_cp_tab.id as con, 
+                     'NULL' as seq 
+                FROM nfv_cp_ref 
+                   INNER JOIN nfv_cp_tab 
+                       ON nfv_cp_ref.cp_no = nfv_cp_tab.cp_no 
+              ) as b 
+        WHERE a.connection_ref_no = b.cp_ref_no 
+             UNION ALL 
+       SELECT * 
+         FROM nfv_vld_tab as a, 
+              (SELECT nfv_security_ref.security_ref_no, 
+                     'NULL' as qos, 
+                     'NULL' as con, 
+                     nfv_security_tab.item as seq 
+                FROM nfv_security_ref 
+                   INNER JOIN nfv_security_tab 
+                       ON nfv_security_ref.security_no = nfv_security_tab.security_no 
+              ) as b 
+        WHERE a.vld_security_ref_no = b.security_ref_no 
+       ) as vld, 
+       nfv_version_tab 
+ WHERE vld.version_no = nfv_version_tab.version_no 
+ and nfv_version_tab.id=#{title}
+	</select>
+	
+	<update id="getVldUpdate" parameterType="hashmap">
+		UPDATE nfv_vld_tab
+		SET 
+			number_of_endpoints=#{number_of_endpoints},
+			root_requirement=#{root_requirement},
+			leaf_requirement=#{leaf_requirement},
+			test_access=#{test_access},
+			connectivity_type=#{connectivity_type}
+		WHERE version_no = #{version_no}
+	</update>
+	
+	<delete id="QosDelete" parameterType="hashmap">
+		DELETE FROM nfv_qos_ref WHERE qos_ref_no=#{qos_ref_no}
+	</delete>
+	<delete id="ConnectionDelete" parameterType="hashmap">
+		DELETE FROM nfv_cp_ref WHERE cp_ref_no=#{cp_ref_no}
+	</delete>
+	<delete id="VldSecurityDelete" parameterType="hashmap">
+		DELETE FROM nfv_security_ref WHERE security_ref_no=#{security_ref_no}
+	</delete>
+	<insert id="QosInsert" parameterType="hashmap">
+		INSERT INTO nfv_qos_ref VALUES(#{qos_ref_no},#{qos_no})
+	</insert>
+	<insert id="ConnectionInsert" parameterType="hashmap">
+		INSERT INTO nfv_cp_ref VALUES(#{cp_ref_no},#{cp_no})
+	</insert>
+	<insert id="VldSecurityInsert" parameterType="hashmap">
+		INSERT INTO nfv_security_ref VALUES(#{security_ref_no},#{security_no})
+	</insert>
+	
+	<select id="getQosList" parameterType="hashmap" resultType="VeryfyVO" >
+		select * from nfv_qos_tab
+	</select>
+	<select id="getConnectionList" parameterType="hashmap" resultType="VeryfyVO" >
+		select * from nfv_cp_tab
+	</select>
+	
+	<select id="getSecurityList" parameterType="hashmap" resultType="VeryfyVO" >
+		select * from nfv_security_tab
+	</select>
+	<update id="getSecurityUpdate" parameterType="hashmap">
+		UPDATE nfv_security_tab
+		SET item=#{item}
+		WHERE security_no = #{security_no}
+	</update>
+	
+	<delete id="getSecurityDelete" parameterType="hashmap">
+		DELETE FROM nfv_security_tab
+		WHERE security_no = #{security_no}
+	</delete>
+	
+	<insert id="getSecuritySave" parameterType="hashmap">
+	 INSERT INTO nfv_security_tab values(#{security_no},#{item})
+	</insert>
+	
+	<update id="getQosUpdate" parameterType="hashmap">
+		UPDATE nfv_qos_tab
+		SET item=#{item}
+		WHERE qos_no = #{qos_no}
+	</update>
+	
+	<delete id="getQosDelete" parameterType="hashmap">
+		DELETE FROM nfv_qos_tab
+		WHERE qos_no = #{qos_no}
+	</delete>
+	
+	<insert id="getQosSave" parameterType="hashmap">
+	 INSERT INTO nfv_qos_tab
+	 (
+	 qos_no,
+	 item
+	 )
+	 VALUES
+	 (
+	 	(
+	 	SELECT 
+		CASE
+			WHEN
+	      (SELECT COUNT(QOS_NO) FROM nfv_qos_tab WHERE SUBSTRING(QOS_NO FROM 1 FOR 6) = (SELECT DATE_FORMAT(NOW(), '%y%m%d'))) > 0
+			THEN  
+			  CONCAT(
+			    (SELECT DATE_FORMAT(NOW(), '%y%m%d')),
+			     '81',
+			    (SELECT LPAD( (SUBSTRING(MAX(QOS_NO), 9)  + 1), 4, '0')FROM nfv_qos_tab)
+		    )
+			ELSE 	
+			  CONCAT((SELECT DATE_FORMAT(NOW(), '%y%m%d')), '81', '0001')
+			END;
+	 	),
+	 	#{item}
+	 )
+	</insert>
+	<insert id="getVersionInsert" parameterType="hashmap">
+		INSERT INTO nfv_version_tab VALUES(#{version_no},#{id},#{vendor},#{version})
+	</insert>
+	<insert id="getVldInsert" parameterType="hashmap">
+		INSERT INTO nfv_vld_tab 
+		VALUES(
+			#{vld_no},
+			#{version_no},
+			#{number_of_endpoints},
+			#{root_requirement},
+			#{leaf_requirement},
+			#{qos_ref_no},
+			#{test_access},
+			#{connection_ref_no},
+			#{connectivity_type},
+			#{vld_security_ref_no}
+			)
+	</insert>
+	<delete id="getVldDelete" parameterType="hashmap">
+		DELETE FROM nfv_vld_tab
+		WHERE vld_no = #{vld_no}
+	</delete>
+	<delete id="getVersionDelete" parameterType="hashmap">
+		DELETE FROM nfv_version_tab
+		WHERE version_no = #{version_no}
+	</delete>
+	
+	
+	
+</mapper>

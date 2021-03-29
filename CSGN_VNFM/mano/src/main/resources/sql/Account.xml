@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Account">
+
+	<select id="findByUserIdAndPassword" parameterType="LoginVO" resultType="AccountVO">
+		SELECT USER_ID userId, PASSWORD password, USER_NAME userName, GRADE_CODE gradeCode, GRADE_NAME gradeName, EMAIL email, REGISTER_DATE registerDate
+		FROM VM_ACCOUNT
+        WHERE USER_ID = #{userId}
+        AND PASSWORD = #{password}
+	</select>
+
+	<select id="getAccountGradeList" resultType="AccountGradeVO" >
+		SELECT GRADE_CODE gradeCode, GRADE_NAME gradeName, STATUS status, REGISTER_DATE registerDate
+		FROM VM_ACCOUNT_GRADE
+		ORDER BY GRADE_CODE ASC
+	</select>
+	
+	<select id="getAccount" parameterType="string" resultType="AccountVO">
+		SELECT USER_ID userId, PASSWORD password, USER_NAME userName, COMPANY company, DEPT dept, PHONE phone, HANDPHONE handphone, EMAIL email, GRADE_CODE gradeCode, GRADE_NAME gradeName, STATUS status, MAKE_ID makeId, UPDATE_USER updateUser, UPDATE_DATE updateDate, LAST_LOGIN_DATE lastLoginDate, REGISTER_DATE registerDate
+		FROM VM_ACCOUNT
+        WHERE USER_ID = #{userId}
+        AND STATUS= 'Y'
+	</select>
+	
+	<insert id="addAccount" parameterType="AccountVO">
+		INSERT INTO VM_ACCOUNT (USER_ID, PASSWORD, USER_NAME, COMPANY, DEPT, PHONE, HANDPHONE, EMAIL, GRADE_CODE, GRADE_NAME)
+		VALUES (#{userId, jdbcType=VARCHAR}, #{password, jdbcType=VARCHAR}, #{userName, jdbcType=VARCHAR}, #{company, jdbcType=VARCHAR}, #{dept, jdbcType=VARCHAR}, #{phone, jdbcType=VARCHAR}, #{handphone, jdbcType=VARCHAR}, #{email, jdbcType=VARCHAR}, #{gradeCode, jdbcType=VARCHAR}, #{gradeName, jdbcType=VARCHAR})
+	 </insert>
+
+	<update id="updateAccount" parameterType="AccountVO">
+		UPDATE VM_ACCOUNT
+		SET PASSWORD=#{password, jdbcType=VARCHAR}, USER_NAME=#{userName, jdbcType=VARCHAR}, COMPANY=#{company, jdbcType=VARCHAR}, DEPT=#{dept, jdbcType=VARCHAR}, PHONE=#{phone, jdbcType=VARCHAR}, HANDPHONE=#{handphone, jdbcType=VARCHAR}, EMAIL=#{email, jdbcType=VARCHAR}, GRADE_CODE=#{gradeCode, jdbcType=VARCHAR}, GRADE_NAME=#{gradeName, jdbcType=VARCHAR}
+		WHERE USER_ID = #{userId, jdbcType=VARCHAR}
+	</update>
+	
+	<select id="getGradeName" parameterType="string" resultType="string">
+		SELECT GRADE_NAME gradeName
+		FROM VM_ACCOUNT_GRADE
+        WHERE GRADE_CODE = #{gradeCode}
+	</select>	
+	
+	<select id="getAccountListTotalCount" parameterType="hashmap" resultType="string" >
+		SELECT COUNT(*) AS TOTAL
+		FROM VM_ACCOUNT
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test='gradeCodes != null and gradeCodes.length != 0'>
+				AND GRADE_CODE IN (
+				<foreach collection="gradeCodes" item="gradeCode" separator=",">#{gradeCode}</foreach>
+				)
+			</if>
+            <if test='userName != null and !userName.equals("")'>
+                AND USER_NAME = #{userName}
+            </if>
+            <if test='handphone != null and !handphone.equals("")'>
+                AND HANDPHONE = #{handphone}
+            </if>
+        </trim>
+	</select>
+	
+	<select id="getAccountListTotalCount_BACK" parameterType="hashmap" resultType="string" >
+		SELECT  NVL((COUNT(*)),0) AS TOTAL
+		FROM VM_ACCOUNT
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test='gradeCodes != null and gradeCodes.length != 0'>
+				AND GRADE_CODE IN (
+				<foreach collection="gradeCodes" item="gradeCode" separator=",">#{gradeCode}</foreach>
+				)
+			</if>
+            <if test='userName != null and !userName.equals("")'>
+                AND USER_NAME = #{userName}
+            </if>
+            <if test='handphone != null and !handphone.equals("")'>
+                AND HANDPHONE = #{handphone}
+            </if>
+            <if test='registerStartDate != null and !registerStartDate.equals("")'>
+            	AND REGISTER_DATE BETWEEN TO_DATE(#{registerStartDate},'YYYYMMDDHH24MISS') AND TO_DATE(#{registerEndDate},'YYYYMMDDHH24MISS')
+            </if>
+        </trim>
+	</select>
+	
+	<select id="getAccountList" parameterType="hashmap" resultType="AccountVO" >
+		SELECT USER_ID userId, PASSWORD password, USER_NAME userName, COMPANY company, DEPT dept, PHONE phone, HANDPHONE handphone, EMAIL email, GRADE_CODE gradeCode, GRADE_NAME gradeName, STATUS status, MAKE_ID makeId, REGISTER_DATE registerDate, UPDATE_USER updateUser, UPDATE_DATE updateDate, LAST_LOGIN_DATE lastLogindate
+		FROM VM_ACCOUNT
+	</select>
+	
+	<select id="getAccountList_BACK" parameterType="hashmap" resultType="AccountVO" >
+		SELECT USER_ID userId, PASSWORD password, USER_NAME userName, COMPANY company, DEPT dept, PHONE phone, HANDPHONE handphone, EMAIL email, GRADE_CODE gradeCode, GRADE_NAME gradeName, STATUS status, MAKE_ID makeId, REGISTER_DATE registerDate, UPDATE_USER updateUser, UPDATE_DATE updateDate, LAST_LOGIN_DATE lastLogindate, LIST_NUM listNum
+		FROM
+		(
+			SELECT USER_ID, PASSWORD, USER_NAME, COMPANY, DEPT, PHONE, HANDPHONE, EMAIL, GRADE_CODE, GRADE_NAME, STATUS, MAKE_ID, REGISTER_DATE, UPDATE_USER, UPDATE_DATE, LAST_LOGIN_DATE, ROWNUM AS LIST_NUM, CEIL(ROWNUM / #{pageSize} ) PAGE
+			FROM
+			(
+				SELECT USER_ID, PASSWORD, USER_NAME, COMPANY, DEPT, PHONE, HANDPHONE, EMAIL, GRADE_CODE, GRADE_NAME, STATUS, MAKE_ID, REGISTER_DATE, UPDATE_USER, UPDATE_DATE, LAST_LOGIN_DATE
+				FROM VM_ACCOUNT
+		        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+					<if test='gradeCodes != null and gradeCodes.length != 0'>
+						AND GRADE_CODE IN (
+						<foreach collection="gradeCodes" item="gradeCode" separator=",">#{gradeCode}</foreach>
+						)
+					</if>
+		            <if test='userName != null and !userName.equals("")'>
+		                AND USER_NAME = #{userName}
+		            </if>
+		            <if test='handphone != null and !handphone.equals("")'>
+		                AND HANDPHONE = #{handphone}
+		            </if>
+		            <if test='registerStartDate != null and !registerStartDate.equals("")'>
+		            	AND REGISTER_DATE BETWEEN TO_DATE(#{registerStartDate},'YYYYMMDDHH24MISS') AND TO_DATE(#{registerEndDate},'YYYYMMDDHH24MISS')
+		            </if>
+		        </trim>
+		        	AND STATUS = 'Y'
+				ORDER BY REGISTER_DATE DESC
+			)
+		)
+		WHERE PAGE = #{currentPage}
+	</select>
+	
+	<update id="deleteAccount" parameterType="string">
+		UPDATE VM_ACCOUNT
+		SET STATUS = 'N'
+		WHERE USER_ID = #{userId}
+	</update>
+	
+</mapper>

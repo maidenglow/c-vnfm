@@ -1,0 +1,373 @@
+<div class="col-md-12 col-lg-12">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<div class="row">
+				<div class="col-md-12 text-left">
+					<span class="glyphicon glyphicon-th"> <span
+						data-i18n="Information"></span></span>
+				</div>
+				<!-- // col -->
+			</div>
+			<!-- // row -->
+		</div>
+		<!-- // panel-heading -->
+
+		<div class="panel-body">
+
+			<div class="nav-container custom-pre-scrollable" ng-style="style()" 	resizefit>
+
+				<div class="col-md-6 col-lg-6">
+					<!-- 왼쪽  -->
+					<div class="row">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-md-12 text-left">
+									<span class="glyphicon glyphicon-list-alt"> <span
+										data-i18n="Instance Group Member List"></span></span>
+								</div>
+								<!-- // col -->
+							</div>
+							<!-- // row -->
+						</div>
+
+						<div class="col-md-12 col-lg-12 ">
+							<div class="well custom-pre-scrollable" resizefit style="min-height: 50px; max-height: 100px;">
+								<div class="custom-container">
+									<div ng-repeat="instance in selectedVal.instance_name" class="btn btn-info btn-sm" style="margin: 5px;">
+												<span>{{instance}}</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-md-12 text-left">
+									<span class="glyphicon glyphicon-list-alt"> <span
+										data-i18n="Configuration"></span></span>
+								</div>
+								<!-- // col -->
+							</div>
+							<!-- // row -->
+						</div>
+						<div class="col-md-6 col-lg-6 custom-pre-scrollable" resizefit>
+
+							<table class="table">
+								<colgroup>
+									<col width="40%" />
+									<col width="60%" />
+								</colgroup>
+								
+								<tbody>
+									<tr>
+										<th>image</th>
+										<td>
+											<div class="radio">
+												<div ng-repeat="imageItem in imageList">
+													<label> <input type="radio" name="image"
+														ng-model="reqData.img_name" value="{{imageItem.name}}"
+														ng-change="idSetter(imageItem, 'image')"
+														 /> {{imageItem.name}}
+													</label>
+												</div>
+											</div> 
+											<span>{{selectedVal.img_name}}</span> 
+											<div ng-show="postVal.imageCheck" data-i18n="Required"></div>
+										</td>
+									</tr>
+									<tr>
+										<th>flavor</th>
+										<td>
+
+											<div class="radio">
+												<div ng-repeat="flavorItem in flavorList">
+													<label> <input type="radio" name="flavor"
+														ng-model="reqData.flavor_name"
+														value="{{flavorItem.name}}"
+														ng-change="idSetter(flavorItem, 'flavor')"
+														> {{flavorItem.name}}
+													</label>
+												</div>
+											</div>
+											<div ng-show="postVal.flavorCheck" data-i18n="Required"></div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							
+						</div>
+
+						<div class="col-md-6 col-lg-6 custom-pre-scrollable" resizefit>
+
+							<table class="table">
+
+								<colgroup>
+									<col width="40%" />
+									<col width="60%" />
+								</colgroup>
+
+								<tbody>
+									<tr>
+										<th>network</th>
+										<td>
+											<div class="checkbox">
+												<div ng-repeat="networkItem in networkList">
+													<label> <input type="checkbox"
+														ng-change="sync(bool, networkItem)" ng-model="bool"
+														ng-checked="isChecked(networkItem.name)"
+														> {{networkItem.name}}
+													</label>
+
+												</div>
+											</div>
+											<div ng-show="postVal.networkCheck" data-i18n="Required"></div>	
+										</td>
+									</tr>
+
+									<tr>
+										<th>key pair</th>
+										<td>
+											<div class="radio">
+												<label>
+													<input type ="radio" name ="keypair" value="" ng-model="reqData.keypair_name" ng-change="idSetter(keypairItem, 'keypair')"> none
+												</label>
+												<div ng-repeat="keypairItem in keypairList">
+													<label> 													
+													<input type="radio" name="keypair"
+														ng-model="reqData.keypair_name"
+														value="{{keypairItem.name}}"
+														ng-change="idSetter(keypairItem, 'keypair')">
+														 {{keypairItem.name}}
+													</label>
+												</div>
+											</div>
+											<!--  key pair에 대한 예외처리는 추후에 추가 될 수 있음. -->
+											<!-- <div ng-show="postVal.keypairCheck" data-i18n="Required"></div>  -->
+										</td>
+									</tr>
+
+								</tbody>
+							</table>
+
+
+						</div>
+					</div>
+
+				</div>
+
+				<div class="col-md-6 col-lg-6" ng-switch on="postVal.inOutValueCheck">
+					<!-- 오른쪽 -->
+					<div class="row">
+						<div class="col-md-6 col-lg-6">
+
+							<div class="panel-heading">
+								<div class="row">
+
+									<span class="glyphicon glyphicon-list-alt"> <span
+										data-i18n="SCALE-IN"></span></span>
+
+									<!-- // col -->
+								</div>
+								<!-- // row -->
+							</div>
+
+
+
+							<div class="custom-pre-scrollable" resizefit
+								style="max-height: 450px; min-height:50px;">
+
+								<div class="form-control-wrapper">
+
+									<table class="table">
+
+										<colgroup>
+											<col width="40%" />
+											<col width="60%" />
+										</colgroup>
+
+										<tbody>
+											<tr>
+												<th>cpu</th>
+												<td>
+													<div class="form-control-wrapper"
+														style="text-align: right; width: 85%;">
+																											
+														<input type="number" name="scale_in_cpu"
+															class="form-control" ng-model="reqData.in_cpu"
+															maxlength="50" required
+															style="width: 85%; display: table-row; text-align: right;"
+															min="0" max="100"
+															onKeyUp="if(this.value>100){this.value='100';}else if(this.value<0){this.value='0';}" />
+														%
+														<div ng-show="form.scale_in_cpu.$error.required">Required</div>			
+																												
+													</div>													
+												</td>
+											</tr>
+											<tr>
+											
+												<th>memory</th>
+												<td>
+													<div class="form-control-wrapper"
+														style="text-align: right; width: 85%;">
+														<input type="number" name="scale_in_memory"
+															class="form-control" ng-model="reqData.in_memory"
+															maxlength="50" required
+															style="width: 85%; display: table-row; text-align: right;"
+															min="0" max="100"
+															onKeyUp="if(this.value>100){this.value='100';}else if(this.value<0){this.value='0';}" />
+														%
+														<div ng-show="form.scale_in_memory.$error.required">Required</div>
+														
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<th>cps</th>
+												<td>
+													<div class="form-control-wrapper"
+														style="text-align: right; width: 85%;">																
+														<input type="number" name="scale_in_cps"
+															class="form-control" ng-model="reqData.in_cps"
+															maxlength="50" required
+															style="width: 85%; display: table-row; text-align: right;"
+															min="0" max="999"
+															onKeyUp="if(this.value>999){this.value='999';}else if(this.value<0){this.value='0';}" />
+														%
+														<div ng-show="form.scale_in_cps.$error.required">Required</div>													
+														
+													</div>
+												</td>
+											</tr>
+
+										</tbody>
+									</table>
+									
+									<div class="text-center" ng-show="postVal.scaleInCheck" data-i18n="Please input one of three values"></div>
+									<!-- <pre>reqData{{reqData|json}}</pre> -->
+								</div>
+
+							</div>
+						</div>
+
+						<div class="col-md-6 col-lg-6">
+
+							<div class="panel-heading">
+								<div class="row">
+
+									<span class="glyphicon glyphicon-list-alt"> <span
+										data-i18n="SCALE-OUT"></span></span>
+
+									<!-- // col -->
+								</div>
+								<!-- // row -->
+							</div>
+
+							<div class="custom-pre-scrollable" resizefit
+								style="max-height: 450px; min-height:50px;">
+
+								<div class="form-control-wrapper">
+
+									<table class="table">
+										<colgroup>
+											<col width="30%" />
+											<col width="70%" />
+										</colgroup>
+
+										<tbody>
+											<tr>
+												<th>cpu</th>
+												<td>
+													<div class="form-control-wrapper"
+														style="text-align: right; width: 85%;">														
+														<input type="number" name="scale_out_cpu"
+															class="form-control" ng-model="reqData.out_cpu"
+															maxlength="50" required
+															style="width: 85%; display: table-row; text-align: right;"
+															min="0" max="100"
+															onKeyUp="if(this.value>100){this.value='100';}else if(this.value<0){this.value='0';}" />
+														%
+														<div ng-show="form.scale_out_cpu.$error.required">Required</div>
+														
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<th>memory</th>
+												<td>
+													<div class="form-control-wrapper"
+														style="text-align: right; width: 85%;">
+																												
+														<input type="number" name="scale_out_memory"
+															class="form-control" ng-model="reqData.out_memory"
+															maxlength="50" required
+															style="width: 85%; display: table-row; text-align: right;"
+															min="0" max="100"
+															onKeyUp="if(this.value>100){this.value='100';}else if(this.value<0){this.value='0';}" />
+														%
+														<div ng-show="form.scale_out_memory.$error.required">Required</div>
+														
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<th>cps</th>
+												<td>
+													<div class="form-control-wrapper"
+														style="text-align: right; width: 85%;">
+														
+														<input type="number" name="scale_out_cps"
+															class="form-control" ng-model="reqData.out_cps"
+															maxlength="50" required
+															style="width: 85%; display: table-row; text-align: right;"
+															min="0" max="999"														
+															onKeyUp="if(this.value>999){this.value='999';}else if(this.value<0){this.value='0';}" />
+														%
+														<div ng-show="form.scale_out_cps.$error.required">Required</div>
+														
+													</div>
+												</td>
+											</tr>
+
+										</tbody>
+									</table>
+									<!-- <pre>selectedVal{{selectedVal|json}}</pre> -->
+									<div class="text-center" ng-show="postVal.scaleOutCheck" data-i18n="Please input one of three values"></div>
+								</div>
+							</div>
+
+
+
+						</div>
+					
+ 						<div class="text-center" ng-switch on="postVal.inOutValueCheck" style="min-height:300px;">
+							<div ng-switch-when="cpu" data-i18n="Scale-in cpu's value is bigger than scale-out value" >
+							</div>
+							<div ng-switch-when="memory" data-i18n="Scale-in memory's value is bigger than scale-out value">
+							</div>
+							<div  ng-switch-when="cps" data-i18n="Scale-in cps's value is bigger than scale-out value">
+							</div>
+							</div>		 	
+						</div>					
+					
+					<div>
+						<div class="text-center">
+							
+							<button type="submit" ng-click="requestScale()"
+								class="btn btn-info">
+								<span data-i18n="SUBMIT"></span>
+							</button>
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+
+		</div>
+		<!-- panel -->
+	</div>
+	<!-- // panel-body -->
+</div>

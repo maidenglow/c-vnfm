@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Scale">
+
+	<!-- nfv_instance_info -->
+	<select id="getInstaceInfo" resultType="java.util.LinkedHashMap">
+		select
+		    instance_no, group_no, instance_id, instance_name, reg_dttm, upd_dttm
+		from 
+		    nfv_instance_info
+	</select>
+	
+	<select id="getInstaceInfoId" parameterType="String" resultType="java.util.LinkedHashMap">
+		select
+		    instance_no, group_no, instance_id, instance_name, reg_dttm, upd_dttm
+		from 
+		    nfv_instance_info
+		where 
+		    instance_id = #{instance_id}
+	</select>
+	
+	<select id="getInstaceInfoGroupNo" parameterType="String" resultType="java.util.LinkedHashMap">
+		select
+		    instance_no, group_no, instance_id, instance_name
+		from 
+		    nfv_instance_info
+		where 
+		    group_no = #{group_no}
+		order by reg_dttm asc
+	</select>
+	
+	<select id="getInstaceInfoCnt" parameterType="hashmap" resultType="int">
+		select
+		    count(*)
+		from 
+		    nfv_instance_info
+		where 
+		    instance_name = #{instance_name}
+		    and instance_id = #{instance_id}
+	</select>
+	
+	<select id="getGroupInstaceInfoCnt" parameterType="String" resultType="int">
+		select
+		    count(*)
+		from 
+		    nfv_instance_info
+		where 
+		    group_no = #{group_no}
+	</select>
+	
+	<insert id="postInstacneInfo" parameterType="hashmap">
+		 insert into 
+		 	nfv_instance_info( instance_no, group_no, instance_id, instance_name, reg_dttm, upd_dttm ) 
+		 values( #{instance_no}, #{group_no}, #{instance_id}, #{instance_name}, now(), now() )
+	</insert>
+	
+	<delete id="deleteInstacneInfo" parameterType="String">
+		delete 
+		from 
+			nfv_instance_info
+		where 
+			instance_no = #{instance_no}
+	</delete>
+	
+	<!-- nfv_group_info -->
+	<select id="getGroupInfo" resultType="ScaleGroupVO" >
+		select 
+			a.group_no, a.group_name, b.in_no, b.in_cpu, b.in_memory, b.in_cps, c.out_no, c.out_cpu, c.out_memory, c.out_cps, 
+			d.create_no, d.img_id, d.img_name, d.flavor_id, d.flavor_name, d.keypair_name
+		from 
+			nfv_group_info a 
+		    left join nfv_scale_in as b on a.group_no = b.group_no 
+		    left join nfv_scale_out as c on a.group_no = c.group_no 
+		    left join nfv_instance_creation_info as d on a.group_no = d.group_no
+		order by a.reg_dttm asc, a.group_name asc
+	</select>
+	
+	<select id="getGroupInfoSyns" resultType="GroupVO" >			
+		select
+			group_no, group_name, img_id, img_name, reg_dttm, upd_dttm
+		from 
+		 	nfv_group_info 
+	</select>
+	
+	<select id="getGroupInfoGroupNo" parameterType="String" resultType="GroupVO" >			
+		select
+			group_no, group_name, img_id, img_name, reg_dttm, upd_dttm
+		from 
+		 	nfv_group_info 
+		where 
+			group_no = #{group_no}
+	</select>
+	
+	<select id="getGroupInfoImgInfo" parameterType="hashmap" resultType="GroupVO" >			
+		select
+			group_no, group_name, img_id, img_name, reg_dttm, upd_dttm
+		from 
+		 	nfv_group_info 
+		where 
+			img_id = #{img_id} and img_name = #{img_name}
+	</select>
+	
+	<select id="getGroupInfoCnt" parameterType="hashmap" resultType="int">
+		select
+		    count(*)
+		from 
+		    nfv_group_info
+		where 
+			group_no = #{group_no}
+		    and group_name = #{group_name}
+	</select>
+	
+	<insert id="postGroupInfo" parameterType="GroupVO">
+		insert into 
+			nfv_group_info( group_no, group_name, img_id, img_name, reg_dttm, upd_dttm ) 
+		values( #{group_no}, #{group_name}, #{img_id}, #{img_name}, now(), now() )
+	</insert>
+	
+	<delete id="deleteGroupInfo" parameterType="String">
+		delete 
+		from 
+			nfv_group_info
+		where 
+			group_no = #{group_no}
+	</delete>
+	
+	<!-- nfv_instance_creation_info -->
+	<select id="getInstanceCreationInfoOne" parameterType="String" resultType="InstanceCreateInfoVO" >			
+		select
+			create_no, group_no, img_id, img_name, flavor_id, flavor_name, keypair_name, reg_dttm, upd_dttm
+		from 
+		 	nfv_instance_creation_info 
+		where 
+			group_no = #{group_no}
+	</select>	
+	
+	<insert id="postInstanceCreateInfo" parameterType="InstanceCreateInfoVO">
+		insert into 
+			nfv_instance_creation_info( create_no, group_no, img_id, img_name, flavor_id, flavor_name, keypair_name, reg_dttm, upd_dttm ) 
+		values( #{create_no}, #{group_no}, #{img_id}, #{img_name}, #{flavor_id}, #{flavor_name}, #{keypair_name}, now(), now() )
+	</insert>
+	
+	<update id="putInstanceCreateInfo" parameterType="InstanceCreateInfoVO">
+		update  
+		 	nfv_instance_creation_info
+		set
+		 	img_id = #{img_id}, 
+		 	img_name = #{img_name}, 
+		 	flavor_id = #{flavor_id}, 
+		 	flavor_name = #{flavor_name}, 
+		 	keypair_name = #{keypair_name}, 
+		 	upd_dttm = now() 
+		where 
+			create_no = #{create_no}
+	</update>
+	
+	<delete id="deleteInstanceCreateInfo" parameterType="String">
+		delete 
+		from 
+			nfv_instance_creation_info
+		where 
+			group_no = #{group_no}
+	</delete>
+	
+	<!-- nfv_scale_in -->
+	<select id="getScaleInOne" parameterType="String" resultType="ScaleInVO" >			
+		select
+			in_no, group_no, in_cpu, in_memory, in_cps, reg_dttm, upd_dttm
+		from 
+		 	nfv_scale_in 
+		where 
+			group_no = #{group_no}
+	</select>	
+	
+	<insert id="postScaleIn" parameterType="ScaleInVO">
+		 insert into 
+		 	nfv_scale_in( in_no, group_no, in_cpu, in_memory, in_cps, reg_dttm, upd_dttm ) 
+		 values( #{in_no}, #{group_no}, #{in_cpu}, #{in_memory}, #{in_cps}, now(), now() )
+	</insert>
+
+	<update id="putScaleIn" parameterType="ScaleInVO">
+		update  
+		 	nfv_scale_in
+		set
+		 	in_cpu = #{in_cpu}, 
+		 	in_memory = #{in_memory}, 
+		 	in_cps = #{in_cps}, 
+		 	upd_dttm = now() 
+		where 
+			in_no = #{in_no}
+	</update>
+	
+	<delete id="deleteScaleIn" parameterType="String">
+		delete 
+		from 
+			nfv_scale_in
+		where 
+			group_no = #{group_no}
+	</delete>
+	
+	<!-- nfv_scale_out -->
+	<select id="getScaleOutOne" parameterType="String" resultType="ScaleOutVO" >			
+		select
+			out_no, group_no, out_cpu, out_memory, out_cps, reg_dttm, upd_dttm
+		from 
+		 	nfv_scale_out 
+		where 
+			group_no = #{group_no}
+	</select>	
+	
+	<insert id="postScaleOut" parameterType="ScaleOutVO">
+		 insert into 
+		 	nfv_scale_out( out_no, group_no, out_cpu, out_memory, out_cps, reg_dttm, upd_dttm ) 
+		 values( #{out_no}, #{group_no}, #{out_cpu}, #{out_memory}, #{out_cps}, now(), now() )
+	</insert>
+	
+	<update id="putScaleOut" parameterType="ScaleOutVO">
+		update  
+		 	nfv_scale_out
+		set
+		 	out_cpu = #{out_cpu}, 
+		 	out_memory = #{out_memory}, 
+		 	out_cps = #{out_cps}, 
+		 	upd_dttm = now() 
+		where 
+			out_no = #{out_no}
+	</update>
+	
+	<delete id="deleteScaleOut" parameterType="String">
+		delete 
+		from 
+			nfv_scale_out
+		where 
+			group_no = #{group_no}
+	</delete>
+	
+	<!-- nfv_instance_scale_history -->
+	<select id="getScaleHistory10Cycle" resultType="RealTimeScaleVO">
+	 	<![CDATA[
+			select
+			    history_no, instance_no, instance_id, instance_name, cpu, memory, cps, scale_info, reg_dttm, upd_dttm
+			from 
+			    nfv_instance_scale_history
+			where scale_info = 'N/A' and upd_dttm >= date_format(now()- interval 3 minute, '%Y-%m-%d %H:%i:00') and upd_dttm <= date_format(now(), '%Y-%m-%d %H:%i:59')
+		]]>
+	</select>
+	
+	<insert id="postScaleHistory" parameterType="RealTimeScaleVO">
+		 insert into 
+		 	nfv_instance_scale_history( history_no, instance_no, instance_id, instance_name, cpu, memory, cps, scale_info, reg_dttm, upd_dttm ) 
+		 values( #{history_no}, #{instance_no}, #{instance_id}, #{instance_name}, #{cpu}, #{memory}, #{cps}, #{scale_info}, now(), now() )
+	</insert>
+	
+	<update id="putScaleHistory" parameterType="RealTimeScaleVO">
+		update  
+		 	nfv_instance_scale_history
+		set
+		 	scale_info = #{scale_info}, 
+		 	upd_dttm = now() 
+		where 
+			history_no = #{history_no}
+	</update>
+	
+	<!-- nfv_networking_ref -->
+	<select id="getNetworkRefItem" parameterType="String" resultType="ScaleNetworkRefItemVO" >			
+		select
+			network_id, network_name
+		from 
+		 	nfv_networking_ref 
+		where 
+			create_no = #{create_no}
+	</select>	
+	
+	<insert id="postNetworkRef" parameterType="hashmap">
+		 insert into 
+		 	nfv_networking_ref( network_no, create_no, network_id, network_name, reg_dttm, upd_dttm ) 
+		 values( #{network_no}, #{create_no}, #{network_id}, #{network_name}, now(), now() )
+	</insert>
+	
+	<delete id="deleteNetworkRef" parameterType="String">
+		delete 
+		from 
+			nfv_networking_ref
+		where 
+			create_no = #{create_no}
+	</delete>
+	
+</mapper>

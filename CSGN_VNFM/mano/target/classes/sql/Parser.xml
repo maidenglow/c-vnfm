@@ -1,0 +1,1966 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Parser">
+
+	<select id="getVldCount" parameterType="hashmap" resultType="int" >
+		
+		select
+			count(*)
+		from 
+		nfv_vld_tab a, nfv_version_tab b
+		where
+			a.version_no = b.version_no
+			<if test="vldId != null">
+			and b.id = #{vldId}
+			</if>
+	</select>
+	
+	<select id="getVldOne" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+
+		SELECT nfv_version_tab.id, 
+	       nfv_version_tab.vendor, 
+	       nfv_version_tab.version as descriptor_version, 
+	       vld.number_of_endpoints, 
+	       vld.root_requirement, 
+	       vld.leaf_requirement, 
+	       qos, 
+	       vld.test_access, 
+	       vld.con as connection, 
+	       vld.connectivity_type, 
+	       vld.seq as vld_security 
+	  FROM 
+	       (SELECT * 
+	         FROM nfv_vld_tab as a, 
+	              (SELECT nfv_qos_ref.qos_ref_no as qos_tmp_no, 
+	                     nfv_qos_tab.item as qos, 
+	                     'NULL' as con, 
+	                     'NULL' as seq 
+	                FROM nfv_qos_ref 
+	                   INNER JOIN nfv_qos_tab 
+	                       ON nfv_qos_ref.qos_no = nfv_qos_tab.qos_no 
+	              ) as b 
+	        WHERE a.qos_ref_no = b.qos_tmp_no 
+	             UNION ALL 
+	       SELECT * 
+	         FROM nfv_vld_tab as a, 
+	              (SELECT nfv_cp_ref.cp_ref_no, 
+	                     'NULL' as qos, 
+	                     nfv_cp_tab.id as con, 
+	                     'NULL' as seq 
+	                FROM nfv_cp_ref 
+	                   INNER JOIN nfv_cp_tab 
+	                       ON nfv_cp_ref.cp_no = nfv_cp_tab.cp_no 
+	              ) as b 
+	        WHERE a.connection_ref_no = b.cp_ref_no 
+	             UNION ALL 
+	       SELECT * 
+	         FROM nfv_vld_tab as a, 
+	              (SELECT nfv_security_ref.security_ref_no, 
+	                     'NULL' as qos, 
+	                     'NULL' as con, 
+	                     nfv_security_tab.item as seq 
+	                FROM nfv_security_ref 
+	                   INNER JOIN nfv_security_tab 
+	                       ON nfv_security_ref.security_no = nfv_security_tab.security_no 
+	              ) as b 
+	        WHERE a.vld_security_ref_no = b.security_ref_no 
+	       ) as vld, 
+	       nfv_version_tab 
+	 WHERE vld.version_no = nfv_version_tab.version_no 
+	 and nfv_version_tab.id = #{vldId}
+	 order by connection
+ 
+	</select>
+	
+	
+	<select id="getVldAllId" parameterType="hashmap" resultType="string" >
+		
+		select
+			b.id
+		from 
+		nfv_vld_tab a, nfv_version_tab b
+		where
+			a.version_no = b.version_no
+	
+	</select>
+	
+	<select id="getPnfdCount" parameterType="hashmap" resultType="int" >
+		
+		select
+			count(*)
+		from 
+		nfv_pnfd_tab a, nfv_version_tab b
+		where
+			a.version_no = b.version_no
+			<if test="pnfdId != null">
+			and b.id = #{pnfdId}
+			</if>
+	</select>
+	
+	<select id="getPnfdOne" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+
+		SELECT nfv_version_tab.id,
+	       nfv_version_tab.vendor,
+	       nfv_version_tab.version,
+	       vld.description,
+	       vld.con as connection_point_id,
+	       vld.type as connection_point_type,
+	       vld.descriptor_version,
+	       vld.seq as pnfd_security
+	  FROM
+	       (SELECT *
+	         FROM nfv_pnfd_tab as a,
+	              (SELECT nfv_cp_ref.cp_ref_no,
+	                     nfv_cp_tab.id as con,
+	                     nfv_cp_tab.type,
+	                     'NULL' as seq
+	                FROM nfv_cp_ref
+	                   INNER JOIN nfv_cp_tab
+	                       ON nfv_cp_ref.cp_no = nfv_cp_tab.cp_no
+	              ) as b
+	        WHERE a.connection_point_ref_no = b.cp_ref_no
+	             UNION ALL
+	       SELECT *
+	         FROM nfv_pnfd_tab as a,
+	              (SELECT nfv_security_ref.security_ref_no,
+	                     'NULL' as con,
+	                     'NULL' as type,
+	                     nfv_security_tab.item as seq
+	                FROM nfv_security_ref
+	                   INNER JOIN nfv_security_tab
+	                       ON nfv_security_ref.security_no = nfv_security_tab.security_no
+	              ) as b
+	        WHERE a.pnfd_security_ref_no = b.security_ref_no
+	       ) as vld,
+	       nfv_version_tab
+	 WHERE vld.version_no = nfv_version_tab.version_no
+	       AND nfv_version_tab.id = #{pnfdId}
+	       order by connection_point_id
+       
+	</select>
+	
+	
+	<select id="getPnfdAllId" parameterType="hashmap" resultType="string" >
+		
+		select
+			b.id
+		from 
+		nfv_pnfd_tab a, nfv_version_tab b
+		where
+			a.version_no = b.version_no
+			
+	</select>
+	
+	<select id="getCpCount" parameterType="hashmap" resultType="int" >
+	
+		select 
+		  count(*) 
+		from
+		  nfv_cp_tab a
+		<if test="cpId != null">
+		where
+			a.id = #{cpId}
+		</if>
+		
+	</select>
+	
+	<select id="getCpOne" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+		select 
+		  id,
+		  virtual_link_reference,
+		  type
+		from
+		  nfv_cp_tab a
+		where
+		  a.id = #{cpId}
+	</select>
+	
+	
+	<select id="getCpAllId" parameterType="hashmap" resultType="string" >
+	
+		select 
+		  id
+		from
+		  nfv_cp_tab a
+		  
+	</select>
+	
+	<select id="getNfpCount" parameterType="hashmap" resultType="int" >
+	
+		select
+			count(*)
+		from nfv_nfp_tab
+		<if test="nfpId != null">
+		WHERE nfp_id = #{nfpId}
+		</if>
+		
+	</select>
+	
+	<select id="getNfpOne" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+		
+		SELECT a.*,
+              b.policy,
+              b.nfp_con
+         FROM nfv_nfp_tab as a,
+              (SELECT nfv_policy_ref.policy_ref_no,
+                     nfv_policy_tab.policy,
+                     'NULL' as cp_ref_no,
+                     'NULL' as nfp_con
+                FROM nfv_policy_ref
+                   INNER JOIN nfv_policy_tab
+                       ON nfv_policy_ref.policy_no = nfv_policy_tab.policy_no
+                    UNION ALL
+              SELECT 'NULL' as policy_ref_no,
+                     'NULL' as policy,
+                     nfv_cp_ref.cp_ref_no,
+                     nfv_cp_tab.id as nfp_con
+                FROM nfv_cp_ref
+                   INNER JOIN nfv_cp_tab
+                       ON nfv_cp_ref.cp_no = nfv_cp_tab.cp_no
+              ) as b
+        WHERE (a.policy_ref_no = b.policy_ref_no
+              OR a.connection_ref_no = b.cp_ref_no)
+              and a.nfp_id = #{nfpId}
+	 
+	</select>
+	
+	<select id="getNfpAllId" parameterType="hashmap" resultType="string" >
+	
+		select
+			nfp_id
+		from nfv_nfp_tab
+		  
+	</select>
+	
+	<select id="getVnffgdCount" parameterType="hashmap" resultType="int" >
+	
+		select
+			count(*) 
+		from 
+			nfv_vnffgd_tab a, nfv_version_tab b
+		WHERE 
+			a.version_no = b.version_no
+			<if test="vnffgdId != null">
+			AND b.id = #{vnffgdId}
+			</if>
+		
+	</select>
+	
+	<select id="getVnffgdOne" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+		SELECT nfv_version_tab.id,
+	       nfv_version_tab.vendor,
+	       nfv_version_tab.version,
+	       vnffgd.number_of_endpoints,
+	       vnffgd.number_of_virtual_links,
+	       vnffgd.dvl,
+	       vnffgd.nfp_id,
+	       vnffgd.policy,
+	       vnffgd.nfp_con,
+	       vnffgd.con,
+	       vnffgd.descriptor_version,
+	       vnffgd.constituent,
+	       vnffgd.seq asvnffgd_security
+	  FROM
+	       (SELECT a.* ,
+	              con as dvl,
+	              'NULL' as nfp_id,
+	              'NULL' as policy,
+	              'NULL' as nfp_con,
+	              'NULL' as con,
+	              'NULL' as constituent,
+	              'NULL' as seq
+	         FROM nfv_vnffgd_tab as a,
+	              (SELECT nfv_function_ref.function_ref_no,
+	                     nfv_version_tab.id as con
+	                FROM nfv_function_ref
+	                   INNER JOIN nfv_version_tab
+	                       ON nfv_function_ref.function_no = nfv_version_tab.version_no
+	              ) as b
+	        WHERE a.dvl_ref_no = b.function_ref_no
+	             UNION ALL
+	       SELECT a.* ,
+	              'NULL' as dvl,
+	              b.nfp_id,
+	              b.policy,
+	              b.nfp_con,
+	              'NULL' as con,
+	              'NULL' as constituent,
+	              'NULL' as seq
+	         FROM nfv_vnffgd_tab as a,
+	              (SELECT d.nfp_ref_no,
+	                     e.nfp_id,
+	                     e.policy,
+	                     e.nfp_con
+	                FROM nfv_nfp_ref as d,
+	                     (SELECT a.*,
+	                            b.policy,
+	                            b.nfp_con
+	                       FROM nfv_nfp_tab as a,
+	                            (SELECT nfv_policy_ref.policy_ref_no,
+	                                   nfv_policy_tab.policy,
+	                                   'NULL' as cp_ref_no,
+	                                   'NULL' as nfp_con
+	                              FROM nfv_policy_ref
+	                                 INNER JOIN nfv_policy_tab
+	                                     ON nfv_policy_ref.policy_no = nfv_policy_tab.policy_no
+	                                  UNION ALL
+	                            SELECT 'NULL' as policy_ref_no,
+	                                   'NULL' as policy,
+	                                   nfv_cp_ref.cp_ref_no,
+	                                   nfv_cp_tab.id as nfp_con
+	                              FROM nfv_cp_ref
+	                                 INNER JOIN nfv_cp_tab
+	                                     ON nfv_cp_ref.cp_no = nfv_cp_tab.cp_no
+	                            ) as b
+	                      WHERE a.policy_ref_no = b.policy_ref_no
+	                            OR a.connection_ref_no = b.cp_ref_no
+	                     ) as e
+	               WHERE d.nfp_no = e.nfp_no
+	              ) as b
+	        WHERE a.nfp_ref_no = b.nfp_ref_no
+	             UNION ALL
+	       SELECT a.* ,
+	              'NULL' as dvl,
+	              'NULL' as nfp_id,
+	              'NULL' as policy,
+	              'NULL' as nfp_con,
+	              con,
+	              'NULL' as constituent,
+	              'NULL' as seq
+	         FROM nfv_vnffgd_tab as a,
+	              (SELECT nfv_cp_ref.cp_ref_no,
+	                     nfv_cp_tab.id as con
+	                FROM nfv_cp_ref
+	                   INNER JOIN nfv_cp_tab
+	                       ON nfv_cp_ref.cp_no = nfv_cp_tab.cp_no
+	              ) as b
+	        WHERE a.connection_point_ref_no = b.cp_ref_no
+	             UNION ALL
+	       SELECT a.* ,
+	              'NULL' as dvl,
+	              'NULL' as nfp_id,
+	              'NULL' as policy,
+	              'NULL' as nfp_con,
+	              'NULL' as con,
+	              con as constituent,
+	              'NULL' as seq
+	         FROM nfv_vnffgd_tab as a,
+	              (SELECT nfv_function_ref.function_ref_no,
+	                     nfv_version_tab.id as con
+	                FROM nfv_function_ref
+	                   INNER JOIN nfv_version_tab
+	                       ON nfv_function_ref.function_no = nfv_version_tab.version_no
+	              ) as b
+	        WHERE a.constituent_vnfs_ref_no = b.function_ref_no
+	             UNION ALL
+	       SELECT a.*,
+	              'NULL' as dvl,
+	              'NULL' as nfp_id,
+	              'NULL' as policy,
+	              'NULL' as nfp_con,
+	              'NULL' as con,
+	              'NULL' as constituent ,
+	              seq
+	         FROM nfv_vnffgd_tab as a,
+	              (SELECT nfv_security_ref.security_ref_no,
+	                     nfv_security_tab.item as seq
+	                FROM nfv_security_ref
+	                   INNER JOIN nfv_security_tab
+	                       ON nfv_security_ref.security_no = nfv_security_tab.security_no
+	              ) as b
+	        WHERE a.vnffgd_security_ref_no = b.security_ref_no
+	       ) as vnffgd,
+	       nfv_version_tab
+	 WHERE vnffgd.version_no = nfv_version_tab.version_no
+	       AND nfv_version_tab.id = #{vnffgdId}
+	       
+	       order by dvl, nfp_id, nfp_con, con
+	</select>
+	
+	
+	<select id="getVnffgdAllId" parameterType="hashmap" resultType="string" >
+	
+		select
+			b.id
+		from 
+			nfv_vnffgd_tab a, nfv_version_tab b
+		WHERE 
+			a.version_no = b.version_no
+		  
+	</select>
+	
+	<select id="getVnfcCount" parameterType="hashmap" resultType="int" >
+	
+		select
+			count(*) 
+		from 
+			nfv_vnfc_tab a
+		<if test="vnfcId != null">
+		WHERE 
+			a.vnfc_id = #{vnfcId}
+		</if>
+		
+	</select>
+	
+	<select id="getVnfcOne" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+               SELECT *
+				  FROM
+				       (SELECT 
+				              vnfc_tab.vnfc_no,
+				              vnfc_tab.vnfc_id,
+				              vnfc_tab.connection_ref_no
+				         FROM 
+				              nfv_vnfc_tab as vnfc_tab
+				       
+				       ) as vnfc,
+				       (SELECT nfv_cp_ref.cp_ref_no,
+				              nfv_cp_tab.id as cp_id,
+		                      nfv_cp_tab.cp_no as cp_no,
+				              nfv_cp_tab.virtual_link_reference,
+				              nfv_cp_tab.type
+				         FROM nfv_cp_ref
+				            INNER JOIN nfv_cp_tab
+				                ON nfv_cp_ref.cp_no = nfv_cp_tab.cp_no
+				       ) as con
+				 WHERE vnfc.connection_ref_no = con.cp_ref_no
+				       AND vnfc.vnfc_id = #{vnfcId}
+	</select>
+	
+	
+	<select id="getVnfcAllId" parameterType="hashmap" resultType="string" >
+	
+		select
+			vnfc_id
+		from 
+			nfv_vnfc_tab
+		order by vnfc_id
+		  
+	</select>
+	
+	<select id="getVduCount" parameterType="hashmap" resultType="int" >
+
+		select 
+			count(*) 
+		from 
+			nfv_vdu_tab a
+		<if test="vduId != null">
+		where
+			a.vdu_id = #{vduId}
+		</if>
+		
+		
+	</select>
+	
+	<select id="getVduOne" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+		
+		SELECT vdu.vdu_no,
+	       vdu.vdu_id,
+	       vdu.vm_image,
+	       vdu.computation_requirement,
+	       vdu.vmre,
+	       vdu.vnbr,
+	       vdu.life_item,
+	       vdu.vdu_constraint,
+	       vdu.high_availability,
+	       vdu.scale_in_out,
+	       vdu.vnfc_id,
+	       vdu.cp_id,
+	       vdu.cp_vlr,
+	       vdu.cp_type,
+	       vdu.mnt_item
+	  FROM
+	       (SELECT a.*,
+	              b.life_item,
+	              'NULL' as vnfc_id,
+	              'NULL' as cp_id,
+	              'NULL' as cp_vlr,
+	              'NULL' as cp_type,
+	              'NULL' as mnt_item
+	         FROM nfv_vdu_tab as a,
+	              (SELECT life_ref.life_ref_no,
+	                     life_tab.item as life_item
+	                FROM nfv_lifecycle_ref as life_ref
+	                   INNER JOIN nfv_lifecycle_tab as life_tab
+	                       ON life_ref.life_no = life_tab.life_no
+	              ) as b
+	        WHERE a.life_ref_no = b.life_ref_no
+	             UNION ALL
+	       SELECT a.*,
+	              'NULL' as life_item,
+	              vnfc.vnfc_id,
+	              vnfc.cp_id,
+	              vnfc.cp_vlr,
+	              vnfc.cp_type,
+	              'NULL' as mnt_item
+	         FROM nfv_vdu_tab as a,
+	              (SELECT a.vnfc_ref_no,
+	                     a.vnfc_id,
+	                     b.cp_id,
+	                     b.cp_vlr,
+	                     b.cp_type
+	                FROM
+	                     (SELECT vnfc_ref.vnfc_ref_no,
+	                            vnfc_tab.vnfc_id,
+	                            vnfc_tab.connection_ref_no
+	                       FROM nfv_vnfc_ref as vnfc_ref
+	                          INNER JOIN nfv_vnfc_tab as vnfc_tab
+	                              ON vnfc_ref.vnfc_no = vnfc_tab.vnfc_no
+	                     ) as a,
+	                     (SELECT nfv_cp_ref.cp_ref_no,
+	                            nfv_cp_tab.id as cp_id,
+	                            nfv_cp_tab.virtual_link_reference as cp_vlr,
+	                            nfv_cp_tab.type as cp_type
+	                       FROM nfv_cp_ref
+	                          INNER JOIN nfv_cp_tab
+	                              ON nfv_cp_ref.cp_no = nfv_cp_tab.cp_no
+	                     ) as b
+	               WHERE a.connection_ref_no = b.cp_ref_no
+	              ) as vnfc
+	        WHERE a.vnfc_ref_no = vnfc.vnfc_ref_no
+	             UNION ALL
+	       SELECT a.*,
+	              'NULL' as life_item,
+	              'NULL' as vnfc_id,
+	              'NULL' as cp_id,
+	              'NULL' as cp_vlr,
+	              'NULL' as cp_type,
+	              b.mnt_item
+	         FROM nfv_vdu_tab as a,
+	              (SELECT mnt_ref.mnt_ref_no,
+	                     mnt_tab.item as mnt_item
+	                FROM nfv_monitoring_ref as mnt_ref
+	                   INNER JOIN nfv_monitoring_tab as mnt_tab
+	                       ON mnt_ref.mnt_no = mnt_tab.mnt_no
+	              ) as b
+	        WHERE a.mnt_ref_no = b.mnt_ref_no
+	       ) as vdu
+	 WHERE vdu.vdu_id = #{vduId}
+	</select>
+	
+	
+	<select id="getVduAllId" parameterType="hashmap" resultType="string" >
+	
+		select 
+			vdu_id
+		from 
+			nfv_vdu_tab a
+		  
+	</select>
+	
+	
+	<select id="getDfCount" parameterType="hashmap" resultType="int" >
+
+		select
+			count(*)
+		from nfv_flavour_tab
+		<if test="flavour_id != null">
+		where flavour_flag = #{flavour_flag}
+		and flavour_id = #{flavour_id}
+		</if>
+		
+	</select>
+	
+	<select id="getDfOne" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+	
+		select
+			CONCAT(flavour_flag, CONCAT('_', flavour_id)) flavour_id,
+			flavour_flag,
+			flavour_key,
+			cstr_item,
+			vdu_id,
+			instance_cnt,
+			cp_id
+		from 
+		(
+		select 
+			a.flavour_id,
+			a.flavour_flag,
+			a.flavour_key,
+			b.item as cstr_item,
+			'NULL' as vdu_id,
+			'NULL' as instance_cnt,
+			'NULL' as cp_id
+		from 
+		nfv_flavour_tab a, nfv_constraint_tab b, nfv_constraint_ref c
+		where 1=1
+		and a.cstr_ref_no = c.cstr_ref_no
+		and b.cstr_no = c.cstr_no
+		
+		UNION ALL
+		select 
+			a.flavour_id,
+			a.flavour_flag,
+			a.flavour_key,
+			'NULL' as cstr_item,
+			c.vdu_id,
+			c.instance_cnt,
+			g.id as cp_id
+		from 
+			nfv_flavour_tab a, nfv_constituent_ref b, 
+			nfv_constituent_tab c, nfv_vnfc_ref d, nfv_vnfc_tab e,
+			nfv_cp_ref f, nfv_cp_tab g 
+		where 1=1 
+		and a.cstt_ref_no = b.cstt_ref_no
+		and b.cstt_no = c.cstt_no
+		and c.vnfc_ref_no = d.vnfc_ref_no
+		and d.vnfc_no = e.vnfc_no
+		and e.connection_ref_no = f.cp_ref_no
+		and f.cp_no = g.cp_no
+		) a
+		where
+		1=1 
+		and a.flavour_id = #{flavour_id}
+		and a.flavour_flag = #{flavour_flag}
+       
+	</select>
+	
+	
+	<select id="getDfAllId" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+	
+		select
+			flavour_id,
+			flavour_flag
+		from
+			nfv_flavour_tab
+			
+	</select>
+	
+	<select id="getVnfdCount" parameterType="hashmap" resultType="int" >
+
+		select
+			count(*)
+		from
+			nfv_vnfd_tab a, nfv_version_tab b
+		where
+			a.version_no = b.version_no
+			<if test="vnfdId != null">
+			and b.id = #{vnfdId}
+			</if>
+		
+	</select>
+	
+	<select id="getVnfdOne" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+	
+		SELECT nfv_version_tab.id as vnfd_id,
+	       nfv_version_tab.vendor as vnfd_vendor,
+	       vnfd.*
+	  FROM nfv_version_tab,
+	       (SELECT a.vnfd_no,
+	              a.version_no,
+	              a.descriptor_version,
+	              b.vdu_id,
+	              b.vm_image,
+	              b.computation_requirement,
+	              b.vmre,
+	              b.vnbr,
+	              b.life_item,
+	              b.vdu_constraint,
+	              b.high_availability,
+	              b.scale_in_out,
+	              b.vnfc_id,
+	              b.cp_id,
+	              b.cp_vlr,
+	              b.cp_type,
+	              b.mnt_item,
+	              'NULL' as vld_no,
+	              'NULL' as vld_id,
+	              'NULL' as vld_vendor,
+	              'NULL' as vld_version,
+	              'NULL' as number_of_endpoints,
+	              'NULL' as root_requirement,
+	              'NULL' as leaf_requirement,
+	              'NULL' as vld_qos,
+	              'NULL' as test_access,
+	              'NULL' as vld_con,
+	              'NULL' as vld_con_type,
+	              'NULL' as vld_security,
+	              'NULL' as vnfd_cp_id,
+	              'NULL' as vnfd_cp_vlr,
+	              'NULL' as vnfd_cp_type,
+	              'NULL' as vnfd_life_item,
+	              'NULL' as dep_item,
+	              'NULL' as vnfd_mnt_item,
+	              'NULL' as flavour_id,
+	              'NULL' as flavour_key,
+	              'NULL' as cstr_item,
+	              'NULL' as cstr_vdu_id,
+	              'NULL' as instance_cnt,
+	              'NULL' as cstr_vnfc_id,
+	              'NULL' as policy_item,
+	              a.manifest_file,
+	              'NULL' as seq_item
+	         FROM nfv_vnfd_tab a,
+	              (SELECT func.function_ref_no as vdu_ref_no,
+	                     vdu.*
+	                FROM nfv_function_ref as func,
+	                     (SELECT a.*,
+	                            b.life_item,
+	                            'NULL' as vnfc_id,
+	                            'NULL' as cp_id,
+	                            'NULL' as cp_vlr,
+	                            'NULL' as cp_type,
+	                            'NULL' as mnt_item
+	                       FROM nfv_vdu_tab as a,
+	                            (SELECT life_ref.life_ref_no,
+	                                   life_tab.item as life_item
+	                              FROM nfv_lifecycle_ref as life_ref
+	                                 INNER JOIN nfv_lifecycle_tab as life_tab
+	                                     ON life_ref.life_no = life_tab.life_no
+	                            ) as b
+	                      WHERE a.life_ref_no = b.life_ref_no
+	                           UNION ALL
+	                     SELECT a.*,
+	                            'NULL' as life_item,
+	                            vnfc.vnfc_id,
+	                            vnfc.cp_id,
+	                            vnfc.cp_vlr,
+	                            vnfc.cp_type,
+	                            'NULL' as mnt_item
+	                       FROM nfv_vdu_tab as a,
+	                            (SELECT a.vnfc_ref_no,
+	                                   a.vnfc_id,
+	                                   b.cp_id,
+	                                   b.cp_vlr,
+	                                   b.cp_type
+	                              FROM
+	                                   (SELECT vnfc_ref.vnfc_ref_no,
+	                                          vnfc_tab.vnfc_id,
+	                                          vnfc_tab.connection_ref_no
+	                                     FROM nfv_vnfc_ref as vnfc_ref
+	                                        INNER JOIN nfv_vnfc_tab as vnfc_tab
+	                                            ON vnfc_ref.vnfc_no = vnfc_tab.vnfc_no
+	                                   ) as a,
+	                                   (SELECT nfv_cp_ref.cp_ref_no,
+	                                          nfv_cp_tab.id as cp_id,
+	                                          nfv_cp_tab.virtual_link_reference as cp_vlr,
+	                                          nfv_cp_tab.type as cp_type
+	                                     FROM nfv_cp_ref
+	                                        INNER JOIN nfv_cp_tab
+	                                            ON nfv_cp_ref.cp_no = nfv_cp_tab.cp_no
+	                                   ) as b
+	                             WHERE a.connection_ref_no = b.cp_ref_no
+	                            ) as vnfc
+	                      WHERE a.vnfc_ref_no = vnfc.vnfc_ref_no
+	                           UNION ALL
+	                     SELECT a.*,
+	                            'NULL' as life_item,
+	                            'NULL' as vnfc_id,
+	                            'NULL' as cp_id,
+	                            'NULL' as cp_vlr,
+	                            'NULL' as cp_type,
+	                            b.mnt_item
+	                       FROM nfv_vdu_tab as a,
+	                            (SELECT mnt_ref.mnt_ref_no,
+	                                   mnt_tab.item as mnt_item
+	                              FROM nfv_monitoring_ref as mnt_ref
+	                                 INNER JOIN nfv_monitoring_tab as mnt_tab
+	                                     ON mnt_ref.mnt_no = mnt_tab.mnt_no
+	                            ) as b
+	                      WHERE a.mnt_ref_no = b.mnt_ref_no
+	                     ) as vdu
+	               WHERE func.function_no = vdu.vdu_no
+	              ) as b
+	        WHERE a.vdu_ref_no = b.vdu_ref_no
+	             UNION ALL
+	       SELECT a.vnfd_no,
+	              a.version_no,
+	              a.descriptor_version,
+	              'NULL' as vdu_id,
+	              'NULL' as vm_image,
+	              'NULL' as computation_requirement,
+	              'NULL' as vmre,
+	              'NULL' as vnbr,
+	              'NULL' as life_item,
+	              'NULL' as vdu_constraint,
+	              'NULL' as high_availability,
+	              'NULL' as scale_in_out,
+	              'NULL' as vnfc_id,
+	              'NULL' as cp_id,
+	              'NULL' as cp_vlr,
+	              'NULL' as cp_type,
+	              'NULL' as mnt_item,
+	              c.vld_no,
+	              c.vld_id,
+	              c.vld_vendor,
+	              c.vld_version,
+	              c.number_of_endpoints,
+	              c.root_requirement,
+	              c.leaf_requirement,
+	              c.vld_qos,
+	              c.test_access,
+	              c.vld_con,
+	              c.vld_con_type,
+	              c.vld_security,
+	              'NULL' as vnfd_cp_id,
+	              'NULL' as vnfd_cp_vlr,
+	              'NULL' as vnfd_cp_type,
+	              'NULL' as vnfd_life_item,
+	              'NULL' as dep_item,
+	              'NULL' as vnfd_mnt_item,
+	              'NULL' as flavour_id,
+	              'NULL' as flavour_key,
+	              'NULL' as cstr_item,
+	              'NULL' as cstr_vdu_id,
+	              'NULL' as instance_cnt,
+	              'NULL' as cstr_vnfc_id,
+	              'NULL' as policy_item,
+	              a.manifest_file,
+	              'NULL' as seq_item
+	         FROM nfv_vnfd_tab a,
+	              (SELECT func.function_ref_no as vld_ref_no,
+	                     vlds.*
+	                FROM nfv_function_ref as func,
+	                     (SELECT vld.vld_no,
+	                            nfv_version_tab.id as vld_id,
+	                            nfv_version_tab.vendor as vld_vendor,
+	                            nfv_version_tab.version as vld_version,
+	                            vld.number_of_endpoints,
+	                            vld.root_requirement,
+	                            vld.leaf_requirement,
+	                            qos as vld_qos,
+	                            vld.test_access,
+	                            vld.con as vld_con,
+	                            vld.connectivity_type as vld_con_type,
+	                            vld.seq as vld_security
+	                       FROM
+	                            (SELECT *
+	                              FROM nfv_vld_tab as a,
+	                                   (SELECT nfv_qos_ref.qos_ref_no as qos_tmp_no,
+	                                          nfv_qos_tab.item as qos,
+	                                          'NULL' as con,
+	                                          'NULL' as seq
+	                                     FROM nfv_qos_ref
+	                                        INNER JOIN nfv_qos_tab
+	                                            ON nfv_qos_ref.qos_no = nfv_qos_tab.qos_no
+	                                   ) as b
+	                             WHERE a.qos_ref_no = b.qos_tmp_no
+	                                  UNION ALL
+	                            SELECT *
+	                              FROM nfv_vld_tab as a,
+	                                   (SELECT nfv_cp_ref.cp_ref_no,
+	                                          'NULL' as qos,
+	                                          nfv_cp_tab.id as con,
+	                                          'NULL' as seq
+	                                     FROM nfv_cp_ref
+	                                        INNER JOIN nfv_cp_tab
+	                                            ON nfv_cp_ref.cp_no = nfv_cp_tab.cp_no
+	                                   ) as b
+	                             WHERE a.connection_ref_no = b.cp_ref_no
+	                                  UNION ALL
+	                            SELECT *
+	                              FROM nfv_vld_tab as a,
+	                                   (SELECT nfv_security_ref.security_ref_no,
+	                                          'NULL' as qos,
+	                                          'NULL' as con,
+	                                          nfv_security_tab.item as seq
+	                                     FROM nfv_security_ref
+	                                        INNER JOIN nfv_security_tab
+	                                            ON nfv_security_ref.security_no = nfv_security_tab.security_no
+	                                   ) as b
+	                             WHERE a.vld_security_ref_no = b.security_ref_no
+	                            ) as vld,
+	                            nfv_version_tab
+	                      WHERE vld.version_no = nfv_version_tab.version_no
+	                     ) as vlds
+	               WHERE func.function_no = vlds.vld_no
+	              ) as c
+	        WHERE a.vld_ref_no = c.vld_ref_no
+	             UNION ALL
+	       SELECT a.vnfd_no,
+	              a.version_no,
+	              a.descriptor_version,
+	              'NULL' as vdu_id,
+	              'NULL' as vm_image,
+	              'NULL' as computation_requirement,
+	              'NULL' as vmre,
+	              'NULL' as vnbr,
+	              'NULL' as life_item,
+	              'NULL' as vdu_constraint,
+	              'NULL' as high_availability,
+	              'NULL' as scale_in_out,
+	              'NULL' as vnfc_id,
+	              'NULL' as cp_id,
+	              'NULL' as cp_vlr,
+	              'NULL' as cp_type,
+	              'NULL' as mnt_item,
+	              'NULL' as vld_no,
+	              'NULL' as vld_id,
+	              'NULL' as vld_vendor,
+	              'NULL' as vld_version,
+	              'NULL' as number_of_endpoints,
+	              'NULL' as root_requirement,
+	              'NULL' as leaf_requirement,
+	              'NULL' as vld_qos,
+	              'NULL' as test_access,
+	              'NULL' as vld_con,
+	              'NULL' as vld_con_type,
+	              'NULL' as vld_security,
+	              d.vnfd_cp_id,
+	              d.vnfd_cp_vlr,
+	              d.vnfd_cp_type,
+	              'NULL' as vnfd_life_item,
+	              'NULL' as dep_item,
+	              'NULL' as vnfd_mnt_item,
+	              'NULL' as flavour_id,
+	              'NULL' as flavour_key,
+	              'NULL' as cstr_item,
+	              'NULL' as cstr_vdu_id,
+	              'NULL' as instance_cnt,
+	              'NULL' as cstr_vnfc_id,
+	              'NULL' as policy_item,
+	              a.manifest_file,
+	              'NULL' as seq_item
+	         FROM nfv_vnfd_tab a,
+	              (SELECT nfv_cp_ref.cp_ref_no,
+	                     nfv_cp_tab.id as vnfd_cp_id,
+	                     nfv_cp_tab.virtual_link_reference as vnfd_cp_vlr,
+	                     nfv_cp_tab.type as vnfd_cp_type
+	                FROM nfv_cp_ref
+	                   INNER JOIN nfv_cp_tab
+	                       ON nfv_cp_ref.cp_no = nfv_cp_tab.cp_no
+	              ) as d
+	        WHERE a.cp_ref_no = d.cp_ref_no
+	             UNION ALL
+	       SELECT a.vnfd_no,
+	              a.version_no,
+	              a.descriptor_version,
+	              'NULL' as vdu_id,
+	              'NULL' as vm_image,
+	              'NULL' as computation_requirement,
+	              'NULL' as vmre,
+	              'NULL' as vnbr,
+	              'NULL' as life_item,
+	              'NULL' as vdu_constraint,
+	              'NULL' as high_availability,
+	              'NULL' as scale_in_out,
+	              'NULL' as vnfc_id,
+	              'NULL' as cp_id,
+	              'NULL' as cp_vlr,
+	              'NULL' as cp_type,
+	              'NULL' as mnt_item,
+	              'NULL' as vld_no,
+	              'NULL' as vld_id,
+	              'NULL' as vld_vendor,
+	              'NULL' as vld_version,
+	              'NULL' as number_of_endpoints,
+	              'NULL' as root_requirement,
+	              'NULL' as leaf_requirement,
+	              'NULL' as vld_qos,
+	              'NULL' as test_access,
+	              'NULL' as vld_con,
+	              'NULL' as vld_con_type,
+	              'NULL' as vld_security,
+	              'NULL' as vnfd_cp_id,
+	              'NULL' as vnfd_cp_vlr,
+	              'NULL' as vnfd_cp_type,
+	              e.vnfd_life_item,
+	              'NULL' as dep_item,
+	              'NULL' as vnfd_mnt_item,
+	              'NULL' as flavour_id,
+	              'NULL' as flavour_key,
+	              'NULL' as cstr_item,
+	              'NULL' as cstr_vdu_id,
+	              'NULL' as instance_cnt,
+	              'NULL' as cstr_vnfc_id,
+	              'NULL' as policy_item,
+	              a.manifest_file,
+	              'NULL' as seq_item
+	         FROM nfv_vnfd_tab a,
+	              (SELECT life_ref.life_ref_no,
+	                     life_tab.item as vnfd_life_item
+	                FROM nfv_lifecycle_ref as life_ref
+	                   INNER JOIN nfv_lifecycle_tab as life_tab
+	                       ON life_ref.life_no = life_tab.life_no
+	              ) as e
+	        WHERE a.life_ref_no = e.life_ref_no
+	             UNION ALL
+	       SELECT a.vnfd_no,
+	              a.version_no,
+	              a.descriptor_version,
+	              'NULL' as vdu_id,
+	              'NULL' as vm_image,
+	              'NULL' as computation_requirement,
+	              'NULL' as vmre,
+	              'NULL' as vnbr,
+	              'NULL' as life_item,
+	              'NULL' as vdu_constraint,
+	              'NULL' as high_availability,
+	              'NULL' as scale_in_out,
+	              'NULL' as vnfc_id,
+	              'NULL' as cp_id,
+	              'NULL' as cp_vlr,
+	              'NULL' as cp_type,
+	              'NULL' as mnt_item,
+	              'NULL' as vld_no,
+	              'NULL' as vld_id,
+	              'NULL' as vld_vendor,
+	              'NULL' as vld_version,
+	              'NULL' as number_of_endpoints,
+	              'NULL' as root_requirement,
+	              'NULL' as leaf_requirement,
+	              'NULL' as vld_qos,
+	              'NULL' as test_access,
+	              'NULL' as vld_con,
+	              'NULL' as vld_con_type,
+	              'NULL' as vld_security,
+	              'NULL' as vnfd_cp_id,
+	              'NULL' as vnfd_cp_vlr,
+	              'NULL' as vnfd_cp_type,
+	              'NULL' as vnfd_life_item,
+	              f.dep_item,
+	              'NULL' as vnfd_mnt_item,
+	              'NULL' as flavour_id,
+	              'NULL' as flavour_key,
+	              'NULL' as cstr_item,
+	              'NULL' as cstr_vdu_id,
+	              'NULL' as instance_cnt,
+	              'NULL' as cstr_vnfc_id,
+	              'NULL' as policy_item,
+	              a.manifest_file,
+	              'NULL' as seq_item
+	         FROM nfv_vnfd_tab a,
+	              (SELECT nfv_function_ref.function_ref_no,
+	                     nfv_version_tab.id as dep_item
+	                FROM nfv_function_ref
+	                   INNER JOIN nfv_version_tab
+	                       ON nfv_function_ref.function_no = nfv_version_tab.version_no
+	              ) as f
+	        WHERE a.dependency_ref_no = f.function_ref_no
+	             UNION ALL
+	       SELECT a.vnfd_no,
+	              a.version_no,
+	              a.descriptor_version,
+	              'NULL' as vdu_id,
+	              'NULL' as vm_image,
+	              'NULL' as computation_requirement,
+	              'NULL' as vmre,
+	              'NULL' as vnbr,
+	              'NULL' as life_item,
+	              'NULL' as vdu_constraint,
+	              'NULL' as high_availability,
+	              'NULL' as scale_in_out,
+	              'NULL' as vnfc_id,
+	              'NULL' as cp_id,
+	              'NULL' as cp_vlr,
+	              'NULL' as cp_type,
+	              'NULL' as mnt_item,
+	              'NULL' as vld_no,
+	              'NULL' as vld_id,
+	              'NULL' as vld_vendor,
+	              'NULL' as vld_version,
+	              'NULL' as number_of_endpoints,
+	              'NULL' as root_requirement,
+	              'NULL' as leaf_requirement,
+	              'NULL' as vld_qos,
+	              'NULL' as test_access,
+	              'NULL' as vld_con,
+	              'NULL' as vld_con_type,
+	              'NULL' as vld_security,
+	              'NULL' as vnfd_cp_id,
+	              'NULL' as vnfd_cp_vlr,
+	              'NULL' as vnfd_cp_type,
+	              'NULL' as vnfd_life_item,
+	              'NULL' as dep_item,
+	              g.vnfd_mnt_item,
+	              'NULL' as flavour_id,
+	              'NULL' as flavour_key,
+	              'NULL' as cstr_item,
+	              'NULL' as cstr_vdu_id,
+	              'NULL' as instance_cnt,
+	              'NULL' as cstr_vnfc_id,
+	              'NULL' as policy_item,
+	              a.manifest_file,
+	              'NULL' as seq_item
+	         FROM nfv_vnfd_tab a,
+	              (SELECT mnt_ref.mnt_ref_no,
+	                     mnt_tab.item as vnfd_mnt_item
+	                FROM nfv_monitoring_ref as mnt_ref
+	                   INNER JOIN nfv_monitoring_tab as mnt_tab
+	                       ON mnt_ref.mnt_no = mnt_tab.mnt_no
+	              ) as g
+	        WHERE a.monitoring_no = g.mnt_ref_no
+	             UNION ALL
+	       SELECT a.vnfd_no,
+	              a.version_no,
+	              a.descriptor_version,
+	              'NULL' as vdu_id,
+	              'NULL' as vm_image,
+	              'NULL' as computation_requirement,
+	              'NULL' as vmre,
+	              'NULL' as vnbr,
+	              'NULL' as life_item,
+	              'NULL' as vdu_constraint,
+	              'NULL' as high_availability,
+	              'NULL' as scale_in_out,
+	              'NULL' as vnfc_id,
+	              'NULL' as cp_id,
+	              'NULL' as cp_vlr,
+	              'NULL' as cp_type,
+	              'NULL' as mnt_item,
+	              'NULL' as vld_no,
+	              'NULL' as vld_id,
+	              'NULL' as vld_vendor,
+	              'NULL' as vld_version,
+	              'NULL' as number_of_endpoints,
+	              'NULL' as root_requirement,
+	              'NULL' as leaf_requirement,
+	              'NULL' as vld_qos,
+	              'NULL' as test_access,
+	              'NULL' as vld_con,
+	              'NULL' as vld_con_type,
+	              'NULL' as vld_security,
+	              'NULL' as vnfd_cp_id,
+	              'NULL' as vnfd_cp_vlr,
+	              'NULL' as vnfd_cp_type,
+	              'NULL' as vnfd_life_item,
+	              'NULL' as dep_item,
+	              'NULL' as vnfd_mnt_item,
+	              flavour_id,
+	              h.flavour_key,
+	              h.cstr_item,
+	              h.vdu_id as cstr_vdu_id,
+	              h.instance_cnt,
+	              h.cp_id as cstr_vnfc_id,
+	              'NULL' as policy_item,
+	              a.manifest_file,
+	              'NULL' as seq_item
+	         FROM nfv_vnfd_tab a, nfv_flavour_ref b,
+	              (
+	              select 
+	              		a.flavour_no,
+							a.flavour_id,
+							a.flavour_flag,
+							a.flavour_key,
+							b.item as cstr_item,
+							'NULL' as vdu_id,
+							'NULL' as instance_cnt,
+							'NULL' as cp_id
+						from 
+						nfv_flavour_tab a, nfv_constraint_tab b, nfv_constraint_ref c
+						where 1=1
+						and a.cstr_ref_no = c.cstr_ref_no
+						and b.cstr_no = c.cstr_no
+			
+	                    UNION ALL
+	              select 
+	              		a.flavour_no,
+							a.flavour_id,
+							a.flavour_flag,
+							a.flavour_key,
+							'NULL' as cstr_item,
+							c.vdu_id,
+							c.instance_cnt,
+							g.id as cp_id
+						from 
+							nfv_flavour_tab a, nfv_constituent_ref b, 
+							nfv_constituent_tab c, nfv_vnfc_ref d, nfv_vnfc_tab e,
+							nfv_cp_ref f, nfv_cp_tab g 
+						where 1=1 
+						and a.cstt_ref_no = b.cstt_ref_no
+						and b.cstt_no = c.cstt_no
+						and c.vnfc_ref_no = d.vnfc_ref_no
+						and d.vnfc_no = e.vnfc_no
+						and e.connection_ref_no = f.cp_ref_no
+						and f.cp_no = g.cp_no
+	              ) as h
+				WHERE a.flavour_ref_no = b.flavour_ref_no
+						and b.flavour_no = h.flavour_no
+	             UNION ALL
+	       SELECT a.vnfd_no,
+	              a.version_no,
+	              a.descriptor_version,
+	              'NULL' as vdu_id,
+	              'NULL' as vm_image,
+	              'NULL' as computation_requirement,
+	              'NULL' as vmre,
+	              'NULL' as vnbr,
+	              'NULL' as life_item,
+	              'NULL' as vdu_constraint,
+	              'NULL' as high_availability,
+	              'NULL' as scale_in_out,
+	              'NULL' as vnfc_id,
+	              'NULL' as cp_id,
+	              'NULL' as cp_vlr,
+	              'NULL' as cp_type,
+	              'NULL' as mnt_item,
+	              'NULL' as vld_no,
+	              'NULL' as vld_id,
+	              'NULL' as vld_vendor,
+	              'NULL' as vld_version,
+	              'NULL' as number_of_endpoints,
+	              'NULL' as root_requirement,
+	              'NULL' as leaf_requirement,
+	              'NULL' as vld_qos,
+	              'NULL' as test_access,
+	              'NULL' as vld_con,
+	              'NULL' as vld_con_type,
+	              'NULL' as vld_security,
+	              'NULL' as vnfd_cp_id,
+	              'NULL' as vnfd_cp_vlr,
+	              'NULL' as vnfd_cp_type,
+	              'NULL' as vnfd_life_item,
+	              'NULL' as dep_item,
+	              'NULL' as vnfd_mnt_item,
+	              'NULL' as flavour_id,
+	              'NULL' as flavour_key,
+	              'NULL' as cstr_item,
+	              'NULL' as cstr_vdu_id,
+	              'NULL' as instance_cnt,
+	              'NULL' as cstr_vnfc_id,
+	              i.policy_item,
+	              a.manifest_file,
+	              'NULL' as seq_item
+	         FROM nfv_vnfd_tab a,
+	              (SELECT nfv_policy_ref.policy_ref_no,
+	                     nfv_policy_tab.policy as policy_item
+	                FROM nfv_policy_ref
+	                   INNER JOIN nfv_policy_tab
+	                       ON nfv_policy_ref.policy_no = nfv_policy_tab.policy_no
+	              ) as i
+	        WHERE a.policy_ref_no = i.policy_ref_no
+	             UNION ALL
+	       SELECT a.vnfd_no,
+	              a.version_no,
+	              a.descriptor_version,
+	              'NULL' as vdu_id,
+	              'NULL' as vm_image,
+	              'NULL' as computation_requirement,
+	              'NULL' as vmre,
+	              'NULL' as vnbr,
+	              'NULL' as life_item,
+	              'NULL' as vdu_constraint,
+	              'NULL' as high_availability,
+	              'NULL' as scale_in_out,
+	              'NULL' as vnfc_id,
+	              'NULL' as cp_id,
+	              'NULL' as cp_vlr,
+	              'NULL' as cp_type,
+	              'NULL' as mnt_item,
+	              'NULL' as vld_no,
+	              'NULL' as vld_id,
+	              'NULL' as vld_vendor,
+	              'NULL' as vld_version,
+	              'NULL' as number_of_endpoints,
+	              'NULL' as root_requirement,
+	              'NULL' as leaf_requirement,
+	              'NULL' as vld_qos,
+	              'NULL' as test_access,
+	              'NULL' as vld_con,
+	              'NULL' as vld_con_type,
+	              'NULL' as vld_security,
+	              'NULL' as vnfd_cp_id,
+	              'NULL' as vnfd_cp_vlr,
+	              'NULL' as vnfd_cp_type,
+	              'NULL' as vnfd_life_item,
+	              'NULL' as dep_item,
+	              'NULL' as vnfd_mnt_item,
+	              'NULL' as flavour_id,
+	              'NULL' as flavour_key,
+	              'NULL' as cstr_item,
+	              'NULL' as cstr_vdu_id,
+	              'NULL' as instance_cnt,
+	              'NULL' as cstr_vnfc_id,
+	              'NULL' as policy_item,
+	              a.manifest_file,
+	              j.seq_item
+	         FROM nfv_vnfd_tab a,
+	              (SELECT nfv_security_ref.security_ref_no,
+	                     nfv_security_tab.item as seq_item
+	                FROM nfv_security_ref
+	                   INNER JOIN nfv_security_tab
+	                       ON nfv_security_ref.security_no = nfv_security_tab.security_no
+	              ) as j
+	        WHERE a.security_ref_no = j.security_ref_no
+	       ) as vnfd
+	 WHERE nfv_version_tab.version_no = vnfd.version_no
+       AND nfv_version_tab.id = #{vnfdId}
+		
+	</select>
+	
+	
+	<select id="getVnfdAllId" parameterType="hashmap" resultType="string" >
+	
+		select
+			b.id
+		from
+			nfv_vnfd_tab a, nfv_version_tab b
+		where
+			a.version_no = b.version_no
+			
+	</select>
+	
+	
+	<select id="getSdfCount" parameterType="hashmap" resultType="int" >
+		
+		select
+			count(*)
+		from
+			nfv_sdf_tab
+		<if test="sdfId != null">
+		where
+			sdf_id = #{sdfId}
+		</if>
+		
+	</select>
+	
+	<select id="getSdfOne" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+
+		SELECT nfv_sdf_tab.sdf_no as convnf_ref_no, 
+		       nfv_sdf_tab.sdf_id, 
+		       nfv_sdf_tab.sdf_flavour_key, 
+		       convnf.* 
+		  FROM nfv_convnf_ref, 
+		       nfv_sdf_tab, 
+		       (SELECT nfv_convnf_tab.convnf_no, 
+		              nfv_version_tab.id as vnf_ref_id, 
+		              nfv_convnf_tab.flavour_nm as vnf_flavour_id, 
+		              nfv_convnf_tab.rddc_model, 
+		              nfv_convnf_tab.affinity, 
+		              nfv_convnf_tab.vnf_cap, 
+		              nfv_convnf_tab.vnf_instance_cnt 
+		         FROM nfv_convnf_tab, 
+		              nfv_version_tab 
+		        WHERE nfv_convnf_tab.version_no = nfv_version_tab.version_no 
+		       ) as convnf 
+		 WHERE nfv_convnf_ref.convnf_no = convnf.convnf_no 
+		   AND nfv_sdf_tab.convnf_ref_no = nfv_convnf_ref.convnf_ref_no 
+		   AND nfv_sdf_tab.sdf_id = #{sdfId}
+		   
+	</select>
+	
+	<select id="getSdfAllId" parameterType="hashmap" resultType="string" >
+	
+		select
+			sdf_id
+		from
+			nfv_sdf_tab
+			
+	</select>
+	
+	<select id="getNsdCount" parameterType="hashmap" resultType="int" >
+		
+		select
+			count(*)
+		from
+			nfv_nsd_tab a, nfv_version_tab b
+		where
+			a.version_no = b.version_no
+			<if test="nsdId != null">
+			and b.id = #{nsdId}
+			</if>
+		
+	</select>
+	
+	<select id="getNsdOne" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+
+		SELECT nfv_version_tab.id as nsd_id,
+	       nfv_version_tab.vendor as nsd_vendor,
+	       nfv_version_tab.version as nsd_version,
+	       nsd.*
+		  FROM nfv_version_tab,
+		       (SELECT a.version_no,
+		              x.vnfd_item,
+		              'NULL' as vnffgd_item,
+		              'NULL' as vld_item,
+		              'NULL' as nsd_life_item,
+		              'NULL' as nsd_vnfdep_item,
+		              'NULL' as nsd_mnt_item,
+		              'NULL' as sdf_id,
+		              'NULL' as sdf_flavour_key,
+		              'NULL' as convnf_ref_no,
+		              'NULL' as vnf_ref_id,
+		              'NULL' as vnf_flavour_id,
+		              'NULL' as rddc_model,
+		              'NULL' as affinity,
+		              'NULL' as vnf_cap,
+		              'NULL' as vnf_instance_cnt,
+		              'NULL' as nsd_policy_item,
+		              'NULL' as nsd_cp_id,
+		              'NULL' as nsd_cp_vlr,
+		              'NULL' as nsd_cp_type,
+		              'NULL' as pnfd_item,
+		              'NULL' as nsd_seq_item
+		         FROM nfv_nsd_tab a,
+		              (SELECT nfv_function_ref.function_ref_no,
+		                     nfv_version_tab.id as vnfd_item
+		                FROM nfv_function_ref
+		                   INNER JOIN nfv_version_tab
+		                       ON nfv_function_ref.function_no = nfv_version_tab.version_no
+		              ) as x
+		        WHERE a.vnfd_ref_no = x.function_ref_no
+		             UNION ALL
+		       SELECT a.version_no,
+		              'NULL' as vnfd_item,
+		              y.vnffgd_item,
+		              'NULL' as vld_item,
+		              'NULL' as nsd_life_item,
+		              'NULL' as nsd_vnfdep_item,
+		              'NULL' as nsd_mnt_item,
+		              'NULL' as sdf_id,
+		              'NULL' as sdf_flavour_key,
+		              'NULL' as convnf_ref_no,
+		              'NULL' as vnf_ref_id,
+		              'NULL' as vnf_flavour_id,
+		              'NULL' as rddc_model,
+		              'NULL' as affinity,
+		              'NULL' as vnf_cap,
+		              'NULL' as vnf_instance_cnt,
+		              'NULL' as nsd_policy_item,
+		              'NULL' as nsd_cp_id,
+		              'NULL' as nsd_cp_vlr,
+		              'NULL' as nsd_cp_type,
+		              'NULL' as pnfd_item,
+		              'NULL' as nsd_seq_item
+		         FROM nfv_nsd_tab a,
+		              (SELECT nfv_function_ref.function_ref_no,
+		                     nfv_version_tab.id as vnffgd_item
+		                FROM nfv_function_ref
+		                   INNER JOIN nfv_version_tab
+		                       ON nfv_function_ref.function_no = nfv_version_tab.version_no
+		              ) as y
+		        WHERE a.vnffgd_ref_no = y.function_ref_no
+		             UNION ALL
+		       SELECT a.version_no,
+		              'NULL' as vnfd_item,
+		              'NULL' as vnffgd_item,
+		              z.vld_item,
+		              'NULL' as nsd_life_item,
+		              'NULL' as nsd_vnfdep_item,
+		              'NULL' as nsd_mnt_item,
+		              'NULL' as sdf_id,
+		              'NULL' as sdf_flavour_key,
+		              'NULL' as convnf_ref_no,
+		              'NULL' as vnf_ref_id,
+		              'NULL' as vnf_flavour_id,
+		              'NULL' as rddc_model,
+		              'NULL' as affinity,
+		              'NULL' as vnf_cap,
+		              'NULL' as vnf_instance_cnt,
+		              'NULL' as nsd_policy_item,
+		              'NULL' as nsd_cp_id,
+		              'NULL' as nsd_cp_vlr,
+		              'NULL' as nsd_cp_type,
+		              'NULL' as pnfd_item,
+		              'NULL' as nsd_seq_item
+		         FROM nfv_nsd_tab a,
+		              (SELECT nfv_function_ref.function_ref_no,
+		                     nfv_version_tab.id as vld_item
+		                FROM nfv_function_ref
+		                   INNER JOIN nfv_version_tab
+		                       ON nfv_function_ref.function_no = nfv_version_tab.version_no
+		              ) as z
+		        WHERE a.vld_ref_no = z.function_ref_no
+		             UNION ALL
+		       SELECT a.version_no,
+		              'NULL' as vnfd_item,
+		              'NULL' as vnffgd_item,
+		              'NULL' as vld_item,
+		              d.nsd_life_item,
+		              'NULL' as nsd_vnfdep_item,
+		              'NULL' as nsd_mnt_item,
+		              'NULL' as sdf_id,
+		              'NULL' as sdf_flavour_key,
+		              'NULL' as convnf_ref_no,
+		              'NULL' as vnf_ref_id,
+		              'NULL' as vnf_flavour_id,
+		              'NULL' as rddc_model,
+		              'NULL' as affinity,
+		              'NULL' as vnf_cap,
+		              'NULL' as vnf_instance_cnt,
+		              'NULL' as nsd_policy_item,
+		              'NULL' as nsd_cp_id,
+		              'NULL' as nsd_cp_vlr,
+		              'NULL' as nsd_cp_type,
+		              'NULL' as pnfd_item,
+		              'NULL' as nsd_seq_item
+		         FROM nfv_nsd_tab a,
+		              (SELECT life_ref.life_ref_no,
+		                     life_tab.item as nsd_life_item
+		                FROM nfv_lifecycle_ref as life_ref
+		                   INNER JOIN nfv_lifecycle_tab as life_tab
+		                       ON life_ref.life_no = life_tab.life_no
+		              ) as d
+		        WHERE a.life_ref_no = d.life_ref_no
+		             UNION ALL
+		       SELECT a.version_no,
+		              'NULL' as vnfd_item,
+		              'NULL' as vnffgd_item,
+		              'NULL' as vld_item,
+		              'NULL' as nsd_life_item,
+		              e.nsd_vnfdep_item,
+		              'NULL' as nsd_mnt_item,
+		              'NULL' as sdf_id,
+		              'NULL' as sdf_flavour_key,
+		              'NULL' as convnf_ref_no,
+		              'NULL' as vnf_ref_id,
+		              'NULL' as vnf_flavour_id,
+		              'NULL' as rddc_model,
+		              'NULL' as affinity,
+		              'NULL' as vnf_cap,
+		              'NULL' as vnf_instance_cnt,
+		              'NULL' as nsd_policy_item,
+		              'NULL' as nsd_cp_id,
+		              'NULL' as nsd_cp_vlr,
+		              'NULL' as nsd_cp_type,
+		              'NULL' as pnfd_item,
+		              'NULL' as nsd_seq_item
+		         FROM nfv_nsd_tab a,
+		              (SELECT nfv_vnfdep_ref.vnfdep_ref_no,
+		                     nfv_vnfdep_tab.item as nsd_vnfdep_item
+		                FROM nfv_vnfdep_ref
+		                   INNER JOIN nfv_vnfdep_tab
+		                       ON nfv_vnfdep_ref.vnfdep_no = nfv_vnfdep_tab.vnfdep_no
+		              ) as e
+		        WHERE a.vnf_ref_no = e.vnfdep_ref_no
+		             UNION ALL
+		       SELECT a.version_no,
+		              'NULL' as vnfd_item,
+		              'NULL' as vnffgd_item,
+		              'NULL' as vld_item,
+		              'NULL' as nsd_life_item,
+		              'NULL' as nsd_vnfdep_item,
+		              f.nsd_mnt_item,
+		              'NULL' as sdf_id,
+		              'NULL' as sdf_flavour_key,
+		              'NULL' as convnf_ref_no,
+		              'NULL' as vnf_ref_id,
+		              'NULL' as vnf_flavour_id,
+		              'NULL' as rddc_model,
+		              'NULL' as affinity,
+		              'NULL' as vnf_cap,
+		              'NULL' as vnf_instance_cnt,
+		              'NULL' as nsd_policy_item,
+		              'NULL' as nsd_cp_id,
+		              'NULL' as nsd_cp_vlr,
+		              'NULL' as nsd_cp_type,
+		              'NULL' as pnfd_item,
+		              'NULL' as nsd_seq_item
+		         FROM nfv_nsd_tab a,
+		              (SELECT mnt_ref.mnt_ref_no,
+		                     mnt_tab.item as nsd_mnt_item
+		                FROM nfv_monitoring_ref as mnt_ref
+		                   INNER JOIN nfv_monitoring_tab as mnt_tab
+		                       ON mnt_ref.mnt_no = mnt_tab.mnt_no
+		              ) as f
+		        WHERE a.monitoring_ref_no = f.mnt_ref_no
+		             UNION ALL
+		       SELECT a.version_no,
+		              'NULL' as vnfd_item,
+		              'NULL' as vnffgd_item,
+		              'NULL' as vld_item,
+		              'NULL' as nsd_life_item,
+		              'NULL' as nsd_vnfdep_item,
+		              'NULL' as nsd_mnt_item,
+		              g.sdf_id,
+		              g.sdf_flavour_key,
+		              g.convnf_ref_no,
+		              g.vnf_ref_id,
+		              g.vnf_flavour_id,
+		              g.rddc_model,
+		              g.affinity,
+		              g.vnf_cap,
+		              g.vnf_instance_cnt,
+		              'NULL' as nsd_policy_item,
+		              'NULL' as nsd_cp_id,
+		              'NULL' as nsd_cp_vlr,
+		              'NULL' as nsd_cp_type,
+		              'NULL' as pnfd_item,
+		              'NULL' as nsd_seq_item
+		         FROM nfv_nsd_tab a,
+		              (SELECT nfv_sdf_ref.sdf_ref_no,
+		                     sdf_tab.*
+		                FROM nfv_sdf_ref,
+			              (SELECT nfv_sdf_tab.sdf_no as convnf_ref_no, 
+			                     nfv_sdf_tab.sdf_id, 
+			                     nfv_sdf_tab.sdf_flavour_key, 
+			                     convnf.* 
+			                FROM nfv_convnf_ref, 
+			                     nfv_sdf_tab, 
+			                     (SELECT nfv_convnf_tab.convnf_no,  
+			                            nfv_version_tab.id as vnf_ref_id, 
+			                            nfv_convnf_tab.flavour_nm as vnf_flavour_id, 
+			                            nfv_convnf_tab.rddc_model, 
+			                            nfv_convnf_tab.affinity, 
+			                            nfv_convnf_tab.vnf_cap, 
+			                            nfv_convnf_tab.vnf_instance_cnt 
+			                       FROM nfv_convnf_tab, 
+			                            nfv_version_tab 
+			                      WHERE nfv_convnf_tab.version_no = nfv_version_tab.version_no  
+			                     ) as convnf 
+			               WHERE nfv_convnf_ref.convnf_no = convnf.convnf_no 
+		                     AND nfv_sdf_tab.convnf_ref_no = nfv_convnf_ref.convnf_ref_no 
+		                     ) as sdf_tab
+		               WHERE nfv_sdf_ref.sdf_no = sdf_tab.convnf_ref_no
+		              ) as g
+		        WHERE a.sdf_ref_no = g.sdf_ref_no
+		             UNION ALL
+		       SELECT a.version_no,
+		              'NULL' as vnfd_item,
+		              'NULL' as vnffgd_item,
+		              'NULL' as vld_item,
+		              'NULL' as nsd_life_item,
+		              'NULL' as nsd_vnfdep_item,
+		              'NULL' as nsd_mnt_item,
+		              'NULL' as sdf_id,
+		              'NULL' as sdf_flavour_key,
+		              'NULL' as convnf_ref_no,
+		              'NULL' as vnf_ref_id,
+		              'NULL' as vnf_flavour_id,
+		              'NULL' as rddc_model,
+		              'NULL' as affinity,
+		              'NULL' as vnf_cap,
+		              'NULL' as vnf_instance_cnt,
+		              h.nsd_policy_item,
+		              'NULL' as nsd_cp_id,
+		              'NULL' as nsd_cp_vlr,
+		              'NULL' as nsd_cp_type,
+		              'NULL' as pnfd_item,
+		              'NULL' as nsd_seq_item
+		         FROM nfv_nsd_tab a,
+		              (SELECT nfv_policy_ref.policy_ref_no,
+		                     nfv_policy_tab.policy as nsd_policy_item
+		                FROM nfv_policy_ref
+		                   INNER JOIN nfv_policy_tab
+		                       ON nfv_policy_ref.policy_no = nfv_policy_tab.policy_no
+		              ) as h
+		        WHERE a.policy_ref_no = h.policy_ref_no
+		             UNION ALL
+		       SELECT a.version_no,
+		              'NULL' as vnfd_item,
+		              'NULL' as vnffgd_item,
+		              'NULL' as vld_item,
+		              'NULL' as nsd_life_item,
+		              'NULL' as nsd_vnfdep_item,
+		              'NULL' as nsd_mnt_item,
+		              'NULL' as sdf_id,
+		              'NULL' as sdf_flavour_key,
+		              'NULL' as convnf_ref_no,
+		              'NULL' as vnf_ref_id,
+		              'NULL' as vnf_flavour_id,
+		              'NULL' as rddc_model,
+		              'NULL' as affinity,
+		              'NULL' as vnf_cap,
+		              'NULL' as vnf_instance_cnt,
+		              'NULL' as nsd_policy_item,
+		              i.nsd_cp_id,
+		              i.nsd_cp_vlr,
+		              i.nsd_cp_type,
+		              'NULL' as pnfd_item,
+		              'NULL' as nsd_seq_item
+		         FROM nfv_nsd_tab a,
+		              (SELECT nfv_cp_ref.cp_ref_no,
+		                     nfv_cp_tab.id as nsd_cp_id,
+		                     nfv_cp_tab.virtual_link_reference as nsd_cp_vlr,
+		                     nfv_cp_tab.type as nsd_cp_type
+		                FROM nfv_cp_ref
+		                   INNER JOIN nfv_cp_tab
+		                       ON nfv_cp_ref.cp_no = nfv_cp_tab.cp_no
+		              ) as i
+		        WHERE a.cp_ref_no = i.cp_ref_no
+		             UNION ALL
+		       SELECT a.version_no,
+		              'NULL' as vnfd_item,
+		              'NULL' as vnffgd_item,
+		              'NULL' as vld_item,
+		              'NULL' as nsd_life_item,
+		              'NULL' as nsd_vnfdep_item,
+		              'NULL' as nsd_mnt_item,
+		              'NULL' as sdf_id,
+		              'NULL' as sdf_flavour_key,
+		              'NULL' as convnf_ref_no,
+		              'NULL' as vnf_ref_id,
+		              'NULL' as vnf_flavour_id,
+		              'NULL' as rddc_model,
+		              'NULL' as affinity,
+		              'NULL' as vnf_cap,
+		              'NULL' as vnf_instance_cnt,
+		              'NULL' as nsd_policy_item,
+		              'NULL' as nsd_cp_id,
+		              'NULL' as nsd_cp_vlr,
+		              'NULL' as nsd_cp_type,
+		              q.pnfd_item,
+		              'NULL' as nsd_seq_item
+		         FROM nfv_nsd_tab a,
+		              (SELECT nfv_function_ref.function_ref_no,
+		                     nfv_version_tab.id as pnfd_item
+		                FROM nfv_function_ref
+		                   INNER JOIN nfv_version_tab
+		                       ON nfv_function_ref.function_no = nfv_version_tab.version_no
+		              ) as q
+		        WHERE a.pnfd_ref_no = q.function_ref_no
+		             UNION ALL
+		       SELECT a.version_no,
+		              'NULL' as vnfd_item,
+		              'NULL' as vnffgd_item,
+		              'NULL' as vld_item,
+		              'NULL' as nsd_life_item,
+		              'NULL' as nsd_vnfdep_item,
+		              'NULL' as nsd_mnt_item,
+		              'NULL' as sdf_id,
+		              'NULL' as sdf_flavour_key,
+		              'NULL' as convnf_ref_no,
+		              'NULL' as vnf_ref_id,
+		              'NULL' as vnf_flavour_id,
+		              'NULL' as rddc_model,
+		              'NULL' as affinity,
+		              'NULL' as vnf_cap,
+		              'NULL' as vnf_instance_cnt,
+		              'NULL' as nsd_policy_item,
+		              'NULL' as nsd_cp_id,
+		              'NULL' as nsd_cp_vlr,
+		              'NULL' as nsd_cp_type,
+		              'NULL' as pnfd_item,
+		              k.nsd_seq_item
+		         FROM nfv_nsd_tab a,
+		              (SELECT nfv_security_ref.security_ref_no,
+		                     nfv_security_tab.item as nsd_seq_item
+		                FROM nfv_security_ref
+		                   INNER JOIN nfv_security_tab
+		                       ON nfv_security_ref.security_no = nfv_security_tab.security_no
+		              ) as k
+		        WHERE a.sec_ref_no = k.security_ref_no
+		       ) as nsd
+		 WHERE nfv_version_tab.version_no = nsd.version_no
+			AND nfv_version_tab.id = #{nsdId}
+	</select>
+	
+	<select id="getNsdAllId" parameterType="hashmap" resultType="string" >
+	
+		select
+			b.id
+		from
+			nfv_nsd_tab a, nfv_version_tab b
+		where
+			a.version_no = b.version_no
+			
+	</select>
+	
+	<select id="getVnfrtdCount" parameterType="hashmap" resultType="int" >
+		
+		select
+			count(*)
+		from 
+			nfv_vnfrtd_tab
+		<if test="vnfrtdId != null">
+		where
+			vnfrtd_id = #{vnfrtdId}
+		</if>
+		
+		
+		
+	</select>
+	
+	<select id="getVnfrtdOne" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+			<!-- 기존쿼리
+		SELECT b.vnfrtd_ref_no,
+	       a.vnfrtd_id,
+	       a.mnt_ref_no,
+	       c.vnfrtd_mnt_item
+	  FROM nfv_vnfrtd_tab as a,
+	       nfv_vnfrtd_ref as b,
+	       (SELECT mnt_ref.mnt_ref_no,
+	              mnt_tab.item as vnfrtd_mnt_item
+	         FROM nfv_monitoring_ref as mnt_ref
+	            INNER JOIN nfv_monitoring_tab as mnt_tab
+	                ON mnt_ref.mnt_no = mnt_tab.mnt_no
+	       ) as c
+	 WHERE a.vnfrtd_no = b.vnfrtd_no
+	       AND a.mnt_ref_no = c.mnt_ref_no
+	       AND a.vnfrtd_id = #{vnfrtdId}
+		 -->
+		SELECT 
+	       a.vnfrtd_id,
+	       a.mnt_ref_no,
+	       c.vnfrtd_mnt_item
+	  FROM nfv_vnfrtd_tab as a,
+	       (SELECT mnt_ref.mnt_ref_no,
+	              mnt_tab.item as vnfrtd_mnt_item
+	         FROM nfv_monitoring_ref as mnt_ref
+	            INNER JOIN nfv_monitoring_tab as mnt_tab
+	                ON mnt_ref.mnt_no = mnt_tab.mnt_no
+	       ) as c
+	 WHERE
+	 			a.mnt_ref_no = c.mnt_ref_no
+	       AND a.vnfrtd_id = #{vnfrtdId} 
+		 
+	</select>
+	
+	<select id="getVnfrtdAllId" parameterType="hashmap" resultType="string" >
+	
+		select
+			vnfrtd_id
+		from 
+			nfv_vnfrtd_tab
+			
+	</select>
+	
+	<select id="getNfvidCount" parameterType="hashmap" resultType="int" >
+		
+		select
+			count(*)
+		from
+			nfv_nfvid_tab
+		<if test="nfvidId != null">
+			where nfvid_id = #{nfvidId}
+		</if>
+		
+	</select>
+	
+	<select id="getNfvidOne" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+		select 
+			A.nfvi_no, 
+		    A.id as nfvi_id, 
+		    B.image_no, 
+		    B.image_name
+		from 
+			nfv_nfvi_tab A, nfv_image_tab B 
+		where 
+			A.nfvi_no = B.nfvi_no
+		and
+			A.id = #{nfvidId}		
+	</select>
+	
+	<select id="getNfvidAllId" parameterType="hashmap" resultType="string" >
+	
+		select
+			id as nfvi_id
+		from nfv_nfvi_tab
+			
+	</select>
+	
+	
+	<!-- nfvic(기존 nfvidc) -->
+	<select id="getNfvicCount" parameterType="hashmap" resultType="int" >
+		select
+			count(*)
+		from
+			nfv_nfvidc_tab
+		<if test="nfvicId != null">
+			where nfvidc_id = #{nfvicId}
+		</if>
+	</select>
+	
+	<select id="getNfvicOne" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+		SELECT a.nfvidc_no,
+		     a.nfvidc_id,
+		     a.mnt_ref_no,
+		     a.func_ref_no,
+		     b.mnt_no as mnt_no,
+		     b.nfvid_mnt_item as mnt_item,
+		     'NULL' as function_no,
+		     'NULL' as ver_item,
+		     'NULL' as ver_id
+		FROM nfv_nfvidc_tab as a,
+		     (SELECT mnt_ref.mnt_ref_no,
+		            mnt_ref.mnt_no,
+		            mnt_tab.item as nfvid_mnt_item
+		       FROM nfv_monitoring_ref as mnt_ref
+		          INNER JOIN nfv_monitoring_tab as mnt_tab
+		              ON mnt_ref.mnt_no = mnt_tab.mnt_no
+		     ) as b
+		WHERE a.mnt_ref_no = b.mnt_ref_no
+		and a.nfvidc_id = #{nfvicId}
+		    UNION ALL
+		SELECT a.nfvidc_no,
+		     a.nfvidc_id,
+		     a.mnt_ref_no,
+		     a.func_ref_no,
+		     'NULL' as mnt_no,
+		     'NULL' as mnt_item,
+		     b.function_no,
+		     b.ver_item,
+		     b.ver_id
+		FROM nfv_nfvidc_tab as a,
+		     (SELECT nfv_function_ref.function_ref_no,
+		            nfv_function_ref.function_no,
+		            vnf_tab.ver_item,
+		            vnf_tab.ver_id
+		       FROM nfv_function_ref,
+		            (SELECT nfv_state_tab.state_no,
+		                   nfv_state_tab.item as ver_item,
+		                   nfv_version_tab.id as ver_id
+		              FROM nfv_state_tab
+		                 INNER JOIN nfv_version_tab
+		                     ON nfv_state_tab.version_no = nfv_version_tab.version_no
+		            ) as vnf_tab
+		      WHERE nfv_function_ref.function_no = vnf_tab.state_no
+		     ) as b
+		WHERE a.func_ref_no = b.function_ref_no
+		and a.nfvidc_id = #{nfvicId}	
+	</select>
+	
+	<select id="getNfvicAllId" parameterType="hashmap" resultType="string" >
+		select
+			nfvidc_id
+		from 
+			nfv_nfvidc_tab			
+	</select>
+	
+	<!-- constituent -->
+	<select id="getConstituenCount" parameterType="hashmap" resultType="int" >
+		select
+			count(*)
+		from
+			nfv_constituent_tab
+		<if test="vdu_id != null">
+			where vdu_id = #{vdu_id}
+		</if>
+	</select>
+	
+	<select id="getConstituenOne" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+		select 
+		    a.vdu_id, a.instance_cnt, b.vnfc_no, b.vnfc_id, b.cp_no, b.id as cp_id
+		from 
+		    nfv_constituent_tab as a, 
+		    (select cp_tab.cp_no, cp_tab.id, cp_ref.cp_ref_no, vnfc_tab.vnfc_no, vnfc_tab.vnfc_id, vnfc_ref.vnfc_ref_no from nfv_cp_tab as cp_tab 
+		    inner join nfv_cp_ref as cp_ref on cp_tab.cp_no = cp_ref.cp_no
+		    inner join nfv_vnfc_tab as vnfc_tab on vnfc_tab.connection_ref_no = cp_ref.cp_ref_no 
+		    inner join nfv_vnfc_ref as vnfc_ref on vnfc_ref.vnfc_no = vnfc_tab.vnfc_no) as b
+		where 
+		    a.vnfc_ref_no = b.vnfc_ref_no
+		    and a.vdu_id = #{vdu_id}		
+	</select>
+	
+	<select id="getConstituenAllId" parameterType="hashmap" resultType="string" >
+		select
+			vdu_id
+		from 
+			nfv_constituent_tab			
+	</select>
+	
+	<!-- cvnf(constituent_vnf) -->
+	<select id="getCvnfCount" parameterType="hashmap" resultType="int" >
+		select
+			count(*)
+		from 
+			nfv_convnf_tab a, nfv_version_tab b
+		where
+			a.version_no = b.version_no
+			<if test="cvnf_id != null">
+			and a.flavour_nm = #{flavour_nm} and b.id = #{vnf_id}
+			</if>
+	</select>
+	
+	<select id="getCvnfOne" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+		SELECT 
+			version_tab.version_no, version_tab.id, version_tab.vendor, version_tab.version, convnf_tab.convnf_no, convnf_tab.flavour_nm, 
+			convnf_tab.rddc_model, convnf_tab.affinity, convnf_tab.vnf_cap, convnf_tab.vnf_instance_cnt
+		FROM
+		    nfv_version_tab as version_tab inner join nfv_convnf_tab as convnf_tab on convnf_tab.version_no = version_tab.version_no
+		WHERE convnf_tab.flavour_nm = #{flavour_nm} AND version_tab.id = #{vnf_id}
+	</select>
+	
+	<select id="getCvnfAllId" parameterType="hashmap" resultType="java.util.LinkedHashMap" >
+		select
+			a.flavour_nm, b.id
+		from 
+			nfv_convnf_tab a, nfv_version_tab b
+		where
+			a.version_no = b.version_no		
+	</select>
+	
+	
+	
+</mapper>

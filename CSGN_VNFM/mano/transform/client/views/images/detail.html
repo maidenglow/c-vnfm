@@ -1,0 +1,155 @@
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<div class="row">
+			<div class="col-md-6 text-left">
+				<span class="glyphicon glyphicon-th"></span>
+				이미지 상세
+			</div><!-- // col -->
+			
+			<div class="col-md-6 text-right">
+
+				<div class="btn-group" dropdown>
+					<button type="button"
+						ng-disabled="image == null"
+						class="btn btn-info btn-sm dropdown-toggle">
+						동작
+						<span class="caret"></span>
+					</button>
+	
+	                <ul class="dropdown-menu" role="menu">
+	                    <li><a href ng-click="updateImageForm(image)">이미지 편집</a></li>
+	                </ul>
+				</div>
+	
+				<a href
+					ng-click="deleteImageForm(image)"
+					ng-disabled="image == null || image.protected"
+					class="btn btn-danger btn-sm">
+					<span class="fa fa-trash"></span> 이미지 삭제</a>
+
+			</div><!-- // col -->
+		</div><!-- // row -->
+	</div><!-- // panel-heading -->
+
+	<div class="panel-body">
+		<div class="custom-pre-scrollable" ng-style="style()" resizefit>
+		
+			<div ng-show="image">
+	
+				<table class="table">
+					<caption>정보</caption>
+
+					<colgroup>
+						<col width="20%" />
+						<col width="30%" />
+						<col width="20%" />
+						<col width="30%" />
+					</colgroup>
+	
+					<tbody>
+						<tr>
+							<th><span data-i18n="이름"></span></th>
+							<td colspan="3"><span ng-bind="image.name"></span></td>
+						</tr>
+						
+						<tr>
+							<th><span data-i18n="ID"></span></th>
+							<td colspan="3"><span ng-bind="image.id"></span></td>
+						</tr>
+						
+						<tr>
+							<th><span data-i18n="상태"></span></th>
+							<td colspan="3">
+								<span ng-show="isActionProgress(image.status)" class="custom_progress">
+									<progressbar class="progressbar-sm progress-striped active" value="100"></progressbar>
+								</span>
+								<span ng-bind="image.status"></span>
+							</td>
+						</tr>
+						
+						<tr>
+							<th><span data-i18n="공용"></span></th>
+							<td><span ng-bind="image.is_public"></span></td>
+
+							<th><span data-i18n="보호함"></span></th>
+							<td><span ng-bind="image.protected"></span></td>
+						</tr>
+						
+						<tr>
+							<th><span data-i18n="Checksum"></span></th>
+							<td colspan="3"><span ng-bind="image.checksum"></span></td>
+						</tr>
+						
+						<tr>
+							<th><span data-i18n="생성"></span></th>
+							<td><span ng-bind="image.created_at | date: 'yyyy-MM-dd HH:mm:ss'"></span></td>
+
+							<th><span data-i18n="업데이트"></span></th>
+							<td><span ng-bind="image.updated_at | date: 'yyyy-MM-dd HH:mm:ss'"></span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<div>
+				<table class="table">
+					<caption>스펙</caption>
+
+					<colgroup>
+						<col width="20%" />
+						<col width="30%" />
+						<col width="20%" />
+						<col width="30%" />
+					</colgroup>
+					<tbody>
+						<tr>
+							<th><span data-i18n="크기"></span></th>
+							<td colspan="3"><span ng-bind="image.size | number"></span></td>
+						</tr>
+						
+						<tr>
+							<th><span data-i18n="컨테이너 포멧"></span></th>
+							<td><span ng-bind="image.container_format"></span></td>
+
+							<th><span data-i18n="디스크 포멧"></span></th>
+							<td><span ng-bind="image.disk_format"></span></td>
+						</tr>
+						
+						<div ng-if="image.min_disk > 0">
+							<tr>
+								<th><span data-i18n="최소 디스크"></span></th>
+								<td colspan="3"><span ng-bind="image.min_disk"></span></td>
+							</tr>
+						</div>
+			
+						<div ng-if="image.min_ram > 0">
+							<tr>
+								<th><span data-i18n="최소 RAM"></span></th>
+								<td colspan="3"><span ng-bind="image.min_ram"></span></td>
+							</tr>
+						</div>
+					</tbody>
+				</table>
+			</div>
+	
+			<div>
+				<table class="table">
+					<caption>사용자속성</caption>
+
+					<colgroup>
+						<col width="30%" />
+						<col width="70%" />
+					</colgroup>
+					<tbody>
+						<tr ng-repeat="(key, value) in image.properties">
+							<th title="key"><span ng-bind="key"></span></th>
+							<td title="value"><span ng-bind="value"></span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+		</div><!-- // panel-body-wrapper -->
+	</div><!-- // panel-body -->
+</div><!-- // panel -->

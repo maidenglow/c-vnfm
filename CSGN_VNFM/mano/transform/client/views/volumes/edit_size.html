@@ -1,0 +1,29 @@
+<div class="modal-header">
+	<h3>Volume 확장</h3>
+</div>
+
+<form name="form" class="form-validation" novalidate ng-submit="submit(volume)">
+
+	<div class="modal-body">
+
+		<!-- Detail -->
+		<div ng-include=" 'views/volumes/edit_size_detail.html' "></div>
+
+	</div><!-- // modal-body -->
+
+	<div class="modal-footer">
+
+
+		<button type="button"
+			class="btn btn-warning"
+			ng-click="cancel()"
+			data-i18n="취소"></button>
+
+		<button type="submit"
+			class="btn btn-primary"
+			ng-disabled="!canSubmit()"
+			data-i18n="저장"></button>
+
+	</div><!-- // modal-footer -->
+
+</form><!-- // form -->

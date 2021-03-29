@@ -1,0 +1,26 @@
+<included>
+
+	<logger name="com.eluon.vepc.mano" level="OFF"/>
+	<logger name="org.springframework.transaction.interceptor" level="OFF"/>
+	<logger name="org.mybatis" level="OFF"/>
+	 <!-- <logger name="org.hibernate.validator" level="DEBUG" /> -->
+	<logger name="org.springframework" level="OFF" />
+	<logger name="org.quartz" level="OFF"/>
+	<logger name="org.springframework.batch" level="OFF"/>
+	<logger name="com.eluon.vepc.mano.batch" level="OFF"/>
+	<logger name="jdbc.resultset" level="OFF"/>
+	<logger name="jdbc.resultsettable" level="OFF"/>
+	
+	<!--<logger name="com.sktelecom.myshop.batch.tasks.OcbAlarmTask" level="DEBUG"/>-->
+	
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+	    <encoder>
+	        <pattern>%date [%-5level] %logger{26} %message%xException%n</pattern>
+	    </encoder>
+	</appender>
+	
+	<root level="DEBUG">
+	    <appender-ref ref="CONSOLE"/>
+	</root>
+            
+</included>

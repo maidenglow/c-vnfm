@@ -1,0 +1,112 @@
+<div class="modal-header">
+	<h3>시스템 관리</h3>
+</div>
+
+
+<form name="form" class="form-validation" novalidate ng-submit="submit(system)">
+	<div class="row">
+		<!-- List -->
+		<div class="col-md-12 col-lg-6">
+			<div class="row">
+				
+				<div class="col-md-10 col-lg-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-md-6 text-left">
+									<span class="glyphicon glyphicon-th"> <span data-i18n="전체"></span></span>
+								</div><!-- // col -->
+		
+								<div class="col-md-6 text-right">
+								<a href
+									ng-click="deleteLeft()"
+									class="btn btn-sm btn-danger">
+									<span class="fa fa-plus"></span>
+									추가 </a>
+									
+								</div>
+							
+							</div><!-- // row -->
+						</div><!-- // panel-heading -->
+		
+						<div class="panel-body">
+						
+							<div class="nav-container custom-pre-scrollable" ng-style="style()" resizefit>
+								<ul class="nav">
+									<li ng-repeat="item in items">
+										<a href
+											ng-click="selectLItem(item)"
+											ng-class="{'highlight' : isSelected(item)}">
+											<i class="fa fa-desktop"></i>
+											<span ng-bind="item.hypervisor_hostname"
+												ng-class="itemStatusClass(item)"></span></a></li>
+								</ul>
+							</div>
+							
+						</div><!-- panel -->
+					</div><!-- // panel-body -->
+				</div>
+			</div>
+		</div>
+		<!-- // List -->
+		
+		<div class="col-md-12 col-lg-6">
+			<div class="row">
+				
+				<!-- List -->
+				
+				
+				<!-- List -->
+				<div class="col-md-10 col-lg-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-md-6 text-left">
+									<span class="glyphicon glyphicon-th"> <span data-i18n="사용중"></span></span>
+								</div><!-- // col -->
+								<div class="col-md-6 text-right">
+								<a href
+									ng-click="deleteRight()"
+									class="btn btn-sm btn-danger">
+									<span class="fa fa-plus"></span>
+									삭제 </a>
+									
+								</div>
+								<!-- // col -->
+							</div><!-- // row -->
+						</div><!-- // panel-heading -->
+		
+						<div class="panel-body">
+		
+							<div class="nav-container custom-pre-scrollable" ng-style="style()" resizefit>
+								<ul class="nav">
+									<li ng-repeat="item in selectItems">
+										<a href
+											ng-click="selectRItem(item)"
+											ng-class="{'highlight' : isSelected(item)}">
+											<i class="fa fa-desktop"></i>
+											<span ng-bind="item.hypervisor_hostname"
+												ng-class="itemStatusClass(item)"></span></a></li>
+								</ul>
+							</div>
+						</div><!-- panel -->
+					</div><!-- // panel-body -->
+				</div>
+				<!-- // List -->
+				
+				<!-- List -->
+				
+				<div class="text-center">
+					<button type="submit" ng-click="requestVerification()" class="btn btn-info" >
+						<span data-i18n="Request Verification"></span>
+					</button>
+					
+				</div>
+				<!-- // List -->
+			</div>
+		</div>
+		
+		
+	</div>
+
+</div><!-- // InstancesCtrl -->
